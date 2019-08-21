@@ -7,7 +7,7 @@ title: Fly with You # 网站标题
 subtitle: 多谷黑芝麻 & 蜂蜜柚子茶
 description: 记录生活 知识管理 思考感悟
 author: Kubert
-language: zh-CN
+language: en
 timezone:
 
 # URL
@@ -78,6 +78,7 @@ disqus_shortname: kuberfly
 # theme: cnfeat
 # theme: themia
 theme: tranquilpeak
+post_assert_folder: true
 #exclude_generator:
 #Plugins:
 
