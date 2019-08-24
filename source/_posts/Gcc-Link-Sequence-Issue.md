@@ -1,6 +1,6 @@
 ---
 title: Gcc Link Sequence Issue
-ate: 2017-08-21 10:50:11
+date: 2017-08-21 10:50:11
 categories: 
    - C
    - Compiler
@@ -71,7 +71,7 @@ Or use repeat option to your linking command, make the "ld" keep finding refer l
 
 use `readelf -d sqltest` or `ldd sqltest` to see the reference connection of a *.bin/*.so/.lib.
 
-![readelf](readelf.png)
+![readelf](http://blog.kuberfly.me/2017/08/21/Gcc-Link-Sequence-Issue/readelf.png)
 
 
 
