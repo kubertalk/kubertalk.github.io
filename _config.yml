@@ -78,7 +78,6 @@ disqus_shortname: kuberfly
 # theme: cnfeat
 # theme: themia
 theme: tranquilpeak
-post_assert_folder: true
 #exclude_generator:
 #Plugins:
 
