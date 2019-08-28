@@ -1,13 +1,11 @@
 ---
 title: 数据结构篇笔记-2-链表
-date: 2017-08-14 17:21:55
+date: 2017-04-14 17:21:55
 tags: 
 	- 数据结构
 	- 链表
 categories: 
 	- 数据结构
-description: 
-	- 什么是链表？你可以在这里找到答案。
 thumbnailImage: mushroom.jpg
 thumbnailImagePosition: left
 autoThumbnailImage: true

@@ -1,6 +1,6 @@
 ---
 title: Gcc Link Sequence Issue
-date: 2017-08-21 10:50:11
+date: 2017-05-21 10:50:11
 categories: 
    - C
    - Compiler
