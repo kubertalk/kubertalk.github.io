@@ -1,8 +1,19 @@
 * text eol=lf
+#text format
 *.md eol=lf
 *.js eol=lf
 *.css eol=lf
 *.html eol=lf
 *.json eol=lf
+*.xml eol=lf
+#picture format
 *.svg -text
 *.jpg -text
+*.png -text
+#characters format
+*.otf -text
+*.eot -text
+*.ttf -text
+*.woff -text
+*.woff2 -text
+
