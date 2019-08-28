@@ -23,7 +23,7 @@ coverCaption: "A beautiful galaxy"
 1) 在Linux下，到L4T的页面，找到Jetson TK1和sample file system这两个下载：
 链接为https://developer.nvidia.com/embedded/linux-tegra
 界面如下：
-![Jetson Downloading](http://blog.kuberfly.me/2017/03/26/Data-Structure-7-Sorting-1/jetson_package.png)
+![Jetson Downloading](http://blog.kuberfly.me/2017/03/26/Nvidia-Jetson-TK1-board-set-up-and-get-started/jetson_package.png)
 目前最新的版本是R21.4，以这个版本为例，下载下来的是两个文件：
 Tegra124_Linux_R21.4.0_armhf.tbz2
 Tegra_Linux_Sample-Root-Filesystem_R21.4.0_armhf.tbz2
