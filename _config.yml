@@ -77,7 +77,8 @@ disqus_shortname: kuberfly
 # theme: landscape
 # theme: cnfeat
 # theme: themia
-theme: tranquilpeak
+# theme: next
+theme: kuber-tranquilpeak
 #exclude_generator:
 #Plugins:
 
