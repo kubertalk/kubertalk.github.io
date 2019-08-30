@@ -16,7 +16,7 @@ comments: true
 Sometimes when you need to use a cpp runtime environments on Windows system for your special applications, you can just install a Visuo Studio xxx to do it. But if you want to dilivery it to cloud environment, maybe you need make it into a Docker just like me. 
 <!--more-->
 <!--toc-->
-### 1. Install Docker into Win10
+### Install Docker into Win10
 
 1. Install [Docker CE](https://docs.docker.com/docker-for-windows/install/) in one computer with Windows 10 system, which its Virtualization must to be turn on firstly in your BIOS.
 
@@ -24,7 +24,7 @@ Sometimes when you need to use a cpp runtime environments on Windows system for 
 
 3. After it, when you start Docker, it will check your computer setting of Hyper-V. 
 
-   ![Windows Feature](http://blog.kuberfly.me/2017/05/15/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/1.png)
+   ![Windows Feature](http://blog.kuberfly.me/2017/05/15/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/windows_feature.png)
    Hyper-v must be turn on status when you run Docker, which means your Virtual Box can not be used in the meantime. maybe there will have one computer restart here, don't panic, this is the last restart if you only use Docker instead of virtual machines.
 
 4. After Docker started, you can find a penguin log in your taskbar. here has some tips to help you test Docker or improve Docker.
@@ -42,7 +42,7 @@ Sometimes when you need to use a cpp runtime environments on Windows system for 
 
    3. First example of windows container: execute `docker version` in your cmd.exe, then the client and server information for Docker will be shown. After that,  you can execute `docker run microsoft/sample-dotnet` in your cmd.exe or Windows PowerShell.exe (more popular and more convenient) . if there has a logo output, your installation would be correct.
 
-### 2. Load a Windows Image with VS Build Tools
+### Load a Windows Image with VS Build Tools
 
 1. Basic Commands: 
 
@@ -73,9 +73,9 @@ Sometimes when you need to use a cpp runtime environments on Windows system for 
 
    Use **`docker images`** to check if this image already in your system when it load finished.
    
-   ![Check Images](http://blog.kuberfly.me/2017/05/15/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/4.png)
+   ![Check Images](http://blog.kuberfly.me/2017/05/15/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/check_images.png)
 
-### 3. Start a Container with a Interactive Cmdlet
+### Start a Container with a Interactive Cmdlet
 
 1. After the image load successfully, you can run a container with this image, or you can build other images using this image.
 
@@ -83,7 +83,7 @@ Sometimes when you need to use a cpp runtime environments on Windows system for 
 
    Use ***`docker run -it -v $host-code-addr:$container-code-addr win-vs`*** to start a container with a interactive cmdlet, just like the below picture. Then you can do everything you like in this container.
 
-   ![Start Container](http://blog.kuberfly.me/2017/05/15/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/2.png)
+   ![Start Container](http://blog.kuberfly.me/2017/05/15/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/start_container.png)
 
 3. About the above command, just give you some tips for it:
    ```
@@ -106,12 +106,12 @@ Sometimes when you need to use a cpp runtime environments on Windows system for 
    .\hello
    ```
 
-   ![Run Hello-World](http://blog.kuberfly.me/2017/05/15/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/3.png)
+   ![Run Hello-World](http://blog.kuberfly.me/2017/05/15/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/hello_world.png)
 
 5. Move your whole application of vc++ code to your shared volume on your host computer, and make it in your container. just have a try !
 
 6. After test or debug on this pseudo cmdlet, you can use `exit` or `ctl+P+Q` to quit this window. Then you can use `docker start/restart -i $containerID`  to go back this container's cmdlet.
 
-### 4. QA and Issues
+### QA and Issues
 
 **Have a fun and if you have any issues or problem, please don't hesitate to contact me with kubertqiu@hotmail.com**.
