@@ -71,7 +71,7 @@ Or use repeat option to your linking command, make the "ld" keep finding refer l
 
 use `readelf -d sqltest` or `ldd sqltest` to see the reference connection of a *.bin/*.so/.lib.
 
-![readelf](http://blog.kuberfly.me/2017/08/21/Gcc-Link-Sequence-Issue/readelf.png)
+![readelf](http://blog.kuberfly.me/2017/05/21/Gcc-Link-Sequence-Issue/readelf.png)
 
 
 
