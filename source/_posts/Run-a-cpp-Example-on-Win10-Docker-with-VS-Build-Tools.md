@@ -5,7 +5,7 @@ categories:
    - DevOps
 tags: 
    - Docker
-thumbnailImage: mushroom.jpg
+thumbnailImage: architecture-buildings-business-2385210.jpg
 thumbnailImagePosition: left
 autoThumbnailImage: yes
 coverImage: galaxy.jpg

@@ -6,7 +6,7 @@ tags:
 	- CUDA
 categories: 
 	- 研究僧日常
-thumbnailImage: mushroom.jpg
+thumbnailImage: analogue-aperture-black-and-white-1203819.jpg
 thumbnailImagePosition: left
 autoThumbnailImage: true
 coverImage: galaxy.jpg

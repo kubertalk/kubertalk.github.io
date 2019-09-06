@@ -14,7 +14,7 @@ timezone:
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: http://blog.kuberfly.me
 root: /
-permalink: :year/:month/:day/:title/
+permalink: :title/
 permalink_defaults:
 # tag_dir: tags
 # archive_dir: archives
@@ -105,3 +105,14 @@ deploy:
   type: git
   repo: https://github.com/kubertalk/kubertalk.github.io.git
   branch: master
+
+# hexo sitemap网站地图
+sitemap:
+  path: sitemap.xml
+baidusitemap:
+  path: baidusitemap.xml
+
+post_copyright:
+  enable: true 
+  author: kuber
+  copyright_text: 作者拥有版权，请注明出处转载。

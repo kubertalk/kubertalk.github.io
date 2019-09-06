@@ -6,16 +6,18 @@ categories:
    - Compiler
 tags: 
    - GCC
-thumbnailImage: mushroom.jpg
+thumbnailImage: analogue-aperture-black-and-white-1203819.jpg
 thumbnailImagePosition: left
 autoThumbnailImage: yes
 coverImage: galaxy.jpg
 coverCaption: "A beautiful galaxy"
 comments: yes
+copyright: true
 ---
 When you use a GCC compiler or a makefile to build your project, do you know the details behind this compiling ? Let me tell you what i see and what i know.
 <!--more-->
 <!--toc-->
+
 ### GCC Link Sequence Issue
 
 #### GCC Link Background

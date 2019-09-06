@@ -8,7 +8,7 @@ tags:
 	- 冒泡排序
 	- 插入排序
 	- 选择排序
-thumbnailImage: mushroom.jpg
+thumbnailImage: action-adventure-cliff-2334533.jpg
 thumbnailImagePosition: left
 autoThumbnailImage: true
 coverImage: galaxy.jpg
