@@ -1,0 +1,675 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="google-site-verification" content="0DhOwPrg8r0NkCu3BwNH0_WgQalIXNAOanq-Gs-xLaI" />
+    <meta name="google-site-verification" content="OaEXvviVUNa10fJC2M-0qnpN6izG0NxVTQfjg1MmUsE" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Fly with You">
+    <title>八大排序算法  by C++ (转) - Fly with You</title>
+    <meta name="author" content="Kubert">
+    
+        <meta name="keywords" content="hexo,javascript,">
+    
+    
+        <link rel="icon" href="kuberme.cn/assets/images/elephant.jpg">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg"},"articleBody":"八大排序算法  by C++ (转)\n\n\n\n八大排序算法  by C++ (转)冒泡排序123456789101112131415161718#include &lt;iostream&gt;using namespace std;void BubbleSort(int arr[], int len)&#123;​\tfor (int i=0;i&lt;len-1;i++)​\t&#123;​\t\tfor (int j=0;j&lt;len-i-1;j++)​\t\t&#123;​\t\t\tif (arr[j] &gt; arr[j+1])​\t\t\t&#123;​\t\t\t\tint tmp = arr[j];​\t\t\t\tarr[j] = arr[j+1];​\t\t\t\tarr[j+1] = tmp;​\t\t\t&#125;​\t\t&#125;​\t&#125;&#125;\n\n插入排序12345678910111213141516171819202122#include &lt;iostream&gt;using namespace std;void InsertSort(int arr[], int len)&#123;​\tint tmp;​\tfor (int i=1;i&lt;len;i++)​\t&#123;​\t\tfor (int j=i-1;j&gt;=0;j--)​\t\t&#123;​\t\t\tif (arr[i] &lt; arr[j])​\t\t\t&#123;​\t\t\t\tint tmp = arr[j];​\t\t\t\tarr[j] = arr[i];​\t\t\t\tarr[i] = tmp;​\t\t\t\ti=j;​\t\t\t&#125;​\t\t\telse​\t\t\t\tbreak;​\t\t&#125;​\t&#125;&#125;\n\n选择排序123456789101112131415161718192021#include &lt;iostream&gt;using namespace std;void SelectSort(int arr[], int len)&#123;​\tint i,j,min, tmp;​\tfor (i=0;i&lt;len-1;i++)​\t&#123;​\t\tmin = i;​\t\tfor (j=i+1;j&lt;len;j++)​\t\t&#123;​\t\t\tif (arr[min] &gt; arr[j])​\t\t\t&#123;​\t\t\t\tmin = j;​\t\t\t&#125;​\t\t&#125;​\t\ttmp = arr[min];​\t\tarr[min] = arr[i];​\t\tarr[i] = tmp;​\t&#125;&#125;\n\n归并排序12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849#include &lt;iostream&gt;using namespace std;void MergeArray(int arr[], int l, int r, int mid)&#123;​\tint* temp = (int*)malloc((r-l+1)*sizeof(int));​\tint i=l, j = mid+1, k=0;​\twhile(i&lt;=mid &amp;&amp; j&lt;=r)​\t&#123;​\t\tif (arr[i] &lt;= arr[j])​\t\t&#123;​\t\t\ttemp[k++] = arr[i];​\t\t\ti++;​\t\t&#125;​\t\telse​\t\t&#123;​\t\t\ttemp[k++] = arr[j];​\t\t\tj++;​\t\t&#125;​\t&#125;​\twhile(i&lt;=mid)​\t&#123;​\t\ttemp[k++] = arr[i];​\t\ti++;​\t&#125;​\twhile(j&lt;=r)​\t&#123;​\t\ttemp[k++] = arr[j];​\t\tj++;​\t&#125;​\tfor (i=0;i&lt;k;i++)​\t&#123;​\t\tarr[l+i] = temp[i];​\t&#125;​\tfree(temp);&#125;void MergeSort(int arr[], int l, int r)&#123;​\tif (l &lt; r)​\t&#123;​\t\tint mid = (l + r)/2;​\t\tMergeSort(arr, l, mid);​\t\tMergeSort(arr, mid+1, r);​\t\tMergeArray(arr, l, r, mid);​\t&#125;​\t​\t&#125;\n\n快速排序12345678910111213141516171819202122232425262728293031323334353637#include &lt;iostream&gt;using namespace std;int AdjustArr(int arr[], int l, int r)&#123;​\tint i=l,j=r,tmp=arr[l];​\twhile(i&lt;j)​\t&#123;​\t\twhile(arr[j] &gt; tmp &amp;&amp; i&lt;j)​\t\t&#123;​\t\t\tj--;​\t\t&#125;​\t\tif (i&lt;j)​\t\t&#123;​\t\t\tarr[i++] = arr[j];// ++​\t\t&#125;​\t\twhile(arr[i] &lt; tmp &amp;&amp; i&lt;j)​\t\t&#123;​\t\t\ti++;​\t\t&#125;​\t\tif (i&lt;j)​\t\t&#123;​\t\t\tarr[j--] = arr[i];​\t\t&#125;​\t&#125;​\tarr[i] = tmp;​\treturn i;&#125;void QuickSort(int arr[], int l, int r)&#123;​\tif (l &lt; r)​\t&#123;​\t\tint k = AdjustArr(arr, l, r);​\t\tQuickSort(arr,l,k-1);​\t\tQuickSort(arr,k+1,r);​\t&#125;&#125;\n\n希尔排序123456789101112131415161718192021222324252627282930#include &lt;iostream&gt;using namespace std;void ShellSort(int arr[], int len)&#123;​\tint step = len / 2;​\tint tmp;​\tfor (;step &gt; 0;step /= 2)​\t&#123;​\t\tfor (int i=0;i&lt;step;i++)​\t\t&#123;​\t\t\tfor (int j=i+step;j&lt;len;j+=step)​\t\t\t&#123;​\t\t\t\tfor (int k=j-step;k&gt;=0;k-=step)​\t\t\t\t&#123;​\t\t\t\t\tif (arr[j] &lt; arr[k])​\t\t\t\t\t&#123;​\t\t\t\t\t\ttmp = arr[j];​\t\t\t\t\t\tarr[j] = arr[k];​\t\t\t\t\t\tarr[k] = tmp;​\t\t\t\t\t\tj = k;// attention​\t\t\t\t\t&#125;​\t\t\t\t\telse​\t\t\t\t\t\tbreak;​\t\t\t\t&#125;​\t\t\t&#125;​\t\t&#125;​\t&#125;&#125;\n\n堆排序1234567891011121314151617181920212223242526272829303132333435363738394041#include &lt;iostream&gt;using namespace std;void HeapDown(int arr[], int first, int last)&#123;​\tint i=first, j=2*i+1,tmp;​\twhile(j&lt;last)​\t&#123;​\t\tif (arr[j] &lt; arr[j+1])​\t\t&#123;​\t\t\tj++;​\t\t&#125;​\t\tif (arr[i] &lt; arr[j])​\t\t&#123;​\t\t\ttmp = arr[j];​\t\t\tarr[j] = arr[i];​\t\t\tarr[i] = tmp;​\t\t\ti = j;​\t\t\tj = 2*i+1;​\t\t&#125;​\t\telse​\t\t\tbreak;​\t&#125;&#125;void HeapSort(int arr[], int len)&#123;​\tint tmp;​\tfor (int i = len/2-1; i&gt;=0; i--)​\t&#123;​\t\tHeapDown(arr, i, len-1);​\t&#125;​\tfor (int i=len-1;i&gt;0;i--)​\t&#123;​\t\ttmp = arr[0];​\t\tarr[0] = arr[i];​\t\tarr[i] = tmp;​\t\tHeapDown(arr, 0, i-1);​\t&#125;&#125;\n\n桶排序1234567891011121314151617181920212223242526#include &lt;iostream&gt;using namespace std;void BucketSort(int arr[], int len, int nExp)&#123;​\tint bucketArr[10] = &#123;0&#125;;​\tint *outputs = (int*)malloc(len*sizeof(int));​\tfor(int i=0;i&lt;len;i++)​\t&#123;​\t\tbucketArr[(arr[i]/nExp)%10]++;​\t&#125;​\tfor(int j=1;j&lt;len;j++)​\t&#123;​\t\tbucketArr[j] += bucketArr[j-1];​\t&#125;​\tfor (int i=len-1;i&gt;=0;i--)// attention​\t&#123;​\t\toutputs[bucketArr[(arr[i]/nExp)%10]-1] = arr[i];​\t\tbucketArr[(arr[i]/nExp)%10]--;​\t&#125;​\tfor (int i=0;i&lt;len;i++)​\t&#123;​\t\tarr[i] = outputs[i];​\t&#125;​\tfree(outputs);&#125;\n\n基数排序1234567891011121314151617181920#include &lt;iostream&gt;using namespace std;void RadixSort(int arr[], int len)&#123;​\tint i, nMax = arr[0], nExp;​\tfor (i=1;i&lt;len;i++)​\t&#123;​\t\tif (nMax &lt; arr[i])​\t\t&#123;​\t\t\tnMax = arr[i];​\t\t&#125;​\t&#125;​\tfor (nExp = 1; nMax/nExp&gt;0; nExp *= 10)​\t&#123;​\t\tBucketSort(arr, len, nExp);​\t&#125;&#125;\n\nJust Test It12345678910111213141516171819202122#include &lt;iostream&gt;using namespace std;void main()&#123;​\tint arr[] = &#123;49,38,65,97,76,13,27,49,55,0&#125;;​\tint len = 10;​\t//BubbleSort(arr, len);​\t//InsertSort(arr, len);​\t//SelectSort(arr, len);​\t//MergeSort(arr, 0, len-1);​\t//QuickSort(arr, 0, len-1);​\t//ShellSort(arr, len);​\t//HeapSort(arr, len);​\tRadixSort(arr, len);​\tfor (int i=0;i&lt;len;i++)​\t&#123;​\t\tcout&lt;&lt;arr[i]&lt;&lt;\" \";​\t&#125;​\tcout&lt;&lt;endl;​\tsystem(\"Pause\");&#125;\n\n","dateCreated":"2017-04-28T15:20:55+08:00","dateModified":"2020-04-26T13:13:15+08:00","datePublished":"2017-04-28T15:20:55+08:00","description":"八大排序算法  by C++ (转)","headline":"八大排序算法  by C++ (转)","image":["mushroom.jpg","galaxy.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"/kuberme.cn/Top-8-Sorting-Algorithm(cpp)/"},"publisher":{"@type":"Organization","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg","logo":{"@type":"ImageObject","url":"elephant.jpg"}},"url":"/kuberme.cn/Top-8-Sorting-Algorithm(cpp)/","keywords":"数据结构, 归并排序, 快速排序, 冒泡排序, 插入排序, 选择排序, 桶排序, 基数排序, 希尔排序, 堆排序","thumbnailUrl":"mushroom.jpg"}</script>
+    <meta name="description" content="八大排序算法  by C++ (转)">
+<meta name="keywords" content="数据结构,归并排序,快速排序,冒泡排序,插入排序,选择排序,桶排序,基数排序,希尔排序,堆排序">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="八大排序算法  by C++ (转)">
+<meta property="og:url" content="kuberme.cn/Top-8-Sorting-Algorithm(cpp)/index.html">
+<meta property="og:site_name" content="Fly with You">
+<meta property="og:description" content="八大排序算法  by C++ (转)">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-04-26T05:13:15.692Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="八大排序算法  by C++ (转)">
+<meta name="twitter:description" content="八大排序算法  by C++ (转)">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="kuberme.cn/assets/images/elephant.jpg"/>
+    
+    
+        <meta property="og:image" content="kuberme.cn/Top-8-Sorting-Algorithm(cpp)/mushroom.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="kuberme.cn/Top-8-Sorting-Algorithm(cpp)/mushroom.jpg"/>
+    
+    
+        <meta property="og:image" content="kuberme.cn/Top-8-Sorting-Algorithm(cpp)/galaxy.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="kuberme.cn/Top-8-Sorting-Algorithm(cpp)/galaxy.jpg"/>
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-fniyqlsw5pf9vc6yjgxwasnk5aedpxzktlqqyflf36mnqscn70u3wtotq7ms.min.css">
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/ "
+            aria-label=""
+        >
+            Fly with You
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+            <img class="header-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="Read more about the author"
+                >
+                    <img class="sidebar-profile-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">Kubert</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>author.bio</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="主页"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">主页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                            title="条目"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">条目</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="标签"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="归档"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                            title="搜索"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">搜索</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="#about"
+                            
+                            title="关于"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/kubertalk" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="mailto:kubertqiu@hotmail.com" target="_blank" rel="noopener" title="Mail">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                            title="RSS"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+        <div class="post-header-cover
+                    text-left
+                    "
+             style="background-image:url('/Top-8-Sorting-Algorithm(cpp)/galaxy.jpg');"
+             data-behavior="5">
+            
+                <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            八大排序算法  by C++ (转)
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2017-04-28T15:20:55+08:00">
+	
+		    Apr 28, 2017
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/数据结构/">数据结构</a>
+
+
+    
+</div>
+
+    
+</div>
+
+            
+        </div>
+
+            <div id="main" data-behavior="5"
+                 class="hasCover
+                        hasCoverMetaIn
+                        hasCoverCaption">
+                
+<article class="post">
+    
+        <span class="post-header-cover-caption caption">A beautiful galaxy</span>
+    
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>八大排序算法  by C++ (转)</p>
+<a id="more"></a>
+<h1 id="table-of-contents">Table of Contents</h1><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#八大排序算法-by-C-转"><span class="toc-text">八大排序算法  by C++ (转)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#冒泡排序"><span class="toc-text">冒泡排序</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#插入排序"><span class="toc-text">插入排序</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#选择排序"><span class="toc-text">选择排序</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#归并排序"><span class="toc-text">归并排序</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#快速排序"><span class="toc-text">快速排序</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#希尔排序"><span class="toc-text">希尔排序</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#堆排序"><span class="toc-text">堆排序</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#桶排序"><span class="toc-text">桶排序</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#基数排序"><span class="toc-text">基数排序</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Just-Test-It"><span class="toc-text">Just Test It</span></a></li></ol>
+
+<h4 id="八大排序算法-by-C-转"><a href="#八大排序算法-by-C-转" class="headerlink" title="八大排序算法  by C++ (转)"></a>八大排序算法  by C++ (转)</h4><h5 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h5><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">BubbleSort</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> len)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">​	<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len<span class="number">-1</span>;i++)</span><br><span class="line">​	&#123;</span><br><span class="line">​		<span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;len-i<span class="number">-1</span>;j++)</span><br><span class="line">​		&#123;</span><br><span class="line">​			<span class="keyword">if</span> (arr[j] &gt; arr[j+<span class="number">1</span>])</span><br><span class="line">​			&#123;</span><br><span class="line">​				<span class="keyword">int</span> tmp = arr[j];</span><br><span class="line">​				arr[j] = arr[j+<span class="number">1</span>];</span><br><span class="line">​				arr[j+<span class="number">1</span>] = tmp;</span><br><span class="line">​			&#125;</span><br><span class="line">​		&#125;</span><br><span class="line">​	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">InsertSort</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> len)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">​	<span class="keyword">int</span> tmp;</span><br><span class="line">​	<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;len;i++)</span><br><span class="line">​	&#123;</span><br><span class="line">​		<span class="keyword">for</span> (<span class="keyword">int</span> j=i<span class="number">-1</span>;j&gt;=<span class="number">0</span>;j--)</span><br><span class="line">​		&#123;</span><br><span class="line">​			<span class="keyword">if</span> (arr[i] &lt; arr[j])</span><br><span class="line">​			&#123;</span><br><span class="line">​				<span class="keyword">int</span> tmp = arr[j];</span><br><span class="line">​				arr[j] = arr[i];</span><br><span class="line">​				arr[i] = tmp;</span><br><span class="line">​				i=j;</span><br><span class="line">​			&#125;</span><br><span class="line">​			<span class="keyword">else</span></span><br><span class="line">​				<span class="keyword">break</span>;</span><br><span class="line">​		&#125;</span><br><span class="line">​	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">void SelectSort(int arr[], int len)</span><br><span class="line">&#123;</span><br><span class="line">​	int i,j,min, tmp;</span><br><span class="line">​	for (i=0;i&lt;len-1;i++)</span><br><span class="line">​	&#123;</span><br><span class="line">​		min = i;</span><br><span class="line">​		for (j=i+1;j&lt;len;j++)</span><br><span class="line">​		&#123;</span><br><span class="line">​			if (arr[min] &gt; arr[j])</span><br><span class="line">​			&#123;</span><br><span class="line">​				min = j;</span><br><span class="line">​			&#125;</span><br><span class="line">​		&#125;</span><br><span class="line">​		tmp = arr[min];</span><br><span class="line">​		arr[min] = arr[i];</span><br><span class="line">​		arr[i] = tmp;</span><br><span class="line">​	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MergeArray</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> l, <span class="keyword">int</span> r, <span class="keyword">int</span> mid)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">​	<span class="keyword">int</span>* temp = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>((r-l+<span class="number">1</span>)*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">​	<span class="keyword">int</span> i=l, j = mid+<span class="number">1</span>, k=<span class="number">0</span>;</span><br><span class="line">​	<span class="keyword">while</span>(i&lt;=mid &amp;&amp; j&lt;=r)</span><br><span class="line">​	&#123;</span><br><span class="line">​		<span class="keyword">if</span> (arr[i] &lt;= arr[j])</span><br><span class="line">​		&#123;</span><br><span class="line">​			temp[k++] = arr[i];</span><br><span class="line">​			i++;</span><br><span class="line">​		&#125;</span><br><span class="line">​		<span class="keyword">else</span></span><br><span class="line">​		&#123;</span><br><span class="line">​			temp[k++] = arr[j];</span><br><span class="line">​			j++;</span><br><span class="line">​		&#125;</span><br><span class="line">​	&#125;</span><br><span class="line">​	<span class="keyword">while</span>(i&lt;=mid)</span><br><span class="line">​	&#123;</span><br><span class="line">​		temp[k++] = arr[i];</span><br><span class="line">​		i++;</span><br><span class="line">​	&#125;</span><br><span class="line">​	<span class="keyword">while</span>(j&lt;=r)</span><br><span class="line">​	&#123;</span><br><span class="line">​		temp[k++] = arr[j];</span><br><span class="line">​		j++;</span><br><span class="line">​	&#125;</span><br><span class="line">​	<span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;k;i++)</span><br><span class="line">​	&#123;</span><br><span class="line">​		arr[l+i] = temp[i];</span><br><span class="line">​	&#125;</span><br><span class="line">​	<span class="built_in">free</span>(temp);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MergeSort</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> l, <span class="keyword">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">​	<span class="keyword">if</span> (l &lt; r)</span><br><span class="line">​	&#123;</span><br><span class="line">​		<span class="keyword">int</span> mid = (l + r)/<span class="number">2</span>;</span><br><span class="line">​		MergeSort(arr, l, mid);</span><br><span class="line">​		MergeSort(arr, mid+<span class="number">1</span>, r);</span><br><span class="line">​		MergeArray(arr, l, r, mid);</span><br><span class="line">​	&#125;</span><br><span class="line">​	</span><br><span class="line">​	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">AdjustArr</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> l, <span class="keyword">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">​	<span class="keyword">int</span> i=l,j=r,tmp=arr[l];</span><br><span class="line">​	<span class="keyword">while</span>(i&lt;j)</span><br><span class="line">​	&#123;</span><br><span class="line">​		<span class="keyword">while</span>(arr[j] &gt; tmp &amp;&amp; i&lt;j)</span><br><span class="line">​		&#123;</span><br><span class="line">​			j--;</span><br><span class="line">​		&#125;</span><br><span class="line">​		<span class="keyword">if</span> (i&lt;j)</span><br><span class="line">​		&#123;</span><br><span class="line">​			arr[i++] = arr[j];<span class="comment">// ++</span></span><br><span class="line">​		&#125;</span><br><span class="line">​		<span class="keyword">while</span>(arr[i] &lt; tmp &amp;&amp; i&lt;j)</span><br><span class="line">​		&#123;</span><br><span class="line">​			i++;</span><br><span class="line">​		&#125;</span><br><span class="line">​		<span class="keyword">if</span> (i&lt;j)</span><br><span class="line">​		&#123;</span><br><span class="line">​			arr[j--] = arr[i];</span><br><span class="line">​		&#125;</span><br><span class="line">​	&#125;</span><br><span class="line">​	arr[i] = tmp;</span><br><span class="line">​	<span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">QuickSort</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> l, <span class="keyword">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">​	<span class="keyword">if</span> (l &lt; r)</span><br><span class="line">​	&#123;</span><br><span class="line">​		<span class="keyword">int</span> k = AdjustArr(arr, l, r);</span><br><span class="line">​		QuickSort(arr,l,k<span class="number">-1</span>);</span><br><span class="line">​		QuickSort(arr,k+<span class="number">1</span>,r);</span><br><span class="line">​	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="希尔排序"><a href="#希尔排序" class="headerlink" title="希尔排序"></a>希尔排序</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ShellSort</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> len)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">​	<span class="keyword">int</span> step = len / <span class="number">2</span>;</span><br><span class="line">​	<span class="keyword">int</span> tmp;</span><br><span class="line">​	<span class="keyword">for</span> (;step &gt; <span class="number">0</span>;step /= <span class="number">2</span>)</span><br><span class="line">​	&#123;</span><br><span class="line">​		<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;step;i++)</span><br><span class="line">​		&#123;</span><br><span class="line">​			<span class="keyword">for</span> (<span class="keyword">int</span> j=i+step;j&lt;len;j+=step)</span><br><span class="line">​			&#123;</span><br><span class="line">​				<span class="keyword">for</span> (<span class="keyword">int</span> k=j-step;k&gt;=<span class="number">0</span>;k-=step)</span><br><span class="line">​				&#123;</span><br><span class="line">​					<span class="keyword">if</span> (arr[j] &lt; arr[k])</span><br><span class="line">​					&#123;</span><br><span class="line">​						tmp = arr[j];</span><br><span class="line">​						arr[j] = arr[k];</span><br><span class="line">​						arr[k] = tmp;</span><br><span class="line">​						j = k;<span class="comment">// attention</span></span><br><span class="line"></span><br><span class="line">​					&#125;</span><br><span class="line">​					<span class="keyword">else</span></span><br><span class="line">​						<span class="keyword">break</span>;</span><br><span class="line">​				&#125;</span><br><span class="line">​			&#125;</span><br><span class="line">​		&#125;</span><br><span class="line">​	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HeapDown</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> first, <span class="keyword">int</span> last)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">​	<span class="keyword">int</span> i=first, j=<span class="number">2</span>*i+<span class="number">1</span>,tmp;</span><br><span class="line">​	<span class="keyword">while</span>(j&lt;last)</span><br><span class="line">​	&#123;</span><br><span class="line">​		<span class="keyword">if</span> (arr[j] &lt; arr[j+<span class="number">1</span>])</span><br><span class="line">​		&#123;</span><br><span class="line">​			j++;</span><br><span class="line">​		&#125;</span><br><span class="line">​		<span class="keyword">if</span> (arr[i] &lt; arr[j])</span><br><span class="line">​		&#123;</span><br><span class="line">​			tmp = arr[j];</span><br><span class="line">​			arr[j] = arr[i];</span><br><span class="line">​			arr[i] = tmp;</span><br><span class="line">​			i = j;</span><br><span class="line">​			j = <span class="number">2</span>*i+<span class="number">1</span>;</span><br><span class="line">​		&#125;</span><br><span class="line">​		<span class="keyword">else</span></span><br><span class="line">​			<span class="keyword">break</span>;</span><br><span class="line">​	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">HeapSort</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> len)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">​	<span class="keyword">int</span> tmp;</span><br><span class="line">​	<span class="keyword">for</span> (<span class="keyword">int</span> i = len/<span class="number">2</span><span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--)</span><br><span class="line">​	&#123;</span><br><span class="line">​		HeapDown(arr, i, len<span class="number">-1</span>);</span><br><span class="line">​	&#125;</span><br><span class="line"></span><br><span class="line">​	<span class="keyword">for</span> (<span class="keyword">int</span> i=len<span class="number">-1</span>;i&gt;<span class="number">0</span>;i--)</span><br><span class="line">​	&#123;</span><br><span class="line">​		tmp = arr[<span class="number">0</span>];</span><br><span class="line">​		arr[<span class="number">0</span>] = arr[i];</span><br><span class="line">​		arr[i] = tmp;</span><br><span class="line">​		HeapDown(arr, <span class="number">0</span>, i<span class="number">-1</span>);</span><br><span class="line">​	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">BucketSort</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> len, <span class="keyword">int</span> nExp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">​	<span class="keyword">int</span> bucketArr[<span class="number">10</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">​	<span class="keyword">int</span> *outputs = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(len*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">​	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len;i++)</span><br><span class="line">​	&#123;</span><br><span class="line">​		bucketArr[(arr[i]/nExp)%<span class="number">10</span>]++;</span><br><span class="line">​	&#125;</span><br><span class="line">​	<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;len;j++)</span><br><span class="line">​	&#123;</span><br><span class="line">​		bucketArr[j] += bucketArr[j<span class="number">-1</span>];</span><br><span class="line">​	&#125;</span><br><span class="line">​	<span class="keyword">for</span> (<span class="keyword">int</span> i=len<span class="number">-1</span>;i&gt;=<span class="number">0</span>;i--)<span class="comment">// attention</span></span><br><span class="line">​	&#123;</span><br><span class="line">​		outputs[bucketArr[(arr[i]/nExp)%<span class="number">10</span>]<span class="number">-1</span>] = arr[i];</span><br><span class="line">​		bucketArr[(arr[i]/nExp)%<span class="number">10</span>]--;</span><br><span class="line">​	&#125;</span><br><span class="line">​	<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len;i++)</span><br><span class="line">​	&#123;</span><br><span class="line">​		arr[i] = outputs[i];</span><br><span class="line">​	&#125;</span><br><span class="line">​	<span class="built_in">free</span>(outputs);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="基数排序"><a href="#基数排序" class="headerlink" title="基数排序"></a>基数排序</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">RadixSort</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> len)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">​	<span class="keyword">int</span> i, nMax = arr[<span class="number">0</span>], nExp;</span><br><span class="line">​	<span class="keyword">for</span> (i=<span class="number">1</span>;i&lt;len;i++)</span><br><span class="line">​	&#123;</span><br><span class="line">​		<span class="keyword">if</span> (nMax &lt; arr[i])</span><br><span class="line">​		&#123;</span><br><span class="line">​			nMax = arr[i];</span><br><span class="line">​		&#125;</span><br><span class="line">​	&#125;</span><br><span class="line"></span><br><span class="line">​	<span class="keyword">for</span> (nExp = <span class="number">1</span>; nMax/nExp&gt;<span class="number">0</span>; nExp *= <span class="number">10</span>)</span><br><span class="line">​	&#123;</span><br><span class="line">​		BucketSort(arr, len, nExp);</span><br><span class="line">​	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Just-Test-It"><a href="#Just-Test-It" class="headerlink" title="Just Test It"></a>Just Test It</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">​	<span class="keyword">int</span> arr[] = &#123;<span class="number">49</span>,<span class="number">38</span>,<span class="number">65</span>,<span class="number">97</span>,<span class="number">76</span>,<span class="number">13</span>,<span class="number">27</span>,<span class="number">49</span>,<span class="number">55</span>,<span class="number">0</span>&#125;;</span><br><span class="line">​	<span class="keyword">int</span> len = <span class="number">10</span>;</span><br><span class="line">​	<span class="comment">//BubbleSort(arr, len);</span></span><br><span class="line">​	<span class="comment">//InsertSort(arr, len);</span></span><br><span class="line">​	<span class="comment">//SelectSort(arr, len);</span></span><br><span class="line">​	<span class="comment">//MergeSort(arr, 0, len-1);</span></span><br><span class="line">​	<span class="comment">//QuickSort(arr, 0, len-1);</span></span><br><span class="line">​	<span class="comment">//ShellSort(arr, len);</span></span><br><span class="line">​	<span class="comment">//HeapSort(arr, len);</span></span><br><span class="line">​	RadixSort(arr, len);</span><br><span class="line">​	<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len;i++)</span><br><span class="line">​	&#123;</span><br><span class="line">​		<span class="built_in">cout</span>&lt;&lt;arr[i]&lt;&lt;<span class="string">" "</span>;</span><br><span class="line">​	&#125;</span><br><span class="line">​	<span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">​	system(<span class="string">"Pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+            
+
+
+            <!-- my-copyright -->
+            
+            <!-- my-copyright -->
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/冒泡排序/">冒泡排序</a> <a class="tag tag--primary tag--small t-link" href="/tags/基数排序/">基数排序</a> <a class="tag tag--primary tag--small t-link" href="/tags/堆排序/">堆排序</a> <a class="tag tag--primary tag--small t-link" href="/tags/希尔排序/">希尔排序</a> <a class="tag tag--primary tag--small t-link" href="/tags/归并排序/">归并排序</a> <a class="tag tag--primary tag--small t-link" href="/tags/快速排序/">快速排序</a> <a class="tag tag--primary tag--small t-link" href="/tags/插入排序/">插入排序</a> <a class="tag tag--primary tag--small t-link" href="/tags/数据结构/">数据结构</a> <a class="tag tag--primary tag--small t-link" href="/tags/桶排序/">桶排序</a> <a class="tag tag--primary tag--small t-link" href="/tags/选择排序/">选择排序</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
+                    data-tooltip="Run a cpp Example on Win10 Docker with VS Build Tools"
+                    aria-label="PREVIOUS: Run a cpp Example on Win10 Docker with VS Build Tools"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/SQL-Study-Note/"
+                    data-tooltip="数据库篇笔记-1-数据库基础概念"
+                    aria-label="NEXT: 数据库篇笔记-1-数据库基础概念"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Top-8-Sorting-Algorithm(cpp)/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=kuberme.cn/Top-8-Sorting-Algorithm(cpp)/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=kuberme.cn/Top-8-Sorting-Algorithm(cpp)/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="Table of Contents">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2020 Kubert. All Rights Reserved.
+    </span><br>
+    <span class="upyun-image">
+    	Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>&nbsp&nbsp&nbsp&nbsp
+        CDN Accelerating Supported by<a href="https://www.upyun.com/" target="_blank" rel="external nofollow">
+        	<img src="/assets/images/upyunLogo.png" height="20" width="50"/>
+       	</a>
+    </span>
+
+<!--不蒜子统计
+<br>
+
+    <span id="busuanzi_container_site_pv">
+            PV&nbsp<span id="busuanzi_value_site_pv"></span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+            Vistors&nbsp<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	 
+-->
+
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
+                    data-tooltip="Run a cpp Example on Win10 Docker with VS Build Tools"
+                    aria-label="PREVIOUS: Run a cpp Example on Win10 Docker with VS Build Tools"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/SQL-Study-Note/"
+                    data-tooltip="数据库篇笔记-1-数据库基础概念"
+                    aria-label="NEXT: 数据库篇笔记-1-数据库基础概念"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Top-8-Sorting-Algorithm(cpp)/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=kuberme.cn/Top-8-Sorting-Algorithm(cpp)/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=kuberme.cn/Top-8-Sorting-Algorithm(cpp)/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="Table of Contents">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Top-8-Sorting-Algorithm(cpp)/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=kuberme.cn/Top-8-Sorting-Algorithm(cpp)/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=kuberme.cn/Top-8-Sorting-Algorithm(cpp)/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">Kubert</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Chengdu,China
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/galaxy.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-pn1j1k5loooddhnobedbnbb3axrh5qfsl8x8kmeka2su2hkn9zbqwjkkkqva.min.js"></script>
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

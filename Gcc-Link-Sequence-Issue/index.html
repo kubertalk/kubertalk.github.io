@@ -1,0 +1,685 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="google-site-verification" content="0DhOwPrg8r0NkCu3BwNH0_WgQalIXNAOanq-Gs-xLaI" />
+    <meta name="google-site-verification" content="OaEXvviVUNa10fJC2M-0qnpN6izG0NxVTQfjg1MmUsE" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Fly with You">
+    <title>Gcc Link Sequence Issue - Fly with You</title>
+    <meta name="author" content="Kubert">
+    
+        <meta name="keywords" content="hexo,javascript,">
+    
+    
+        <link rel="icon" href="kuberme.cn/assets/images/elephant.jpg">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg"},"articleBody":"When you use a GCC compiler or a makefile to build your project, do you know the details behind this compiling ? Let me tell you what i see and what i know.\n\n\n\nGCC Link Sequence IssueGCC Link BackgroundGCC linker will link some object files  to only one object file.  During this time, it must replace all symbols(parameters/functions) to memory address(parameters address/functions address), for referring all sections in your object.\nThe most standard functions are located in “libc.a”(a means achieve), or located in shared dynamic lib “libc.so”(so means share object). these libs always located in /lib/ or /usr/lib/ or other folders of gcc finding setting.\nSimple Case1234567//test.c#include &lt;stdio.h&gt;int main(void)&#123;    printf(\"Hello World!\\n\");    return 0;&#125;\n\nUse gcc test.c -o test to make a quick compile, for making *.c to *.exe or *.bin.\nfour entire steps in Gcc Compile123456gcc -E sqltest.c -o sqltest.i\t//firstly, make *.c preprocessing to *.igcc -S sqltest.i -o sqltest.s\t//secondly, make *.i compiling to *.s   gcc -c sqltest.s -o sqltest.o\t//thirdly, make *.s assemblying to *.o  gcc sqltest.o &apos;mysql_configs --libs&apos; -o sqltest //finally, make *.o and *.so/*.lib/*.dll linking to *.bin//which &apos;mysql_configs --libs&apos; equal to &quot;-L/usr/lib/x86_64-linux-gnu -lmysqlclient -lpthread -lm -lrt -ldl&quot;\n\nSequence issue in linkingif you use gcc &#39;mysql_configs --libs&#39;sqltest.o -o sqltest to make a link, you will get errors which said “undefined reference to xxx”. but why ?\nbecause the finding sequence about symbols and libs of linking of GCC, is from Left to Right, according to -L sequence. So the Mysql API in sqltest.o can not find its references if you put the mysql libs to the left place of the sqltest.o. \nSolutions:\nPut the lowest layer libs to the end of the linking command, like gcc obj($?) -l (top logic libs) -l (middle packeted libs) -l (system libs) -o $@.\nOr use repeat option to your linking command, make the “ld” keep finding refer libs in your command.\nOther Usage on library connectionuse readelf -d sqltest or ldd sqltest to see the reference connection of a .bin/.so/.lib.\n\nHope you have a strong makefile and happy compiling on your code.\nEnd.\n","dateCreated":"2017-05-21T10:50:11+08:00","dateModified":"2020-04-15T11:23:32+08:00","datePublished":"2017-05-21T10:50:11+08:00","description":"When you use a GCC compiler or a makefile to build your project, do you know the details behind this compiling ? Let me tell you what i see and what i know.","headline":"Gcc Link Sequence Issue","image":["analogue-aperture-black-and-white-1203819.jpg","galaxy.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"/kuberme.cn/Gcc-Link-Sequence-Issue/"},"publisher":{"@type":"Organization","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg","logo":{"@type":"ImageObject","url":"elephant.jpg"}},"url":"/kuberme.cn/Gcc-Link-Sequence-Issue/","keywords":"GCC","thumbnailUrl":"analogue-aperture-black-and-white-1203819.jpg"}</script>
+    <meta name="description" content="When you use a GCC compiler or a makefile to build your project, do you know the details behind this compiling ? Let me tell you what i see and what i know.">
+<meta name="keywords" content="GCC">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Gcc Link Sequence Issue">
+<meta property="og:url" content="kuberme.cn/Gcc-Link-Sequence-Issue/index.html">
+<meta property="og:site_name" content="Fly with You">
+<meta property="og:description" content="When you use a GCC compiler or a makefile to build your project, do you know the details behind this compiling ? Let me tell you what i see and what i know.">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://blog.kuberfly.me/2017/05/21/Gcc-Link-Sequence-Issue/readelf.png">
+<meta property="og:updated_time" content="2020-04-15T03:23:32.824Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gcc Link Sequence Issue">
+<meta name="twitter:description" content="When you use a GCC compiler or a makefile to build your project, do you know the details behind this compiling ? Let me tell you what i see and what i know.">
+<meta name="twitter:image" content="http://blog.kuberfly.me/2017/05/21/Gcc-Link-Sequence-Issue/readelf.png">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="kuberme.cn/assets/images/elephant.jpg"/>
+    
+    
+        <meta property="og:image" content="kuberme.cn/Gcc-Link-Sequence-Issue/analogue-aperture-black-and-white-1203819.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="kuberme.cn/Gcc-Link-Sequence-Issue/analogue-aperture-black-and-white-1203819.jpg"/>
+    
+    
+        <meta property="og:image" content="kuberme.cn/Gcc-Link-Sequence-Issue/galaxy.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="kuberme.cn/Gcc-Link-Sequence-Issue/galaxy.jpg"/>
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-fniyqlsw5pf9vc6yjgxwasnk5aedpxzktlqqyflf36mnqscn70u3wtotq7ms.min.css">
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/ "
+            aria-label=""
+        >
+            Fly with You
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+            <img class="header-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="Read more about the author"
+                >
+                    <img class="sidebar-profile-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">Kubert</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>author.bio</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="主页"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">主页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                            title="条目"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">条目</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="标签"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="归档"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                            title="搜索"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">搜索</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="#about"
+                            
+                            title="关于"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/kubertalk" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="mailto:kubertqiu@hotmail.com" target="_blank" rel="noopener" title="Mail">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                            title="RSS"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+        <div class="post-header-cover
+                    text-left
+                    "
+             style="background-image:url('/Gcc-Link-Sequence-Issue/galaxy.jpg');"
+             data-behavior="5">
+            
+                <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            Gcc Link Sequence Issue
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2017-05-21T10:50:11+08:00">
+	
+		    May 21, 2017
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/C/">C</a>, <a class="category-link" href="/categories/C/Compiler/">Compiler</a>
+
+
+    
+</div>
+
+    
+</div>
+
+            
+        </div>
+
+            <div id="main" data-behavior="5"
+                 class="hasCover
+                        hasCoverMetaIn
+                        hasCoverCaption">
+                
+<article class="post">
+    
+        <span class="post-header-cover-caption caption">A beautiful galaxy</span>
+    
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>When you use a GCC compiler or a makefile to build your project, do you know the details behind this compiling ? Let me tell you what i see and what i know.</p>
+<a id="more"></a>
+<h1 id="table-of-contents">Table of Contents</h1><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#GCC-Link-Sequence-Issue"><span class="toc-text">GCC Link Sequence Issue</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#GCC-Link-Background"><span class="toc-text">GCC Link Background</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Simple-Case"><span class="toc-text">Simple Case</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#four-entire-steps-in-Gcc-Compile"><span class="toc-text">four entire steps in Gcc Compile</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Sequence-issue-in-linking"><span class="toc-text">Sequence issue in linking</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Other-Usage-on-library-connection"><span class="toc-text">Other Usage on library connection</span></a></li></ol></li></ol>
+
+<h3 id="GCC-Link-Sequence-Issue"><a href="#GCC-Link-Sequence-Issue" class="headerlink" title="GCC Link Sequence Issue"></a>GCC Link Sequence Issue</h3><h4 id="GCC-Link-Background"><a href="#GCC-Link-Background" class="headerlink" title="GCC Link Background"></a>GCC Link Background</h4><p>GCC linker will link some object files  to only one object file.  During this time, it must replace all symbols(parameters/functions) to memory address(parameters address/functions address), for referring all sections in your object.</p>
+<p>The most standard functions are located in “libc.a”(a means achieve), or located in shared dynamic lib “libc.so”(so means share object). these libs always located in <code>/lib/</code> or <code>/usr/lib/</code> or other folders of gcc finding setting.</p>
+<h4 id="Simple-Case"><a href="#Simple-Case" class="headerlink" title="Simple Case"></a>Simple Case</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//test.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Hello World!\n"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Use <code>gcc test.c -o test</code> to make a quick compile, for making *.c to *.exe or *.bin.</p>
+<h4 id="four-entire-steps-in-Gcc-Compile"><a href="#four-entire-steps-in-Gcc-Compile" class="headerlink" title="four entire steps in Gcc Compile"></a>four entire steps in Gcc Compile</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">gcc -E sqltest.c -o sqltest.i	//firstly, make *.c preprocessing to *.i</span><br><span class="line">gcc -S sqltest.i -o sqltest.s	//secondly, make *.i compiling to *.s   </span><br><span class="line">gcc -c sqltest.s -o sqltest.o	//thirdly, make *.s assemblying to *.o  </span><br><span class="line">gcc sqltest.o &apos;mysql_configs --libs&apos; -o sqltest </span><br><span class="line">//finally, make *.o and *.so/*.lib/*.dll linking to *.bin</span><br><span class="line">//which &apos;mysql_configs --libs&apos; equal to &quot;-L/usr/lib/x86_64-linux-gnu -lmysqlclient -lpthread -lm -lrt -ldl&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Sequence-issue-in-linking"><a href="#Sequence-issue-in-linking" class="headerlink" title="Sequence issue in linking"></a>Sequence issue in linking</h4><p>if you use <code>gcc &#39;mysql_configs --libs&#39;sqltest.o -o sqltest</code> to make a link, you will get errors which said “undefined reference to xxx”. but why ?</p>
+<p>because the finding sequence about symbols and libs of linking of GCC, is from Left to Right, according to <code>-L</code> sequence. So the Mysql API in sqltest.o can not find its references if you put the mysql libs to the left place of the sqltest.o. </p>
+<p>Solutions:</p>
+<p>Put the lowest layer libs to the end of the linking command, like <code>gcc obj($?) -l (top logic libs) -l (middle packeted libs) -l (system libs) -o $@</code>.</p>
+<p>Or use repeat option to your linking command, make the “ld” keep finding refer libs in your command.</p>
+<h4 id="Other-Usage-on-library-connection"><a href="#Other-Usage-on-library-connection" class="headerlink" title="Other Usage on library connection"></a>Other Usage on library connection</h4><p>use <code>readelf -d sqltest</code> or <code>ldd sqltest</code> to see the reference connection of a <em>.bin/</em>.so/.lib.</p>
+<p><img src="http://blog.kuberfly.me/2017/05/21/Gcc-Link-Sequence-Issue/readelf.png" alt="readelf"></p>
+<p>Hope you have a strong makefile and happy compiling on your code.</p>
+<p>End.</p>
+
+            
+
+
+            <!-- my-copyright -->
+            
+                <div class="article-footer-copyright">
+    <p><span>本文标题:</span><href="/ "> Gcc Link Sequence Issue</a></p>
+    <p><span>文章作者:</span><a href="/" title="访问 Kubert的个人博客">Kubert</a></p>
+    <p><span>发布时间:</span>2017年05月21日 - 10:50</p>
+    <p><span>最后更新:</span>2020年04月15日 - 11:23</p>
+    <p><span>原始链接:</span><a href="/Gcc-Link-Sequence-Issue/" title="Gcc Link Sequence Issue">kuberme.cn/Gcc-Link-Sequence-Issue/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="kuberme.cn/Gcc-Link-Sequence-Issue/"  aria-label="复制成功！"></i></span>
+    </p>
+    <p><span>许可协议:</span><i class="fab fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)" rel="external nofollow">CC BY-NC-ND 4.0</a> 转载请保留原文链接及作者</p>  
+</div>
+
+            
+            <!-- my-copyright -->
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/GCC/">GCC</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/Data-Structure-2-Linked-List/"
+                    data-tooltip="数据结构篇笔记-2-链表"
+                    aria-label="PREVIOUS: 数据结构篇笔记-2-链表"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/Hacker Marathon Note of 2017/"
+                    data-tooltip="201705 交大黑客松（Hacker Marathon)纪要"
+                    aria-label="NEXT: 201705 交大黑客松（Hacker Marathon)纪要"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Gcc-Link-Sequence-Issue/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=kuberme.cn/Gcc-Link-Sequence-Issue/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=kuberme.cn/Gcc-Link-Sequence-Issue/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="Table of Contents">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2020 Kubert. All Rights Reserved.
+    </span><br>
+    <span class="upyun-image">
+    	Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>&nbsp&nbsp&nbsp&nbsp
+        CDN Accelerating Supported by<a href="https://www.upyun.com/" target="_blank" rel="external nofollow">
+        	<img src="/assets/images/upyunLogo.png" height="20" width="50"/>
+       	</a>
+    </span>
+
+<!--不蒜子统计
+<br>
+
+    <span id="busuanzi_container_site_pv">
+            PV&nbsp<span id="busuanzi_value_site_pv"></span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+            Vistors&nbsp<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	 
+-->
+
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/Data-Structure-2-Linked-List/"
+                    data-tooltip="数据结构篇笔记-2-链表"
+                    aria-label="PREVIOUS: 数据结构篇笔记-2-链表"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/Hacker Marathon Note of 2017/"
+                    data-tooltip="201705 交大黑客松（Hacker Marathon)纪要"
+                    aria-label="NEXT: 201705 交大黑客松（Hacker Marathon)纪要"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Gcc-Link-Sequence-Issue/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=kuberme.cn/Gcc-Link-Sequence-Issue/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=kuberme.cn/Gcc-Link-Sequence-Issue/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="Table of Contents">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Gcc-Link-Sequence-Issue/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=kuberme.cn/Gcc-Link-Sequence-Issue/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=kuberme.cn/Gcc-Link-Sequence-Issue/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">Kubert</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Chengdu,China
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/galaxy.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-pn1j1k5loooddhnobedbnbb3axrh5qfsl8x8kmeka2su2hkn9zbqwjkkkqva.min.js"></script>
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

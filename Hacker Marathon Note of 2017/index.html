@@ -1,0 +1,792 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="google-site-verification" content="0DhOwPrg8r0NkCu3BwNH0_WgQalIXNAOanq-Gs-xLaI" />
+    <meta name="google-site-verification" content="OaEXvviVUNa10fJC2M-0qnpN6izG0NxVTQfjg1MmUsE" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Fly with You">
+    <title>201705 交大黑客松（Hacker Marathon)纪要 - Fly with You</title>
+    <meta name="author" content="Kubert">
+    
+        <meta name="keywords" content="hexo,javascript,">
+    
+    
+        <link rel="icon" href="kuberme.cn/assets/images/elephant.jpg">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg"},"articleBody":"201705 交大黑客松（Hacker Marathon)纪要\n\n\n\n201705 交大黑客松（Hacker Marathon)纪要例子1–NVIDIA小车详情描述\n本项目拼装了一台能够智能识别图像的小车，该小车利用摄像头捕捉物体并分类，如猫、瓶子、人等等，进而根据分类结果执行相关动作。\n1.控制：在ROS环境下，利用twist结构控制小车执行相关动作，并发布topic，然后在ARDUINO中订阅该主题。\n2.视觉识别：\n解决的问题\n1.小组成员在36个小时内，完成小车驱动软件的编制，并实现远程控制。\n2.小车能够根据不同的图片做出不同动作，遇到障碍时会停止动作，并且操控者可以在任何时候终止小车运动。\n3.具体动作有：前进、后退、原地旋转等组合动作。\n项目使用指南\n用于控制行进动作的图片可以打印在A4纸上，由操控者手举着图片让小车识别后分别执行不同的行进动作。\n未来发展规划\n1.机场加油车或拖车：\n利用视觉识别功能捕捉飞机，捕捉到之后靠近目标并执行相关任务。\n2.道路清扫车：\n若识别到瓶子等垃圾，自动清扫；若识别到汽车或行人时，停止前进。\n例子2–图片识别SDK使用情况说明\n我们利用了IBM Waston服务来做图片识别，之后将其转换为对应的表情包（目前是Emoji）。\n服务部署在青云上，依赖于其提供的QingStor来存储上传的图片，并使用负载均衡/VPC等服务来提供高可靠的服务。\n![青云API](/Users/kuber/Documents/ 青灯黄卷2/面试书籍/青云API.tiff)\n例子三–NVIDIA小车在本次比赛中，我们将深度学习中的目标识别问题与智能小车的运动控制问题相结合，顺利完成了整个比赛项目。整个项目可以分解为如下几个部分：首先，利用图像处理工具Opencv对小车摄像头接受到的图像信息进行处理，将接收图像的RGB通道信息进行处理。之后，利用深度学习领域的SSD算法进行目标识别方面的处理，利用分类识别效果很好的深度网络模型对接受到的图片信息进行识别，进而输出图像的类别信息。最后，针对接收图像的不同类别，控制智能小车做出前行、后退、原地360度左转/右转等不同动作、除此之外，还加入了利用超声波进行障碍物躲避、小车的即时停止等功能。充分利用了相关企业提供的硬件、软件资源。\n![小车套件](/Users/kuber/Documents/ 青灯黄卷2/面试书籍/小车套件.tiff)\n例子四–NVIDIA小车项目使用指南\n使用远程桌面连接小车的TK板，输入启动指令后，小车在接收到可识别的图片信号才会启动，并在遇到障碍物（距离障碍物一定距离）时停止移动。\n小车的移动规律为：\n识别出猫，向左转。\n识别出人，向右转。\n识别出车，向前进。\n识别出椅子，向后退。\n识别出飞机，向左转并直行。\n识别出房屋，向右转并直行。\n核心技术说明\n小车本身搭载了摄像头，TK板内连接图像处理系统，通过caffeine module识别出图像内的物体，根据分析出的问题做出相应的举动。\n小车内的TK板用ROS连接ardurino板，ardurino上烧录的程序根据ROS发送的信息进行相应的操作。\n未来发展规划\n搭载人脸情绪或手势识别的小型机器人。可以根据情绪信息分析进行相应操作。比如在人情绪低落时会拥抱的机器人。\n例子五–NVIDIA小车详情描述\n本作品主要由视频采集模块、信号处理模块和控制系统组成。上位机部分由具有超强计算能力的Jetson TX1嵌入式开发板和USB相机组成，相机采集的实时数据交由TX1处理，结合Caffe深度学习框架，可以实时的识别视频中的各类物体。与此同时，向下位机发送控制指令，驱动小车做出相应的动作。并且可以通过远程控制，实现对小车的即时控制。作品流程如下图所示。\n![小车项目架构](/Users/kuber/Documents/ 青灯黄卷2/面试书籍/小车项目架构.tiff)\n创意来源\n现今深度学习如此火热，对于各个领域，与其结合必将有更新更广的发展空间。而酷炫的自动驾驶技术也让我们心驰神往，路上行驶的车辆，如何有效地避让行人和车辆，如何在路口减速停车，如何有效地做路径规划等，让我们存有疑惑也充满激情。而且此次NVIDIA提供了基于嵌入式平台的智能车相关硬件和软件，队友一拍即合准备尝试NVIDIA的项目。对于智能车系统的开发，将结合NVIDIA的Jetson TX1平台和深度学习实现类似真实路况的前进，后退，停止等。\n解决的问题\n\n对于基于视觉的自动驾驶技术，与真实的复杂路况相比，我们尝试先从相应的目标识别展开。当车辆在路上行驶时，必将对周围的路况和物体做识别判断，从而控制车辆的行进状态。所以如何有效地识别观察的物体是必不可少的环节。\n\n\n对于前者，有效识别物体是非常重要的，而识别后对控制系统的改变也是重中之重，平稳的行驶，稳定的转弯以及及时的刹车等都是需要好好研究解决的问题。\n\n\n对于远程控制，需要考虑传输速率的实时性问题。\n\n由英伟达公司的嵌入式GPU Jetson TX1作为主控芯片的智能小车。该设备使用开放的Linux + ROS系统，可以通过摄像头实时识别19类物体，并能根据摄像头看到六类物体做出六个不同的规定行进动作。\n核心技术说明\n\nCaffe框架及训练的模型。\n\n\nArduino控制程序\n\nSDK使用情况说明\n\nNVIDIA  英伟达嵌入式开发平台\n\n\nArduino\n\n\nOpencv\n\n\nCaffe\n\n\nROS\n\n未来发展规划\n\n基于嵌入式平台自动驾驶技术\n\nJetson平台具有能耗低，体积小，计算能力强等优点，能够较好地应对自动驾驶要遇到的问题。其强有力的计算能力，能够实时处理接收的数据，较多的接口，具有很强的可扩展性。\n\n车载人脸识别防盗技术\n\n现在汽车数量迅速增加，人们也有较强的防盗意识，但是现有的防盗技术，还是有很多缺点，例如钥匙被盗或者被复制的情况。而基于人脸识别的技术，能够有效的起到防盗作用，对于恶意的盗窃或者无关人员的随意借车能够有效避免。\n\n车辆（地面移动平台）智能跟随系统\n\n无人机的智能跟随系统已经很火热，而对于车辆（地面移动平台）的智能跟随系统，却少有人做。随着智能硬件（NVIDIA嵌入式开发板）计算能力的提升，对于处理地面复杂场景将有更好的解决方法和更好的愿景。\n![小车套件2](/Users/kuber/Documents/ 青灯黄卷2/面试书籍/小车套件2.tiff)\n![小车项目架构2](/Users/kuber/Documents/ 青灯黄卷2/面试书籍/小车项目架构2.tiff)\n例子六NVIDIA小车详情描述\n此款小车结合多种技术，比如SenseTime的计算机视觉识别技术，以及NVIDIA的Jetson Platform TK1作为主控芯片，使用开放的Ubuntu+ROS系统，耦合度低，扩展性强，可以搭载各类传感器，对于输入的信号进行识别。用Caffe的深度学习框架进行训练，可以识别各类物体，并做出相应的动作。此外，我们使用远程桌面控制，使得小车能够自由移动。\n此款小车的创新意义在于NVIDIA GPU Jetson TX1提供了在传统机器人系统中使用的CPU无法提供的人工智能计算能力，使机器人有了一颗“智能”的大脑。\n创意来源\n无人驾驶，人机交互为当今的热点技术。在无人驾驶的热潮中，如何有效识别路况，判别障碍物为一重要的课题。比如：在无人驾驶汽车在遇到障碍物时，会根据障碍种类做出不同运动反应。如果视频输入端检测到飞鸟可以直行通过，而判断行人走路则立即停止。如何实现这类功能？我们通过把课题做在小车上，通过摄像头读取并判定前方物体信息，从而做出不同的反馈动作，验证想法的可行性。本小车作为无人驾驶技术的验证雏形，具有灵活，便捷和开放的特点。\n解决的问题\n无人驾驶概念逐步融入生活。对于无人驾驶技术，如需验证视觉算法的可行性，则需要耗费很大的空间，时间和精力：比如，汽车的安装，场地的限制和计算机视觉算法的调试。而我们的智能小车平台，则可以作为一个集成而浓缩的模型，为无人驾驶技术的验证与发展如虎添翼。\n此外，智能机器人在进行人机交互的过程中，图像识别，计算机视觉为重要的一个组成部分。计算机视觉可以看作是研究如何使人工系统从图像或多维数据中“感知”的科学。计算机视觉包含如下一些分支：画面重建，事件监测，目标跟踪，目标识别，机器学习，索引建立，图像恢复等。针对“感知”，机器人可以做出不同反应，如语音反馈，动作等。从而使得人工智能上一个台阶。\n本机器人是一个基于计算机视觉的人机交互平台的雏形，我们的数据集可扩大到更多不同的物品，乃至声音，自然语言等。机器人能做出的反应指令可扩大到更复杂认知，机器模型结构也可以更为复杂精密。我们的项目验证了这样一个平台的可能性，这就是我们课题所解决的问题。\n功能设计说明\n小车集多种功能于一体，摄像头模块可读取图像数据，基于OpenCV的图像识别物体目标进行识别判定；ROS平台所搭载的Arduino运动控制模块，可根据目标控制小车的运动；TX1的主板保证了基于Caffe框架的Deep Learning和的人工智能的运行；两个声纳模块的协同运作，使得小车可敏捷避障。\n核心技术说明\nSenseTime 目标-人体检测技术\nNVIDIA Jetson Platform TK1 主控芯片\nCaffe Setup 提供深度学习框架，接收交还的RGB数据\nROS及Arduino的集成   小车运动反应控制\nDeep-CNN目标检测算法   \nROS及Arduino的集成\nNVIDIA Jetson Platform TK1\nCaffe Setup\nDeep-CNN目标检测算法\nSenseTime 目标-人体检测技术\nSDK**使用情况说明**\nSDK\nNVIDIA\nSensetime\nArduino\nCaffe\nRos\n未来发展规划\n智能机器人在进行人机交互的过程中，图像识别，计算机视觉为重要的一个组成部分。计算机视觉可以看作是研究如何使人工系统从图像或多维数据中“感知”的科学。计算机视觉包含如下一些分支：画面重建，事件监测，目标跟踪，目标识别，机器学习，索引建立，图像恢复等。针对“感知”，机器人可以做出不同反应，如语音反馈，动作等。从而使得人工智能上一个台阶。\n本机器人是一个基于计算机视觉的人机交互平台的雏形，我们的数据集可扩大到更多不同的物品，乃至声音，自然语言等。机器人能做出的反应指令可扩大到更复杂认知，机器模型结构也可以更为复杂精密。我们的项目验证了这样一个平台的可能性，这就是我们课题所解决的问题。\nNVIDIA GPU Jetson TX1提供了在传统机器人系统中使用的CPU无法提供的人工智能计算能力，该小车除了视频模块外，还可以搭载语言识别和语义检测输入模块，声源定位技术，生机电模块等，有丰富的扩展空间。\n由于该智能小车基于ROS平台开放性强，低耦合性，我们的智能小车可以运用于各类不同的应用场景。\n首先，在家用场景中，我们的小车可以将训练图片集扩展到用户的不同手势和身体姿态，实现智能跟随功能与陪功能。同时，可以与SLAM室内定位相结合，在SLAM定位的过程中，根据定位过程中遇到的移动障碍物的不同情景作出反应，提高定位精确度。\n在安防场景中，小车可以加入除了网络视频模块，加入人脸识别技术中的人脸遮挡检测，对于可疑人员进行跟踪报警，并将视频记录上传。\n在地震救援场景中，该小车可通过高像素摄像头识别出被困人脸，并结合被困人的呼救声进行声源定位，声音与视频信号双重保障，使得救援小车能够更好地输送救灾物资。\n项目使用指南\n首先按电源键开启小车。\n在小车行驶过程中，使用者可在摄像头前放置不同物品或物品的图片，小车即可做出不同反馈。同时，使用者也可以通过远程桌面上的按钮控制小车的前进，后退，停止，旋转。\n1) 遇到小猫图片，向前直行两秒  Aasss\n2) 捕捉牛图片，向后直行两秒\n3) 捕捉自行车图片，原地向右旋转360度\n4) 看到羊，原地向左旋转360度\n5) 看到椅子，原地向右90度转弯并直行两秒\n6) 看到汽车，原地向左90度转弯并直行两秒\n注意：小车仅在出发地接受图片指令，动作行进过程中不接受新的图片指令输入。如需在小车行驶过程中控制小车，可在远程桌面的界面按钮停止。\n小车自带的两个声纳模块，可帮助小车在行驶过程中避免障碍物。\n","dateCreated":"2017-05-20T09:40:55+08:00","dateModified":"2020-04-26T10:15:18+08:00","datePublished":"2017-05-20T09:40:55+08:00","description":"201705 交大黑客松（Hacker Marathon)纪要","headline":"201705 交大黑客松（Hacker Marathon)纪要","image":["mushroom.jpg","galaxy.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"/kuberme.cn/Hacker Marathon Note of 2017/"},"publisher":{"@type":"Organization","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg","logo":{"@type":"ImageObject","url":"elephant.jpg"}},"url":"/kuberme.cn/Hacker Marathon Note of 2017/","keywords":"Jetson TX1, CUDA, 智能小车","thumbnailUrl":"mushroom.jpg"}</script>
+    <meta name="description" content="201705 交大黑客松（Hacker Marathon)纪要">
+<meta name="keywords" content="Jetson TX1,CUDA,智能小车">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="201705 交大黑客松（Hacker Marathon)纪要">
+<meta property="og:url" content="kuberme.cn/Hacker Marathon Note of 2017/index.html">
+<meta property="og:site_name" content="Fly with You">
+<meta property="og:description" content="201705 交大黑客松（Hacker Marathon)纪要">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-04-26T02:15:18.498Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="201705 交大黑客松（Hacker Marathon)纪要">
+<meta name="twitter:description" content="201705 交大黑客松（Hacker Marathon)纪要">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="kuberme.cn/assets/images/elephant.jpg"/>
+    
+    
+        <meta property="og:image" content="kuberme.cn/Hacker Marathon Note of 2017/mushroom.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="kuberme.cn/Hacker Marathon Note of 2017/mushroom.jpg"/>
+    
+    
+        <meta property="og:image" content="kuberme.cn/Hacker Marathon Note of 2017/galaxy.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="kuberme.cn/Hacker Marathon Note of 2017/galaxy.jpg"/>
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-fniyqlsw5pf9vc6yjgxwasnk5aedpxzktlqqyflf36mnqscn70u3wtotq7ms.min.css">
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/ "
+            aria-label=""
+        >
+            Fly with You
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+            <img class="header-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="Read more about the author"
+                >
+                    <img class="sidebar-profile-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">Kubert</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>author.bio</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="主页"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">主页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                            title="条目"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">条目</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="标签"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="归档"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                            title="搜索"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">搜索</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="#about"
+                            
+                            title="关于"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/kubertalk" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="mailto:kubertqiu@hotmail.com" target="_blank" rel="noopener" title="Mail">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                            title="RSS"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+        <div class="post-header-cover
+                    text-left
+                    "
+             style="background-image:url('/Hacker Marathon Note of 2017/galaxy.jpg');"
+             data-behavior="5">
+            
+                <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            201705 交大黑客松（Hacker Marathon)纪要
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2017-05-20T09:40:55+08:00">
+	
+		    May 20, 2017
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/研究僧日常/">研究僧日常</a>
+
+
+    
+</div>
+
+    
+</div>
+
+            
+        </div>
+
+            <div id="main" data-behavior="5"
+                 class="hasCover
+                        hasCoverMetaIn
+                        hasCoverCaption">
+                
+<article class="post">
+    
+        <span class="post-header-cover-caption caption">A beautiful galaxy</span>
+    
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>201705 交大黑客松（Hacker Marathon)纪要</p>
+<a id="more"></a>
+<h1 id="table-of-contents">Table of Contents</h1><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#201705-交大黑客松（Hacker-Marathon-纪要"><span class="toc-text">201705 交大黑客松（Hacker Marathon)纪要</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#例子1–NVIDIA小车"><span class="toc-text">例子1–NVIDIA小车</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#例子2–图片识别"><span class="toc-text">例子2–图片识别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#例子三–NVIDIA小车"><span class="toc-text">例子三–NVIDIA小车</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#例子四–NVIDIA小车"><span class="toc-text">例子四–NVIDIA小车</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#例子五–NVIDIA小车"><span class="toc-text">例子五–NVIDIA小车</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#例子六NVIDIA小车"><span class="toc-text">例子六NVIDIA小车</span></a></li></ol></li></ol>
+
+<h3 id="201705-交大黑客松（Hacker-Marathon-纪要"><a href="#201705-交大黑客松（Hacker-Marathon-纪要" class="headerlink" title="201705 交大黑客松（Hacker Marathon)纪要"></a>201705 交大黑客松（Hacker Marathon)纪要</h3><h4 id="例子1–NVIDIA小车"><a href="#例子1–NVIDIA小车" class="headerlink" title="例子1–NVIDIA小车"></a>例子1–NVIDIA小车</h4><p><strong>详情描述</strong></p>
+<p>本项目拼装了一台能够智能识别图像的小车，该小车利用摄像头捕捉物体并分类，如猫、瓶子、人等等，进而根据分类结果执行相关动作。</p>
+<p>1.控制：在ROS环境下，利用twist结构控制小车执行相关动作，并发布topic，然后在ARDUINO中订阅该主题。</p>
+<p>2.视觉识别：</p>
+<p><strong>解决的问题</strong></p>
+<p>1.小组成员在36个小时内，完成小车驱动软件的编制，并实现远程控制。</p>
+<p>2.小车能够根据不同的图片做出不同动作，遇到障碍时会停止动作，并且操控者可以在任何时候终止小车运动。</p>
+<p>3.具体动作有：前进、后退、原地旋转等组合动作。</p>
+<p><strong>项目使用指南</strong></p>
+<p>用于控制行进动作的图片可以打印在A4纸上，由操控者手举着图片让小车识别后分别执行不同的行进动作。</p>
+<p><strong>未来发展规划</strong></p>
+<p>1.机场加油车或拖车：</p>
+<p>利用视觉识别功能捕捉飞机，捕捉到之后靠近目标并执行相关任务。</p>
+<p>2.道路清扫车：</p>
+<p>若识别到瓶子等垃圾，自动清扫；若识别到汽车或行人时，停止前进。</p>
+<h4 id="例子2–图片识别"><a href="#例子2–图片识别" class="headerlink" title="例子2–图片识别"></a>例子2–图片识别</h4><p><strong>SDK使用情况说明</strong></p>
+<p>我们利用了IBM Waston服务来做图片识别，之后将其转换为对应的表情包（目前是Emoji）。</p>
+<p>服务部署在青云上，依赖于其提供的QingStor来存储上传的图片，并使用负载均衡/VPC等服务来提供高可靠的服务。</p>
+<p>![青云API](/Users/kuber/Documents/ 青灯黄卷2/面试书籍/青云API.tiff)</p>
+<h4 id="例子三–NVIDIA小车"><a href="#例子三–NVIDIA小车" class="headerlink" title="例子三–NVIDIA小车"></a>例子三–NVIDIA小车</h4><p>在本次比赛中，我们将深度学习中的目标识别问题与智能小车的运动控制问题相结合，顺利完成了整个比赛项目。整个项目可以分解为如下几个部分：首先，利用图像处理工具Opencv对小车摄像头接受到的图像信息进行处理，将接收图像的RGB通道信息进行处理。之后，利用深度学习领域的SSD算法进行目标识别方面的处理，利用分类识别效果很好的深度网络模型对接受到的图片信息进行识别，进而输出图像的类别信息。最后，针对接收图像的不同类别，控制智能小车做出前行、后退、原地360度左转/右转等不同动作、除此之外，还加入了利用超声波进行障碍物躲避、小车的即时停止等功能。充分利用了相关企业提供的硬件、软件资源。</p>
+<p>![小车套件](/Users/kuber/Documents/ 青灯黄卷2/面试书籍/小车套件.tiff)</p>
+<h4 id="例子四–NVIDIA小车"><a href="#例子四–NVIDIA小车" class="headerlink" title="例子四–NVIDIA小车"></a>例子四–NVIDIA小车</h4><p><strong>项目使用指南</strong></p>
+<p>使用远程桌面连接小车的TK板，输入启动指令后，小车在接收到可识别的图片信号才会启动，并在遇到障碍物（距离障碍物一定距离）时停止移动。</p>
+<p>小车的移动规律为：</p>
+<p>识别出猫，向左转。</p>
+<p>识别出人，向右转。</p>
+<p>识别出车，向前进。</p>
+<p>识别出椅子，向后退。</p>
+<p>识别出飞机，向左转并直行。</p>
+<p>识别出房屋，向右转并直行。</p>
+<p><strong>核心技术说明</strong></p>
+<p>小车本身搭载了摄像头，TK板内连接图像处理系统，通过caffeine module识别出图像内的物体，根据分析出的问题做出相应的举动。</p>
+<p>小车内的TK板用ROS连接ardurino板，ardurino上烧录的程序根据ROS发送的信息进行相应的操作。</p>
+<p><strong>未来发展规划</strong></p>
+<p>搭载人脸情绪或手势识别的小型机器人。可以根据情绪信息分析进行相应操作。比如在人情绪低落时会拥抱的机器人。</p>
+<h4 id="例子五–NVIDIA小车"><a href="#例子五–NVIDIA小车" class="headerlink" title="例子五–NVIDIA小车"></a>例子五–NVIDIA小车</h4><p><strong>详情描述</strong></p>
+<p>本作品主要由视频采集模块、信号处理模块和控制系统组成。上位机部分由具有超强计算能力的Jetson TX1嵌入式开发板和USB相机组成，相机采集的实时数据交由TX1处理，结合Caffe深度学习框架，可以实时的识别视频中的各类物体。与此同时，向下位机发送控制指令，驱动小车做出相应的动作。并且可以通过远程控制，实现对小车的即时控制。作品流程如下图所示。</p>
+<p>![小车项目架构](/Users/kuber/Documents/ 青灯黄卷2/面试书籍/小车项目架构.tiff)</p>
+<p><strong>创意来源</strong></p>
+<p>现今深度学习如此火热，对于各个领域，与其结合必将有更新更广的发展空间。而酷炫的自动驾驶技术也让我们心驰神往，路上行驶的车辆，如何有效地避让行人和车辆，如何在路口减速停车，如何有效地做路径规划等，让我们存有疑惑也充满激情。而且此次NVIDIA提供了基于嵌入式平台的智能车相关硬件和软件，队友一拍即合准备尝试NVIDIA的项目。对于智能车系统的开发，将结合NVIDIA的Jetson TX1平台和深度学习实现类似真实路况的前进，后退，停止等。</p>
+<p><strong>解决的问题</strong></p>
+<ol>
+<li>对于基于视觉的自动驾驶技术，与真实的复杂路况相比，我们尝试先从相应的目标识别展开。当车辆在路上行驶时，必将对周围的路况和物体做识别判断，从而控制车辆的行进状态。所以如何有效地识别观察的物体是必不可少的环节。</li>
+</ol>
+<ol start="2">
+<li>对于前者，有效识别物体是非常重要的，而识别后对控制系统的改变也是重中之重，平稳的行驶，稳定的转弯以及及时的刹车等都是需要好好研究解决的问题。</li>
+</ol>
+<ol start="3">
+<li>对于远程控制，需要考虑传输速率的实时性问题。</li>
+</ol>
+<p>由英伟达公司的嵌入式GPU Jetson TX1作为主控芯片的智能小车。该设备使用开放的Linux + ROS系统，可以通过摄像头实时识别19类物体，并能根据摄像头看到六类物体做出六个不同的规定行进动作。</p>
+<p><strong>核心技术说明</strong></p>
+<ol>
+<li>Caffe框架及训练的模型。</li>
+</ol>
+<ol start="2">
+<li>Arduino控制程序</li>
+</ol>
+<p><strong>SDK使用情况说明</strong></p>
+<ol>
+<li>NVIDIA  英伟达嵌入式开发平台</li>
+</ol>
+<ol start="2">
+<li>Arduino</li>
+</ol>
+<ol start="3">
+<li>Opencv</li>
+</ol>
+<ol start="4">
+<li>Caffe</li>
+</ol>
+<ol start="5">
+<li>ROS</li>
+</ol>
+<p><strong>未来发展规划</strong></p>
+<ol>
+<li>基于嵌入式平台自动驾驶技术</li>
+</ol>
+<p>Jetson平台具有能耗低，体积小，计算能力强等优点，能够较好地应对自动驾驶要遇到的问题。其强有力的计算能力，能够实时处理接收的数据，较多的接口，具有很强的可扩展性。</p>
+<ol start="2">
+<li>车载人脸识别防盗技术</li>
+</ol>
+<p>现在汽车数量迅速增加，人们也有较强的防盗意识，但是现有的防盗技术，还是有很多缺点，例如钥匙被盗或者被复制的情况。而基于人脸识别的技术，能够有效的起到防盗作用，对于恶意的盗窃或者无关人员的随意借车能够有效避免。</p>
+<ol start="3">
+<li>车辆（地面移动平台）智能跟随系统</li>
+</ol>
+<p>无人机的智能跟随系统已经很火热，而对于车辆（地面移动平台）的智能跟随系统，却少有人做。随着智能硬件（NVIDIA嵌入式开发板）计算能力的提升，对于处理地面复杂场景将有更好的解决方法和更好的愿景。</p>
+<p>![小车套件2](/Users/kuber/Documents/ 青灯黄卷2/面试书籍/小车套件2.tiff)</p>
+<p>![小车项目架构2](/Users/kuber/Documents/ 青灯黄卷2/面试书籍/小车项目架构2.tiff)</p>
+<h4 id="例子六NVIDIA小车"><a href="#例子六NVIDIA小车" class="headerlink" title="例子六NVIDIA小车"></a>例子六NVIDIA小车</h4><p><strong>详情描述</strong></p>
+<p>此款小车结合多种技术，比如SenseTime的计算机视觉识别技术，以及NVIDIA的Jetson Platform TK1作为主控芯片，使用开放的Ubuntu+ROS系统，耦合度低，扩展性强，可以搭载各类传感器，对于输入的信号进行识别。用Caffe的深度学习框架进行训练，可以识别各类物体，并做出相应的动作。此外，我们使用远程桌面控制，使得小车能够自由移动。</p>
+<p>此款小车的创新意义在于NVIDIA GPU Jetson TX1提供了在传统机器人系统中使用的CPU无法提供的人工智能计算能力，使机器人有了一颗“智能”的大脑。</p>
+<p><strong>创意来源</strong></p>
+<p>无人驾驶，人机交互为当今的热点技术。在无人驾驶的热潮中，如何有效识别路况，判别障碍物为一重要的课题。比如：在无人驾驶汽车在遇到障碍物时，会根据障碍种类做出不同运动反应。如果视频输入端检测到飞鸟可以直行通过，而判断行人走路则立即停止。如何实现这类功能？我们通过把课题做在小车上，通过摄像头读取并判定前方物体信息，从而做出不同的反馈动作，验证想法的可行性。本小车作为无人驾驶技术的验证雏形，具有灵活，便捷和开放的特点。</p>
+<p><strong>解决的问题</strong></p>
+<p>无人驾驶概念逐步融入生活。对于无人驾驶技术，如需验证视觉算法的可行性，则需要耗费很大的空间，时间和精力：比如，汽车的安装，场地的限制和计算机视觉算法的调试。而我们的智能小车平台，则可以作为一个集成而浓缩的模型，为无人驾驶技术的验证与发展如虎添翼。</p>
+<p>此外，智能机器人在进行人机交互的过程中，图像识别，计算机视觉为重要的一个组成部分。计算机视觉可以看作是研究如何使人工系统从图像或多维数据中“感知”的科学。计算机视觉包含如下一些分支：画面重建，事件监测，目标跟踪，目标识别，机器学习，索引建立，图像恢复等。针对“感知”，机器人可以做出不同反应，如语音反馈，动作等。从而使得人工智能上一个台阶。</p>
+<p>本机器人是一个基于计算机视觉的人机交互平台的雏形，我们的数据集可扩大到更多不同的物品，乃至声音，自然语言等。机器人能做出的反应指令可扩大到更复杂认知，机器模型结构也可以更为复杂精密。我们的项目验证了这样一个平台的可能性，这就是我们课题所解决的问题。</p>
+<p><strong>功能设计说明</strong></p>
+<p>小车集多种功能于一体，摄像头模块可读取图像数据，基于OpenCV的图像识别物体目标进行识别判定；ROS平台所搭载的Arduino运动控制模块，可根据目标控制小车的运动；TX1的主板保证了基于Caffe框架的Deep Learning和的人工智能的运行；两个声纳模块的协同运作，使得小车可敏捷避障。</p>
+<p><strong>核心技术说明</strong></p>
+<p>SenseTime 目标-人体检测技术</p>
+<p>NVIDIA Jetson Platform TK1 主控芯片</p>
+<p>Caffe Setup 提供深度学习框架，接收交还的RGB数据</p>
+<p>ROS及Arduino的集成   小车运动反应控制</p>
+<p>Deep-CNN目标检测算法   </p>
+<p>ROS及Arduino的集成</p>
+<p>NVIDIA Jetson Platform TK1</p>
+<p>Caffe Setup</p>
+<p>Deep-CNN目标检测算法</p>
+<p>SenseTime 目标-人体检测技术</p>
+<p><strong>SDK**</strong>使用情况说明**</p>
+<p>SDK</p>
+<p>NVIDIA</p>
+<p>Sensetime</p>
+<p>Arduino</p>
+<p>Caffe</p>
+<p>Ros</p>
+<p><strong>未来发展规划</strong></p>
+<p>智能机器人在进行人机交互的过程中，图像识别，计算机视觉为重要的一个组成部分。计算机视觉可以看作是研究如何使人工系统从图像或多维数据中“感知”的科学。计算机视觉包含如下一些分支：画面重建，事件监测，目标跟踪，目标识别，机器学习，索引建立，图像恢复等。针对“感知”，机器人可以做出不同反应，如语音反馈，动作等。从而使得人工智能上一个台阶。</p>
+<p>本机器人是一个基于计算机视觉的人机交互平台的雏形，我们的数据集可扩大到更多不同的物品，乃至声音，自然语言等。机器人能做出的反应指令可扩大到更复杂认知，机器模型结构也可以更为复杂精密。我们的项目验证了这样一个平台的可能性，这就是我们课题所解决的问题。</p>
+<p>NVIDIA GPU Jetson TX1提供了在传统机器人系统中使用的CPU无法提供的人工智能计算能力，该小车除了视频模块外，还可以搭载语言识别和语义检测输入模块，声源定位技术，生机电模块等，有丰富的扩展空间。</p>
+<p>由于该智能小车基于ROS平台开放性强，低耦合性，我们的智能小车可以运用于各类不同的应用场景。</p>
+<p>首先，在家用场景中，我们的小车可以将训练图片集扩展到用户的不同手势和身体姿态，实现智能跟随功能与陪功能。同时，可以与SLAM室内定位相结合，在SLAM定位的过程中，根据定位过程中遇到的移动障碍物的不同情景作出反应，提高定位精确度。</p>
+<p>在安防场景中，小车可以加入除了网络视频模块，加入人脸识别技术中的人脸遮挡检测，对于可疑人员进行跟踪报警，并将视频记录上传。</p>
+<p>在地震救援场景中，该小车可通过高像素摄像头识别出被困人脸，并结合被困人的呼救声进行声源定位，声音与视频信号双重保障，使得救援小车能够更好地输送救灾物资。</p>
+<p><strong>项目使用指南</strong></p>
+<p>首先按电源键开启小车。</p>
+<p>在小车行驶过程中，使用者可在摄像头前放置不同物品或物品的图片，小车即可做出不同反馈。同时，使用者也可以通过远程桌面上的按钮控制小车的前进，后退，停止，旋转。</p>
+<p>1) 遇到小猫图片，向前直行两秒  Aasss</p>
+<p>2) 捕捉牛图片，向后直行两秒</p>
+<p>3) 捕捉自行车图片，原地向右旋转360度</p>
+<p>4) 看到羊，原地向左旋转360度</p>
+<p>5) 看到椅子，原地向右90度转弯并直行两秒</p>
+<p>6) 看到汽车，原地向左90度转弯并直行两秒</p>
+<p>注意：小车仅在出发地接受图片指令，动作行进过程中不接受新的图片指令输入。如需在小车行驶过程中控制小车，可在远程桌面的界面按钮停止。</p>
+<p>小车自带的两个声纳模块，可帮助小车在行驶过程中避免障碍物。</p>
+
+            
+
+
+            <!-- my-copyright -->
+            
+            <!-- my-copyright -->
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/CUDA/">CUDA</a> <a class="tag tag--primary tag--small t-link" href="/tags/Jetson-TX1/">Jetson TX1</a> <a class="tag tag--primary tag--small t-link" href="/tags/智能小车/">智能小车</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/Gcc-Link-Sequence-Issue/"
+                    data-tooltip="Gcc Link Sequence Issue"
+                    aria-label="PREVIOUS: Gcc Link Sequence Issue"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
+                    data-tooltip="Run a cpp Example on Win10 Docker with VS Build Tools"
+                    aria-label="NEXT: Run a cpp Example on Win10 Docker with VS Build Tools"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Hacker Marathon Note of 2017/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=kuberme.cn/Hacker Marathon Note of 2017/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=kuberme.cn/Hacker Marathon Note of 2017/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="Table of Contents">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2020 Kubert. All Rights Reserved.
+    </span><br>
+    <span class="upyun-image">
+    	Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>&nbsp&nbsp&nbsp&nbsp
+        CDN Accelerating Supported by<a href="https://www.upyun.com/" target="_blank" rel="external nofollow">
+        	<img src="/assets/images/upyunLogo.png" height="20" width="50"/>
+       	</a>
+    </span>
+
+<!--不蒜子统计
+<br>
+
+    <span id="busuanzi_container_site_pv">
+            PV&nbsp<span id="busuanzi_value_site_pv"></span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+            Vistors&nbsp<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	 
+-->
+
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/Gcc-Link-Sequence-Issue/"
+                    data-tooltip="Gcc Link Sequence Issue"
+                    aria-label="PREVIOUS: Gcc Link Sequence Issue"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
+                    data-tooltip="Run a cpp Example on Win10 Docker with VS Build Tools"
+                    aria-label="NEXT: Run a cpp Example on Win10 Docker with VS Build Tools"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Hacker Marathon Note of 2017/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=kuberme.cn/Hacker Marathon Note of 2017/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=kuberme.cn/Hacker Marathon Note of 2017/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="Table of Contents">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Hacker Marathon Note of 2017/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=kuberme.cn/Hacker Marathon Note of 2017/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=kuberme.cn/Hacker Marathon Note of 2017/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">Kubert</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Chengdu,China
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/galaxy.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-pn1j1k5loooddhnobedbnbb3axrh5qfsl8x8kmeka2su2hkn9zbqwjkkkqva.min.js"></script>
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>

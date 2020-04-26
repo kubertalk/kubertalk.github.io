@@ -1,0 +1,671 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="google-site-verification" content="0DhOwPrg8r0NkCu3BwNH0_WgQalIXNAOanq-Gs-xLaI" />
+    <meta name="google-site-verification" content="OaEXvviVUNa10fJC2M-0qnpN6izG0NxVTQfjg1MmUsE" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Fly with You">
+    <title>数据结构篇笔记-9-桶&amp;计数&amp;基数排序 - Fly with You</title>
+    <meta name="author" content="Kubert">
+    
+        <meta name="keywords" content="hexo,javascript,">
+    
+    
+        <link rel="icon" href="kuberme.cn/assets/images/elephant.jpg">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg"},"articleBody":"复习数据结构笔记之桶&amp;计数&amp;基数排序\n\n\n数据结构篇-9-线性排序线性排序算法介绍1.线性排序算法包括桶排序、计数排序、基数排序。2.线性排序算法的时间复杂度为O(n)。3.此3种排序算法都不涉及元素之间的比较操作，是非基于比较的排序算法。4.对排序数据的要求很苛刻，重点掌握此3种排序算法的适用场景。\n桶排序（Bucket sort）1.算法原理：1）将要排序的数据分到几个有序的桶里，每个桶里的数据再单独进行快速排序或归并排序。2）桶内排完序之后，再把每个桶里的数据按照顺序依次取出，组成的序列就是有序的了。2.使用条件1）要排序的数据需要很容易就能划分成m个桶，并且桶与桶之间有着天然的大小顺序。2）数据在各个桶之间分布是均匀的。3.适用场景1）桶排序比较适合用在外部排序中。2）外部排序就是数据存储在外部磁盘且数据量大，但内存有限无法将整个数据全部加载到内存中。4.算法分析1)时间复杂度: 最好o(n), 最坏o(nlogn), 平均o(n)，一般桶分的越细越多复杂度就会最好。2)内存消耗: o(n)3)稳定性: 取决于每个桶的排序方式，快排就不稳定，归并就稳定。5.应用案例1）需求描述：有10GB的订单数据，需按订单金额（假设金额都是正整数）进行排序但内存有限，仅几百MB2）解决思路：扫描一遍文件，看订单金额所处数据范围，比如1元-10万元，那么就分100个桶。第一个桶存储金额1-1000元之内的订单，第二个桶存1001-2000元之内的订单，依次类推。每个桶对应一个文件，并按照金额范围的大小顺序编号命名（00，01，02，…，99）。将100个小文件依次放入内存并用快排排序。所有文件排好序后，只需按照文件编号从小到大依次读取每个小文件并写到大文件中即可。3）注意点：若单个文件无法全部载入内存，则针对该文件继续按照前面的思路进行处理即可。\n计数排序（Counting sort）1.算法原理1）计数其实就是桶排序的一种特殊情况。即每个下标代表一个数据范围，其值就是这个数据的个数。2）当要排序的n个数据所处范围并不大时，比如最大值为k，则分成k个桶.3）每个桶内的数据值都是相同的，就省掉了桶内排序的时间。2.代码实现(见文末)案例分析：假设只有8个考生分数在0-5分之间，成绩存于数组A[8] = [2，5，3，0，2，3，0，3]。使用大小为6的数组C[6]表示桶，下标对应分数，即0，1，2，3，4，5。C[6]存储的是考生人数，只需遍历一边考生分数，就可以得到C[6] = [2，0，2，3，0，1]。对C[6]数组顺序求和则C[6]=[2，2，4，7，7，8]，c[k]存储的是小于等于分数k的考生个数。数组R[8] = [0，0，2，2，3，3，3，5]存储考生名次。那么如何得到R[8]的呢？从后到前依次扫描数组A，比如扫描到3时，可以从数组C中取出下标为3的值7，也就是说，到目前为止，包括自己在内，分数小于等于3的考生有7个，也就是说3是数组R的第7个元素（也就是数组R中下标为6的位置）。当3放入数组R后，小于等于3的元素就剩下6个了，相应的C[3]要减1变成6。以此类推，当扫描到第二个分数为3的考生时，就会把它放入数组R中第6个元素的位置（也就是下标为5的位置）。当扫描完数组A后，数组R内的数据就是按照分数从小到大排列的了。执行步骤:\n\n1).找出需要排序的数组的最大值\n2).声明一个新的数组c，用于计数数组使用。此时申请的数组大小为第一步得出的最大值+1\n3).遍历原始数组，将所在的计数数组的对应的下标的值进行累加1\n4).遍历计数数组，将数组从1开始往后累计，\n5).创建跟原始数组大小空间的临时数组\n6).遍历原始数组，根据原始数组值找到对应计数的数组的所对应的下标，并且减一（数组从0开始）\n7).将临时数组拷贝到原始数组总结：此处使用创建2次原始额外空间，所以计数数组，使用场景只能是排序的数组原始范围不大，但是数据量非常大的场景，使用场景非常有限\n\n3.使用条件1）只能用在数据范围不大的场景中，若数据范围k比要排序的数据n大很多，就不适合用计数排序；2）计数排序只能给非负整数排序，其他类型需要在不改变相对大小情况下，转换为非负整数；3）比如如果考试成绩精确到小数后一位，就需要将所有分数乘以10，转换为整数。4.算法分析1)时间复杂度: 都是o(n)2)内存消耗: o(n)3)稳定性: 稳定，只要整理最后结果时从后开始遍历即可。\n基数排序（Radix sort）1.算法原理对数据的每一位进行桶排序或计数排序，对每位排序后结果就是有序的。2.案例说明（以排序10万个手机号为例来说明）1）比较两个手机号码a，b的大小，如果在前面几位中a已经比b大了，那后面几位就不用看了。2）借助稳定排序算法的思想，可以先按照最后一位来排序手机号码，然后再按照倒数第二位来重新排序，以此类推，最后按照第一个位重新排序。3）经过11次排序后，手机号码就变为有序的了。4）每次排序有序数据范围较小，可以使用桶排序或计数排序来完成。2.使用条件1）要求数据可以分割独立的“位”来比较；2）位之间由递进关系，如果a数据的高位比b数据大，那么剩下的地位就不用比较了；3）每一位的数据范围不能太大，要可以用线性排序，否则基数排序的时间复杂度无法做到O(n)。4.算法分析1）时间复杂度: 最好o(n), 最坏o(nlogn), 平均o(n)2）内存消耗: o(n)3）稳定性: 稳定。否则就排不成的。\n思考1.如何根据年龄给100万用户数据排序？答：我们假设年龄的范围最小 1 岁，最大不超过 120 岁。我们可以遍历这 100 万用户，根据年龄将其划分到这 120个桶里，然后依次顺序遍历这 120 个桶中的元素。这样就得到了按照年龄排序的 100 万用户数据。\n2.对D，a，F，B，c，A，z这几个字符串进行排序，要求将其中所有小写字母都排在大写字母前面，但是小写字母内部和大写字母内部不要求有序。比如经过排序后为a，c，z，D，F，B，A，这个如何实现呢？如果字符串中处理大小写，还有数字，将数字放在最前面，又该如何解决呢？答：用两个指针a、b：a指针从头开始往后遍历，遇到大写字母就停下，b从后往前遍历，遇到小写字母就停下，交换a、b指针对应的元素；重复如上过程，直到a、b指针相交。对于小写字母放前面，数字放中间，大写字母放后面，可以先将数据分为小写字母和非小写字母两大类，进行如上交换后再在非小写字母区间内分为数字和大写字母做同样处理。\n附：计数排序代码实现(java版)\n12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455public class CountingSort &#123;    /**     * 计数排序     *     * @param arr 要排序的数组大小     * @param n 数组元素个数     */    public static void sort(int[] arr, int n) &#123;        if (n &lt;= 1) &#123;            return;        &#125;        //默认数组最大的元素为数组第一个元素        int max = arr[0];        //遍历数组的所有的元素，找到最大的元素        for (int i = 1; i &lt; n; i++) &#123;            //若后面的元素大于指定的数组元素，则把元素进行交换            if (arr[i] &gt; max) &#123;                max = arr[i];            &#125;        &#125;        //申请一个计数数组，下标从0~max。        int[] c = new int[max + 1];        //遍历数组，将每个元素的个数放入到计数数组中，比如分数为0的元素，在c[0]就累加1，依次类推        for (int i = 0; i &lt; n; i++) &#123;            c[arr[i]]++;        &#125;        //开始重新整理c[]数组，将c[]数组顺序求和，比如分数0的个数1，分数为1的个数为3。那么重新整理后，分数&lt;=0的为1，分数&lt;=1人数诶1+3=4个，因为包含了&lt;=0的个数，依次类推        //所以终止条件为i&lt;=max        for (int i = 1; i &lt;= max; i++) &#123;            c[i] = c[i] + c[i - 1];        &#125;        //这时候开始进行排序，创建一个跟要排序的数组一样大小的数据空间        int[] temp = new int[n];        //开始循环需要排序的数据        for (int i = 0; i &lt; n; i++) &#123;            //计算出需要往temp临时数组哪个索引位置存放arr[i]的值。            //根据原始数组的值找到计数数组的对应值的计数个数，得到c[arr[i]]的值，也就是temp数组从0开始，所以需要减一            int index = c[arr[i]] - 1;            temp[index] = arr[i];            //每次循环，计数数组的元素值减一，因为数组放到了temp数组中            c[arr[i]]--;        &#125;        //重新赋值        for (int i = 0; i &lt; n; i++) &#123;            arr[i] = temp[i];        &#125;    &#125;&#125;","dateCreated":"2018-10-23T10:40:55+08:00","dateModified":"2020-04-21T19:26:44+08:00","datePublished":"2018-10-23T10:40:55+08:00","description":"复习数据结构笔记之桶&amp;计数&amp;基数排序","headline":"数据结构篇笔记-9-桶&计数&基数排序","image":["alphabets-cubes-love-1148572.jpg","galaxy.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"/kuberme.cn/Data-Structure-9-Sorting-3/"},"publisher":{"@type":"Organization","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg","logo":{"@type":"ImageObject","url":"elephant.jpg"}},"url":"/kuberme.cn/Data-Structure-9-Sorting-3/","keywords":"数据结构, 桶排序, 计数排序, 基数排序","thumbnailUrl":"alphabets-cubes-love-1148572.jpg"}</script>
+    <meta name="description" content="复习数据结构笔记之桶&amp;amp;计数&amp;amp;基数排序">
+<meta name="keywords" content="数据结构,桶排序,计数排序,基数排序">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="数据结构篇笔记-9-桶&amp;计数&amp;基数排序">
+<meta property="og:url" content="kuberme.cn/Data-Structure-9-Sorting-3/index.html">
+<meta property="og:site_name" content="Fly with You">
+<meta property="og:description" content="复习数据结构笔记之桶&amp;amp;计数&amp;amp;基数排序">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-04-21T11:26:44.019Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据结构篇笔记-9-桶&amp;计数&amp;基数排序">
+<meta name="twitter:description" content="复习数据结构笔记之桶&amp;amp;计数&amp;amp;基数排序">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="kuberme.cn/assets/images/elephant.jpg"/>
+    
+    
+        <meta property="og:image" content="kuberme.cn/Data-Structure-9-Sorting-3/alphabets-cubes-love-1148572.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="kuberme.cn/Data-Structure-9-Sorting-3/alphabets-cubes-love-1148572.jpg"/>
+    
+    
+        <meta property="og:image" content="kuberme.cn/Data-Structure-9-Sorting-3/galaxy.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="kuberme.cn/Data-Structure-9-Sorting-3/galaxy.jpg"/>
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-fniyqlsw5pf9vc6yjgxwasnk5aedpxzktlqqyflf36mnqscn70u3wtotq7ms.min.css">
+    <!--STYLES END-->
+    
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="5">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/ "
+            aria-label=""
+        >
+            Fly with You
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-picture "
+                href="#about"
+                aria-label="Open the link: /#about"
+            >
+        
+        
+            <img class="header-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="5">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="Read more about the author"
+                >
+                    <img class="sidebar-profile-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">Kubert</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>author.bio</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/ "
+                            
+                            title="主页"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">主页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-categories"
+                            
+                            title="条目"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">条目</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-tags"
+                            
+                            title="标签"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/all-archives"
+                            
+                            title="归档"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link open-algolia-search"
+                             href="#search"
+                            
+                            title="搜索"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">搜索</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="#about"
+                            
+                            title="关于"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="https://github.com/kubertalk" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link " href="mailto:kubertqiu@hotmail.com" target="_blank" rel="noopener" title="Mail">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a  class="sidebar-button-link "
+                             href="/atom.xml"
+                            
+                            title="RSS"
+                        >
+                    
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+        <div class="post-header-cover
+                    text-left
+                    "
+             style="background-image:url('/Data-Structure-9-Sorting-3/galaxy.jpg');"
+             data-behavior="5">
+            
+                <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            数据结构篇笔记-9-桶&amp;计数&amp;基数排序
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-10-23T10:40:55+08:00">
+	
+		    Oct 23, 2018
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/数据结构/">数据结构</a>
+
+
+    
+</div>
+
+    
+</div>
+
+            
+        </div>
+
+            <div id="main" data-behavior="5"
+                 class="hasCover
+                        hasCoverMetaIn
+                        hasCoverCaption">
+                
+<article class="post">
+    
+        <span class="post-header-cover-caption caption">A beautiful galaxy</span>
+    
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>复习数据结构笔记之桶&amp;计数&amp;基数排序</p>
+<a id="more"></a>
+<h1 id="table-of-contents">Table of Contents</h1><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据结构篇-9-线性排序"><span class="toc-text">数据结构篇-9-线性排序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#线性排序算法介绍"><span class="toc-text">线性排序算法介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#桶排序（Bucket-sort）"><span class="toc-text">桶排序（Bucket sort）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#计数排序（Counting-sort）"><span class="toc-text">计数排序（Counting sort）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基数排序（Radix-sort）"><span class="toc-text">基数排序（Radix sort）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#思考"><span class="toc-text">思考</span></a></li></ol></li></ol>
+<h3 id="数据结构篇-9-线性排序"><a href="#数据结构篇-9-线性排序" class="headerlink" title="数据结构篇-9-线性排序"></a>数据结构篇-9-线性排序</h3><h4 id="线性排序算法介绍"><a href="#线性排序算法介绍" class="headerlink" title="线性排序算法介绍"></a>线性排序算法介绍</h4><p>1.线性排序算法包括桶排序、计数排序、基数排序。<br>2.线性排序算法的时间复杂度为O(n)。<br>3.此3种排序算法都不涉及元素之间的比较操作，是非基于比较的排序算法。<br>4.对排序数据的要求很苛刻，重点掌握此3种排序算法的适用场景。</p>
+<h4 id="桶排序（Bucket-sort）"><a href="#桶排序（Bucket-sort）" class="headerlink" title="桶排序（Bucket sort）"></a>桶排序（Bucket sort）</h4><p>1.算法原理：<br>1）将要排序的数据分到几个有序的桶里，每个桶里的数据再单独进行快速排序或归并排序。<br>2）桶内排完序之后，再把每个桶里的数据按照顺序依次取出，组成的序列就是有序的了。<br>2.使用条件<br>1）要排序的数据需要很容易就能划分成m个桶，并且桶与桶之间有着天然的大小顺序。<br>2）数据在各个桶之间分布是均匀的。<br>3.适用场景<br>1）桶排序比较适合用在外部排序中。<br>2）外部排序就是数据存储在外部磁盘且数据量大，但内存有限无法将整个数据全部加载到内存中。<br>4.算法分析<br>1)时间复杂度: 最好o(n), 最坏o(nlogn), 平均o(n)，一般桶分的越细越多复杂度就会最好。<br>2)内存消耗: o(n)<br>3)稳定性: 取决于每个桶的排序方式，快排就不稳定，归并就稳定。<br>5.应用案例<br>1）需求描述：<br>有10GB的订单数据，需按订单金额（假设金额都是正整数）进行排序<br>但内存有限，仅几百MB<br>2）解决思路：<br>扫描一遍文件，看订单金额所处数据范围，比如1元-10万元，那么就分100个桶。<br>第一个桶存储金额1-1000元之内的订单，第二个桶存1001-2000元之内的订单，依次类推。<br>每个桶对应一个文件，并按照金额范围的大小顺序编号命名（00，01，02，…，99）。<br>将100个小文件依次放入内存并用快排排序。<br>所有文件排好序后，只需按照文件编号从小到大依次读取每个小文件并写到大文件中即可。<br>3）注意点：若单个文件无法全部载入内存，则针对该文件继续按照前面的思路进行处理即可。</p>
+<h4 id="计数排序（Counting-sort）"><a href="#计数排序（Counting-sort）" class="headerlink" title="计数排序（Counting sort）"></a>计数排序（Counting sort）</h4><p>1.算法原理<br>1）计数其实就是桶排序的一种特殊情况。即每个下标代表一个数据范围，其值就是这个数据的个数。<br>2）当要排序的n个数据所处范围并不大时，比如最大值为k，则分成k个桶.<br>3）每个桶内的数据值都是相同的，就省掉了桶内排序的时间。<br>2.代码实现(见文末)<br>案例分析：<br>假设只有8个考生分数在0-5分之间，成绩存于数组A[8] = [2，5，3，0，2，3，0，3]。<br>使用大小为6的数组C[6]表示桶，下标对应分数，即0，1，2，3，4，5。<br>C[6]存储的是考生人数，只需遍历一边考生分数，就可以得到C[6] = [2，0，2，3，0，1]。<br>对C[6]数组顺序求和则C[6]=[2，2，4，7，7，8]，c[k]存储的是小于等于分数k的考生个数。<br>数组R[8] = [0，0，2，2，3，3，3，5]存储考生名次。那么如何得到R[8]的呢？<br>从后到前依次扫描数组A，比如扫描到3时，可以从数组C中取出下标为3的值7，也就是说，到目前为止，包括自己在内，分数小于等于3的考生有7个，也就是说3是数组R的第7个元素（也就是数组R中下标为6的位置）。当3放入数组R后，小于等于3的元素就剩下6个了，相应的C[3]要减1变成6。<br>以此类推，当扫描到第二个分数为3的考生时，就会把它放入数组R中第6个元素的位置（也就是下标为5的位置）。当扫描完数组A后，数组R内的数据就是按照分数从小到大排列的了。<br>执行步骤:</p>
+<ul>
+<li>1).找出需要排序的数组的最大值</li>
+<li>2).声明一个新的数组c，用于计数数组使用。此时申请的数组大小为第一步得出的最大值+1</li>
+<li>3).遍历原始数组，将所在的计数数组的对应的下标的值进行累加1</li>
+<li>4).遍历计数数组，将数组从1开始往后累计，</li>
+<li>5).创建跟原始数组大小空间的临时数组</li>
+<li>6).遍历原始数组，根据原始数组值找到对应计数的数组的所对应的下标，并且减一（数组从0开始）</li>
+<li>7).将临时数组拷贝到原始数组<br>总结：此处使用创建2次原始额外空间，所以计数数组，使用场景只能是排序的数组原始范围不大，但是数据量非常大的场景，使用场景非常有限</li>
+</ul>
+<p>3.使用条件<br>1）只能用在数据范围不大的场景中，若数据范围k比要排序的数据n大很多，就不适合用计数排序；<br>2）计数排序只能给非负整数排序，其他类型需要在不改变相对大小情况下，转换为非负整数；<br>3）比如如果考试成绩精确到小数后一位，就需要将所有分数乘以10，转换为整数。<br>4.算法分析<br>1)时间复杂度: 都是o(n)<br>2)内存消耗: o(n)<br>3)稳定性: 稳定，只要整理最后结果时从后开始遍历即可。</p>
+<h4 id="基数排序（Radix-sort）"><a href="#基数排序（Radix-sort）" class="headerlink" title="基数排序（Radix sort）"></a>基数排序（Radix sort）</h4><p>1.算法原理<br>对数据的每一位进行桶排序或计数排序，对每位排序后结果就是有序的。<br>2.案例说明（以排序10万个手机号为例来说明）<br>1）比较两个手机号码a，b的大小，如果在前面几位中a已经比b大了，那后面几位就不用看了。<br>2）借助稳定排序算法的思想，可以先按照最后一位来排序手机号码，然后再按照倒数第二位来重新排序，以此类推，最后按照第一个位重新排序。<br>3）经过11次排序后，手机号码就变为有序的了。<br>4）每次排序有序数据范围较小，可以使用桶排序或计数排序来完成。<br>2.使用条件<br>1）要求数据可以分割独立的“位”来比较；<br>2）位之间由递进关系，如果a数据的高位比b数据大，那么剩下的地位就不用比较了；<br>3）每一位的数据范围不能太大，要可以用线性排序，否则基数排序的时间复杂度无法做到O(n)。<br>4.算法分析<br>1）时间复杂度: 最好o(n), 最坏o(nlogn), 平均o(n)<br>2）内存消耗: o(n)<br>3）稳定性: 稳定。否则就排不成的。</p>
+<h4 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h4><p>1.如何根据年龄给100万用户数据排序？<br>答：我们假设年龄的范围最小 1 岁，最大不超过 120 岁。我们可以遍历这 100 万用户，根据年龄将其划分到这 120个桶里，然后依次顺序遍历这 120 个桶中的元素。这样就得到了按照年龄排序的 100 万用户数据。</p>
+<p>2.对D，a，F，B，c，A，z这几个字符串进行排序，要求将其中所有小写字母都排在大写字母前面，但是小写字母内部和大写字母内部不要求有序。比如经过排序后为a，c，z，D，F，B，A，这个如何实现呢？如果字符串中处理大小写，还有数字，将数字放在最前面，又该如何解决呢？<br>答：用两个指针a、b：a指针从头开始往后遍历，遇到大写字母就停下，b从后往前遍历，遇到小写字母就停下，交换a、b指针对应的元素；重复如上过程，直到a、b指针相交。<br>对于小写字母放前面，数字放中间，大写字母放后面，可以先将数据分为小写字母和非小写字母两大类，进行如上交换后再在非小写字母区间内分为数字和大写字母做同样处理。</p>
+<p>附：计数排序代码实现(java版)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">public class CountingSort &#123;</span><br><span class="line">    /**</span><br><span class="line">     * 计数排序</span><br><span class="line">     *</span><br><span class="line">     * @param arr 要排序的数组大小</span><br><span class="line">     * @param n 数组元素个数</span><br><span class="line">     */</span><br><span class="line">    public static void sort(int[] arr, int n) &#123;</span><br><span class="line">        if (n &lt;= 1) &#123;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        //默认数组最大的元素为数组第一个元素</span><br><span class="line">        int max = arr[0];</span><br><span class="line">        //遍历数组的所有的元素，找到最大的元素</span><br><span class="line">        for (int i = 1; i &lt; n; i++) &#123;</span><br><span class="line">            //若后面的元素大于指定的数组元素，则把元素进行交换</span><br><span class="line">            if (arr[i] &gt; max) &#123;</span><br><span class="line">                max = arr[i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        //申请一个计数数组，下标从0~max。</span><br><span class="line">        int[] c = new int[max + 1];</span><br><span class="line"></span><br><span class="line">        //遍历数组，将每个元素的个数放入到计数数组中，比如分数为0的元素，在c[0]就累加1，依次类推</span><br><span class="line">        for (int i = 0; i &lt; n; i++) &#123;</span><br><span class="line">            c[arr[i]]++;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        //开始重新整理c[]数组，将c[]数组顺序求和，比如分数0的个数1，分数为1的个数为3。那么重新整理后，分数&lt;=0的为1，分数&lt;=1人数诶1+3=4个，因为包含了&lt;=0的个数，依次类推</span><br><span class="line">        //所以终止条件为i&lt;=max</span><br><span class="line">        for (int i = 1; i &lt;= max; i++) &#123;</span><br><span class="line">            c[i] = c[i] + c[i - 1];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        //这时候开始进行排序，创建一个跟要排序的数组一样大小的数据空间</span><br><span class="line">        int[] temp = new int[n];</span><br><span class="line"></span><br><span class="line">        //开始循环需要排序的数据</span><br><span class="line">        for (int i = 0; i &lt; n; i++) &#123;</span><br><span class="line">            //计算出需要往temp临时数组哪个索引位置存放arr[i]的值。</span><br><span class="line">            //根据原始数组的值找到计数数组的对应值的计数个数，得到c[arr[i]]的值，也就是temp数组从0开始，所以需要减一</span><br><span class="line">            int index = c[arr[i]] - 1;</span><br><span class="line">            temp[index] = arr[i];</span><br><span class="line">            //每次循环，计数数组的元素值减一，因为数组放到了temp数组中</span><br><span class="line">            c[arr[i]]--;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        //重新赋值</span><br><span class="line">        for (int i = 0; i &lt; n; i++) &#123;</span><br><span class="line">            arr[i] = temp[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+            
+
+
+            <!-- my-copyright -->
+            
+            <!-- my-copyright -->
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/基数排序/">基数排序</a> <a class="tag tag--primary tag--small t-link" href="/tags/数据结构/">数据结构</a> <a class="tag tag--primary tag--small t-link" href="/tags/桶排序/">桶排序</a> <a class="tag tag--primary tag--small t-link" href="/tags/计数排序/">计数排序</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/Data-Structure-10-Sorting-4/"
+                    data-tooltip="数据结构篇笔记-10-排序算法小结"
+                    aria-label="PREVIOUS: 数据结构篇笔记-10-排序算法小结"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/Data-Structure-8-Sorting-2/"
+                    data-tooltip="数据结构篇笔记-8-归并&amp;快速排序"
+                    aria-label="NEXT: 数据结构篇笔记-8-归并&amp;快速排序"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Data-Structure-9-Sorting-3/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=kuberme.cn/Data-Structure-9-Sorting-3/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=kuberme.cn/Data-Structure-9-Sorting-3/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="Table of Contents">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2020 Kubert. All Rights Reserved.
+    </span><br>
+    <span class="upyun-image">
+    	Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>&nbsp&nbsp&nbsp&nbsp
+        CDN Accelerating Supported by<a href="https://www.upyun.com/" target="_blank" rel="external nofollow">
+        	<img src="/assets/images/upyunLogo.png" height="20" width="50"/>
+       	</a>
+    </span>
+
+<!--不蒜子统计
+<br>
+
+    <span id="busuanzi_container_site_pv">
+            PV&nbsp<span id="busuanzi_value_site_pv"></span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+            Vistors&nbsp<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	 
+-->
+
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/Data-Structure-10-Sorting-4/"
+                    data-tooltip="数据结构篇笔记-10-排序算法小结"
+                    aria-label="PREVIOUS: 数据结构篇笔记-10-排序算法小结"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/Data-Structure-8-Sorting-2/"
+                    data-tooltip="数据结构篇笔记-8-归并&amp;快速排序"
+                    aria-label="NEXT: 数据结构篇笔记-8-归并&amp;快速排序"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Data-Structure-9-Sorting-3/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=kuberme.cn/Data-Structure-9-Sorting-3/"
+                    title="Share on Twitter"
+                    aria-label="Share on Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://plus.google.com/share?url=kuberme.cn/Data-Structure-9-Sorting-3/"
+                    title="Share on Google+"
+                    aria-label="Share on Google+"
+                >
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="Table of Contents">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Data-Structure-9-Sorting-3/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=kuberme.cn/Data-Structure-9-Sorting-3/"
+                        aria-label="Share on Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://plus.google.com/share?url=kuberme.cn/Data-Structure-9-Sorting-3/"
+                        aria-label="Share on Google+"
+                    >
+                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">Kubert</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>author.job</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Chengdu,China
+            </div>
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/galaxy.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-pn1j1k5loooddhnobedbnbb3axrh5qfsl8x8kmeka2su2hkn9zbqwjkkkqva.min.js"></script>
+<!--SCRIPTS END-->
+
+
+    
+
+
+
+
+    </body>
+</html>
