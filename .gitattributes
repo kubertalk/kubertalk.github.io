@@ -2,10 +2,12 @@
 #text format
 *.md eol=lf
 *.js eol=lf
+*.ejs eol=lf
 *.css eol=lf
 *.html eol=lf
 *.json eol=lf
 *.xml eol=lf
+*.yml eol=lf
 #picture format
 *.svg -text
 *.jpg -text

@@ -1,11 +1,11 @@
 ---
 title: Nvidia Jetson TK1 board set up and get started
 date: 2017-03-26 18:47:20
+categories: 
+	- 研究僧日常
 tags: 
 	- Jetson TK1
 	- CUDA
-categories: 
-	- 研究僧日常
 thumbnailImage: analogue-aperture-black-and-white-1203819.jpg
 thumbnailImagePosition: left
 autoThumbnailImage: true
