@@ -14,17 +14,17 @@
         <meta name="keywords" content="hexo,javascript,">
     
     
-        <link rel="icon" href="kuberme.cn/assets/images/elephant.jpg">
+        <link rel="icon" href="https://kubertalk.github.io/kubertalk/assets/images/elephant.jpg">
     
     
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/kubertalk/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg"},"articleBody":"复习数据结构笔记之二分查找(上)\n\n\n\n数据结构篇-11-二分查找(上)一、什么是二分查找？二分查找针对的是一个有序的数据集合，每次通过跟区间中间的元素对比，将待查找的区间缩小为之前的一半，直到找到要查找的元素，或者区间缩小为0。\n二、时间复杂度分析？1.时间复杂度​    假设数据大小是n，每次查找后数据都会缩小为原来的一半，最坏的情况下，直到查找区间被缩小为空，才停止。所以，每次查找的数据大小是：n，n/2，n/4，…，n/(2^k)，…，这是一个等比数列。当n/(2^k)=1时，k的值就是总共缩小的次数，也是查找的总次数。而每次缩小操作只涉及两个数据的大小比较，所以，经过k次区间缩小操作，时间复杂度就是O(k)。通过n/(2^k)=1，可求得k=log2n，所以时间复杂度是O(logn)。\n2.认识O(logn)\n这是一种极其高效的时间复杂度，有时甚至比O(1)的算法还要高效。为什么？\n因为logn是一个非常“恐怖“的数量级，即便n非常大，对应的logn也很小。比如n等于2的32次方，也就是42亿，而logn才32。\n由此可见，O(logn)有时就是比O(1000)，O(10000)快很多。\n\n三、如何实现二分查找？1.循环实现代码实现：\n1234567891011public int binarySearch1(int[] a, int val)&#123;int start = 0;int end = a.length - 1;while(start &lt;= end)&#123;int mid = start + (end - start) / 2;if(a[mid] &gt; val) end = mid - 1;else if(a[mid] &lt; val) start = mid + 1;else return mid;&#125;return -1;&#125;\n\n注意事项：\n\n循环退出条件是：start&lt;=end，而不是start&lt;end。\nmid的取值，使用mid=start + (end - start) / 2，而不用mid=(start + end)/2，因为如果start和end比较大的话，求和可能会发生int类型的值超出最大范围。为了把性能优化到极致，可以将除以2转换成位运算，即start + ((end - start) &gt;&gt; 1)，因为相比除法运算来说，计算机处理位运算要快得多。\nstart和end的更新：start = mid - 1，end = mid + 1，若直接写成start = mid，end=mid，就可能会发生死循环。\n\n2.递归实现1234567891011public int binarySearch(int[] a, int val)&#123;return bSear(a, val, 0, a.length-1);&#125;private int bSear(int[] a, int val, int start, int end) &#123;if(start &gt; end) return -1;int mid = start + (end - start) / 2;if(a[mid] == val) return mid;else if(a[mid] &gt; val) end = mid - 1;else start = mid + 1;return bSear(a, val, start, end);&#125;\n\n四、使用条件（应用场景的局限性）\n二分查找依赖的是顺序表结构，即数组。\n二分查找针对的是有序数据，因此只能用在插入、删除操作不频繁，一次排序多次查找的场景中。\n数据量太小不适合二分查找，与直接遍历相比效率提升不明显。但有一个例外，就是数据之间的比较操作非常费时，比如数组中存储的都是长度超过300的字符串，那这是还是尽量减少比较操作使用二分查找吧。\n数据量太大也不是适合用二分查找，因为数组需要连续的空间，若数据量太大，往往找不到存储如此大规模数据的连续内存空间。\n\n五、思考如何在1000万个整数中快速查找某个整数？\n\n1000万个整数占用存储空间为40MB，占用空间不大，所以可以全部加载到内存中进行处理;\n用一个1000万个元素的数组存储，然后使用快排进行升序排序，时间复杂度为O(nlogn);\n在有序数组中使用二分查找算法进行查找，时间复杂度为O(logn)2.如何编程实现“求一个数的平方根”？要求精确到小数点后6位？\nLeetCode二分查找相关练习：https://leetcode-cn.com/tag/binary-search/\n\n","dateCreated":"2018-10-31T09:40:55+08:00","dateModified":"2020-04-21T16:16:03+08:00","datePublished":"2018-10-31T09:40:55+08:00","description":"复习数据结构笔记之二分查找(上)","headline":"数据结构篇笔记-11-二分查找(上)","image":["mushroom.jpg","galaxy.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"/kuberme.cn/Data-Structure-11-Binary Search-1/"},"publisher":{"@type":"Organization","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg","logo":{"@type":"ImageObject","url":"elephant.jpg"}},"url":"/kuberme.cn/Data-Structure-11-Binary Search-1/","keywords":"数据结构, 二分查找","thumbnailUrl":"mushroom.jpg"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg"},"articleBody":"复习数据结构笔记之二分查找(上)\n\n\n\n数据结构篇-11-二分查找(上)一、什么是二分查找？二分查找针对的是一个有序的数据集合，每次通过跟区间中间的元素对比，将待查找的区间缩小为之前的一半，直到找到要查找的元素，或者区间缩小为0。\n二、时间复杂度分析？1.时间复杂度​    假设数据大小是n，每次查找后数据都会缩小为原来的一半，最坏的情况下，直到查找区间被缩小为空，才停止。所以，每次查找的数据大小是：n，n/2，n/4，…，n/(2^k)，…，这是一个等比数列。当n/(2^k)=1时，k的值就是总共缩小的次数，也是查找的总次数。而每次缩小操作只涉及两个数据的大小比较，所以，经过k次区间缩小操作，时间复杂度就是O(k)。通过n/(2^k)=1，可求得k=log2n，所以时间复杂度是O(logn)。\n2.认识O(logn)\n这是一种极其高效的时间复杂度，有时甚至比O(1)的算法还要高效。为什么？\n因为logn是一个非常“恐怖“的数量级，即便n非常大，对应的logn也很小。比如n等于2的32次方，也就是42亿，而logn才32。\n由此可见，O(logn)有时就是比O(1000)，O(10000)快很多。\n\n三、如何实现二分查找？1.循环实现代码实现：\n1234567891011public int binarySearch1(int[] a, int val)&#123;int start = 0;int end = a.length - 1;while(start &lt;= end)&#123;int mid = start + (end - start) / 2;if(a[mid] &gt; val) end = mid - 1;else if(a[mid] &lt; val) start = mid + 1;else return mid;&#125;return -1;&#125;\n\n注意事项：\n\n循环退出条件是：start&lt;=end，而不是start&lt;end。\nmid的取值，使用mid=start + (end - start) / 2，而不用mid=(start + end)/2，因为如果start和end比较大的话，求和可能会发生int类型的值超出最大范围。为了把性能优化到极致，可以将除以2转换成位运算，即start + ((end - start) &gt;&gt; 1)，因为相比除法运算来说，计算机处理位运算要快得多。\nstart和end的更新：start = mid - 1，end = mid + 1，若直接写成start = mid，end=mid，就可能会发生死循环。\n\n2.递归实现1234567891011public int binarySearch(int[] a, int val)&#123;return bSear(a, val, 0, a.length-1);&#125;private int bSear(int[] a, int val, int start, int end) &#123;if(start &gt; end) return -1;int mid = start + (end - start) / 2;if(a[mid] == val) return mid;else if(a[mid] &gt; val) end = mid - 1;else start = mid + 1;return bSear(a, val, start, end);&#125;\n\n四、使用条件（应用场景的局限性）\n二分查找依赖的是顺序表结构，即数组。\n二分查找针对的是有序数据，因此只能用在插入、删除操作不频繁，一次排序多次查找的场景中。\n数据量太小不适合二分查找，与直接遍历相比效率提升不明显。但有一个例外，就是数据之间的比较操作非常费时，比如数组中存储的都是长度超过300的字符串，那这是还是尽量减少比较操作使用二分查找吧。\n数据量太大也不是适合用二分查找，因为数组需要连续的空间，若数据量太大，往往找不到存储如此大规模数据的连续内存空间。\n\n五、思考如何在1000万个整数中快速查找某个整数？\n\n1000万个整数占用存储空间为40MB，占用空间不大，所以可以全部加载到内存中进行处理;\n用一个1000万个元素的数组存储，然后使用快排进行升序排序，时间复杂度为O(nlogn);\n在有序数组中使用二分查找算法进行查找，时间复杂度为O(logn)2.如何编程实现“求一个数的平方根”？要求精确到小数点后6位？\nLeetCode二分查找相关练习：https://leetcode-cn.com/tag/binary-search/\n\n","dateCreated":"2018-10-31T09:40:55+08:00","dateModified":"2020-04-21T16:16:03+08:00","datePublished":"2018-10-31T09:40:55+08:00","description":"复习数据结构笔记之二分查找(上)","headline":"数据结构篇笔记-11-二分查找(上)","image":["mushroom.jpg","galaxy.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://kubertalk.github.io/kubertalk/Data-Structure-11-Binary Search-1/"},"publisher":{"@type":"Organization","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg","logo":{"@type":"ImageObject","url":"elephant.jpg"}},"url":"https://kubertalk.github.io/kubertalk/Data-Structure-11-Binary Search-1/","keywords":"数据结构, 二分查找","thumbnailUrl":"mushroom.jpg"}</script>
     <meta name="description" content="复习数据结构笔记之二分查找(上)">
 <meta name="keywords" content="数据结构,二分查找">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="数据结构篇笔记-11-二分查找(上)">
-<meta property="og:url" content="kuberme.cn/Data-Structure-11-Binary Search-1/index.html">
+<meta property="og:url" content="https://kubertalk.github.io/kubertalk/Data-Structure-11-Binary Search-1/index.html">
 <meta property="og:site_name" content="Fly with You">
 <meta property="og:description" content="复习数据结构笔记之二分查找(上)">
 <meta property="og:locale" content="en">
@@ -37,19 +37,19 @@
         
     
     
-        <meta property="og:image" content="kuberme.cn/assets/images/elephant.jpg"/>
+        <meta property="og:image" content="https://kubertalk.github.io/kubertalk/assets/images/elephant.jpg"/>
     
     
-        <meta property="og:image" content="kuberme.cn/Data-Structure-11-Binary Search-1/mushroom.jpg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="kuberme.cn/Data-Structure-11-Binary Search-1/mushroom.jpg"/>
+        <meta property="og:image" content="https://kubertalk.github.io/kubertalk/Data-Structure-11-Binary Search-1/mushroom.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://kubertalk.github.io/kubertalk/Data-Structure-11-Binary Search-1/mushroom.jpg"/>
     
     
-        <meta property="og:image" content="kuberme.cn/Data-Structure-11-Binary Search-1/galaxy.jpg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="kuberme.cn/Data-Structure-11-Binary Search-1/galaxy.jpg"/>
+        <meta property="og:image" content="https://kubertalk.github.io/kubertalk/Data-Structure-11-Binary Search-1/galaxy.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://kubertalk.github.io/kubertalk/Data-Structure-11-Binary Search-1/galaxy.jpg"/>
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/assets/css/style-fniyqlsw5pf9vc6yjgxwasnk5aedpxzktlqqyflf36mnqscn70u3wtotq7ms.min.css">
+    <link rel="stylesheet" href="/kubertalk/assets/css/style-fniyqlsw5pf9vc6yjgxwasnk5aedpxzktlqqyflf36mnqscn70u3wtotq7ms.min.css">
     <!--STYLES END-->
     
 
@@ -76,7 +76,7 @@
     <div class="header-title">
         <a
             class="header-title-link"
-            href="/ "
+            href="/kubertalk/ "
             aria-label=""
         >
             Fly with You
@@ -87,11 +87,11 @@
             <a
                 class="header-right-picture "
                 href="#about"
-                aria-label="Open the link: /#about"
+                aria-label="Open the link: /kubertalk/#about"
             >
         
         
-            <img class="header-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+            <img class="header-picture" src="/kubertalk/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
         
         </a>
     
@@ -109,10 +109,10 @@
         
             <div class="sidebar-profile">
                 <a
-                    href="/#about"
+                    href="/kubertalk/#about"
                     aria-label="Read more about the author"
                 >
-                    <img class="sidebar-profile-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+                    <img class="sidebar-profile-picture" src="/kubertalk/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
                 </a>
                 <h4 class="sidebar-profile-name">Kubert</h4>
                 
@@ -127,7 +127,7 @@
                 <li class="sidebar-button">
                     
                         <a  class="sidebar-button-link "
-                             href="/ "
+                             href="/kubertalk/ "
                             
                             title="主页"
                         >
@@ -140,7 +140,7 @@
                 <li class="sidebar-button">
                     
                         <a  class="sidebar-button-link "
-                             href="/all-categories"
+                             href="/kubertalk/all-categories"
                             
                             title="条目"
                         >
@@ -153,7 +153,7 @@
                 <li class="sidebar-button">
                     
                         <a  class="sidebar-button-link "
-                             href="/all-tags"
+                             href="/kubertalk/all-tags"
                             
                             title="标签"
                         >
@@ -166,7 +166,7 @@
                 <li class="sidebar-button">
                     
                         <a  class="sidebar-button-link "
-                             href="/all-archives"
+                             href="/kubertalk/all-archives"
                             
                             title="归档"
                         >
@@ -231,7 +231,7 @@
                 <li class="sidebar-button">
                     
                         <a  class="sidebar-button-link "
-                             href="/atom.xml"
+                             href="/kubertalk/atom.xml"
                             
                             title="RSS"
                         >
@@ -250,7 +250,7 @@
         <div class="post-header-cover
                     text-left
                     "
-             style="background-image:url('/Data-Structure-11-Binary Search-1/galaxy.jpg');"
+             style="background-image:url('/kubertalk/Data-Structure-11-Binary Search-1/galaxy.jpg');"
              data-behavior="5">
             
                 <div class="post-header main-content-wrap text-left">
@@ -269,7 +269,7 @@
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/数据结构/">数据结构</a>
+    <a class="category-link" href="/kubertalk/categories/数据结构/">数据结构</a>
 
 
     
@@ -342,7 +342,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">TAGGED IN</span><br/>
                 
-    <a class="tag tag--primary tag--small t-link" href="/tags/二分查找/">二分查找</a> <a class="tag tag--primary tag--small t-link" href="/tags/数据结构/">数据结构</a>
+    <a class="tag tag--primary tag--small t-link" href="/kubertalk/tags/二分查找/">二分查找</a> <a class="tag tag--primary tag--small t-link" href="/kubertalk/tags/数据结构/">数据结构</a>
 
             </div>
         
@@ -366,7 +366,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/Data-Structure-10-Sorting-4/"
+                    href="/kubertalk/Data-Structure-10-Sorting-4/"
                     data-tooltip="数据结构篇笔记-10-排序算法小结"
                     aria-label="NEXT: 数据结构篇笔记-10-排序算法小结"
                 >
@@ -393,7 +393,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Data-Structure-11-Binary Search-1/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://kubertalk.github.io/kubertalk/Data-Structure-11-Binary Search-1/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -406,7 +406,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=kuberme.cn/Data-Structure-11-Binary Search-1/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://kubertalk.github.io/kubertalk/Data-Structure-11-Binary Search-1/"
                     title="Share on Twitter"
                     aria-label="Share on Twitter"
                 >
@@ -419,7 +419,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=kuberme.cn/Data-Structure-11-Binary Search-1/"
+                    target="new" href="https://plus.google.com/share?url=https://kubertalk.github.io/kubertalk/Data-Structure-11-Binary Search-1/"
                     title="Share on Google+"
                     aria-label="Share on Google+"
                 >
@@ -499,7 +499,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/Data-Structure-10-Sorting-4/"
+                    href="/kubertalk/Data-Structure-10-Sorting-4/"
                     data-tooltip="数据结构篇笔记-10-排序算法小结"
                     aria-label="NEXT: 数据结构篇笔记-10-排序算法小结"
                 >
@@ -526,7 +526,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Data-Structure-11-Binary Search-1/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://kubertalk.github.io/kubertalk/Data-Structure-11-Binary Search-1/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -539,7 +539,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=kuberme.cn/Data-Structure-11-Binary Search-1/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://kubertalk.github.io/kubertalk/Data-Structure-11-Binary Search-1/"
                     title="Share on Twitter"
                     aria-label="Share on Twitter"
                 >
@@ -552,7 +552,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=kuberme.cn/Data-Structure-11-Binary Search-1/"
+                    target="new" href="https://plus.google.com/share?url=https://kubertalk.github.io/kubertalk/Data-Structure-11-Binary Search-1/"
                     title="Share on Google+"
                     aria-label="Share on Google+"
                 >
@@ -586,7 +586,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Data-Structure-11-Binary Search-1/"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://kubertalk.github.io/kubertalk/Data-Structure-11-Binary Search-1/"
                         aria-label="Share on Facebook"
                     >
                         <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
@@ -599,7 +599,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://twitter.com/intent/tweet?text=kuberme.cn/Data-Structure-11-Binary Search-1/"
+                        href="https://twitter.com/intent/tweet?text=https://kubertalk.github.io/kubertalk/Data-Structure-11-Binary Search-1/"
                         aria-label="Share on Twitter"
                     >
                         <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
@@ -612,7 +612,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://plus.google.com/share?url=kuberme.cn/Data-Structure-11-Binary Search-1/"
+                        href="https://plus.google.com/share?url=https://kubertalk.github.io/kubertalk/Data-Structure-11-Binary Search-1/"
                         aria-label="Share on Google+"
                     >
                         <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
@@ -638,7 +638,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+            <img id="about-card-picture" src="/kubertalk/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
         
             <h4 id="about-card-name">Kubert</h4>
         
@@ -665,9 +665,9 @@
 
         
         
-<div id="cover" style="background-image:url('/assets/images/galaxy.jpg');"></div>
+<div id="cover" style="background-image:url('/kubertalk/assets/images/galaxy.jpg');"></div>
         <!--SCRIPTS-->
-<script src="/assets/js/script-pn1j1k5loooddhnobedbnbb3axrh5qfsl8x8kmeka2su2hkn9zbqwjkkkqva.min.js"></script>
+<script src="/kubertalk/assets/js/script-pn1j1k5loooddhnobedbnbb3axrh5qfsl8x8kmeka2su2hkn9zbqwjkkkqva.min.js"></script>
 <!--SCRIPTS END-->
 
 
