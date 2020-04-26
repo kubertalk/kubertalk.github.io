@@ -1,28 +1,13 @@
-
 <!DOCTYPE html>
-<html lang="en">
-    
-<head>
-    <meta charset="UTF-8">
-    <meta name="google-site-verification" content="0DhOwPrg8r0NkCu3BwNH0_WgQalIXNAOanq-Gs-xLaI" />
-    <meta name="google-site-verification" content="OaEXvviVUNa10fJC2M-0qnpN6izG0NxVTQfjg1MmUsE" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Fly with You">
-    <title>数据结构篇笔记-8-归并&amp;快速排序 - Fly with You</title>
-    <meta name="author" content="Kubert">
-    
-        <meta name="keywords" content="hexo,javascript,">
-    
-    
-        <link rel="icon" href="kuberme.cn/assets/images/elephant.jpg">
-    
-    
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
-    
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg"},"articleBody":"复习数据结构笔记之归并&amp;快速排序\n\n\n\n数据结构篇-8-归并&amp;快速排序一、分治思想\n分治思想：分治，顾明思意，就是分而治之，将一个大问题分解成小的子问题来解决，小的子问题解决了，大问题也就解决了。\n\n分治与递归的区别：分治算法一般都用递归来实现的。分治是一种解决问题的处理思想，递归是一种编程技巧。 \n\n\n二、归并排序1.算法原理先把数组从中间分成前后两部分，然后对前后两部分分别进行排序，再将排序好的两部分合并到一起，这样整个数组就有序了。这就是归并排序的核心思想。如何用递归实现归并排序呢？写递归代码的技巧就是分写得出递推公式，然后找到终止条件，最后将递推公式翻译成递归代码。递推公式怎么写？如下 递推公式：merge_sort(p…r) = merge(merge_sort(p…q), merge_sort(q+1…r)) \n终止条件：p &gt;= r 不用再继续分解 \n2.代码实现（见文末）3.性能分析​    1）算法稳定性： 归并排序稳不稳定关键要看merge()函数，也就是两个子数组合并成一个有序数组的那部分代码。在合并的过程中，如果 A[p…q] 和 A[q+1…r] 之间有值相同的元素，那我们就可以像伪代码中那样，先把 A[p…q] 中的元素放入tmp数组，这样 就保证了值相同的元素，在合并前后的先后顺序不变。所以，归并排序是一种稳定排序算法。 \n​    2）时间复杂度：分析归并排序的时间复杂度就是分析递归代码的时间复杂度 \n如何分析递归代码的时间复杂度？ \n​    递归的适用场景是一个问题a可以分解为多个子问题b、c，那求解问题a就可以分解为求解问题b、c。问题b、c解决之后，我们再把b、c的结果合并成a的结果。若定义求解问题a的时间是T(a)，则求解问题b、c的时间分别是T(b)和T(c)，那就可以得到这样的递推公式：T(a) = T(b) + T(c) + K，其中K等于将两个子问题b、c的结果合并成问题a的结果所消耗的时间。这里有一个重要的结论：不仅递归求解的问题可以写成递推公式，递归代码的时间复杂度也可以写成递推公式。套用这个公式，那么归并排序的时间复杂度就可以表示为：\n123456789101112131415T(1) = C； n=1 时，只需要常量级的执行时间，所以表示为 C。 T(n) = 2*T(n/2) + n； n&gt;1，其中n就是merge()函数合并两个子数组的的时间复杂度O(n)。 *T(n) = 2T(n/2) + n      = 2(2T(n/4) + n/2) + n = 4T(n/4) + 2n      = 4(2T(n/8) + n/4) + 2n = 8T(n/8) + 3*n      *= 8(2T(n/16) + n/8) + 3n = 16T(n/16) + 4n      ......      = 2^k * T(n/2^k) + k * n      ......\n\n​    当T(n/2^k)=T(1) 时，也就是 n/2^k=1，我们得到k=log2n。将k带入上面的公式就得到T(n)=Cn+nlog2n。如用大O表示法，T(n)就等于O(nlogn)。所以，归并排序的是复杂度时间复杂度就是O(nlogn)。 \n​    3）空间复杂度：归并排序算法不是原地排序算法，空间复杂度是O(n) 为什么？\n​    因为归并排序的合并函数，在合并两个数组为一个有序数组时，需要借助额外的存储空间。为什么空间复杂度是O(n)而不是O(nlogn)呢？如果我们按照分析递归的时间复杂度的方法，通过递推公式来求解，那整个归并过程需要的空间复杂度就是O(nlogn)，但这种分析思路是有问题的！因为，在实际上，递归代码的空间复杂度并不是像时间复杂度那样累加，而是这样的过程，即在每次合并过程中都需要申请额外的内存空间，但是合并完成后，临时开辟的内存空间就被释放掉了，在任意时刻，CPU只会有一个函数在执行，也就只会有一个临时的内存空间在使用。临时空间再大也不会超过n个数据的大小，所以空间复杂度是O(n)。\n三、快速排序1.算法原理​    快排的思想是这样的：如果要排序数组中下标从p到r之间的一组数据，我们选择p到r之间的任意一个数据作为pivot（分区点）。然后遍历p到r之间的数据，将小于pivot的放到左边，将大于pivot的放到右边，将povit放到中间。经过这一步之后，数组p到r之间的数据就分成了3部分，前面p到q-1之间都是小于povit的，中间是povit，后面的q+1到r之间是大于povit的。根据分治、递归的处理思想，我们可以用递归排序下标从p到q-1之间的数据和下标从q+1到r之间的数据，直到区间缩小为1，就说明所有的数据都有序了。 \n递推公式：quick_sort(p…r) = quick_sort(p…q-1) + quick_sort(q+1, r) \n终止条件：p &gt;= r\n2.代码实现（见文末）3.性能分析​    1）算法稳定性： 因为分区过程中涉及交换操作，如果数组中有两个8，其中一个是pivot，经过分区处理后，后面的8就有可能放到了另一个8的前面，先后顺序就颠倒了，所以快速排序是不稳定的排序算法。比如数组[1,2,3,9,8,11,8]，取后面的8作为pivot，那么分区后就会将后面的8与9进行交换。 \n​    2）时间复杂度：最好、最坏、平均情况 \n快排也是用递归实现的，所以时间复杂度也可以用递推公式表示。 \n如果每次分区操作都能正好把数组分成大小接近相等的两个小区间，那快排的时间复杂度递推求解公式跟归并的相同。\n123T(1) = C； n=1 时，只需要常量级的执行时间，所以表示为 C.T(n) = 2*T(n/2) + n； n&gt;1 所以，快排的时间复杂度也是O(nlogn).\n\n​    如果数组中的元素原来已经有序了，比如1，3，5，6，8，若每次选择最后一个元素作为pivot，那每次分区得到的两个区间都是不均等的，需要进行大约n次的分区，才能完成整个快排过程，而每次分区我们平均要扫描大约n/2个元素，这种情况下，快排的时间复杂度就是O(n^2)。 \n​    前面两种情况，一个是分区及其均衡，一个是分区极不均衡，它们分别对应了快排的最好情况时间复杂度和最坏情况时间复杂度。那快排的平均时间复杂度是多少呢？T(n)大部分情况下是O(nlogn)，只有在极端情况下才是退化到O(n^2)，而且我们也有很多方法将这个概率降低。 \n3）空间复杂度：​    快排是一种原地排序算法，空间复杂度是O(1) \n四、归并排序与快速排序的区别​    归并和快排用的都是分治思想，递推公式和递归代码也非常相似，那它们的区别在哪里呢？ \n​    1.归并排序，是先递归调用，再进行合并，合并的时候进行数据的交换。所以它是自下而上的排序方式。何为自下而上？就是先解决子问题，再解决父问题。 \n​    2.快速排序，是先分区，在递归调用，分区的时候进行数据的交换。所以它是自上而下的排序方式。何为自上而下？就是先解决父问题，再解决子问题。 \n五、思考​    1.O(n)时间复杂度内求无序数组中第K大元素，比如4，2，5，12，3这样一组数据，第3大元素是4。 我们选择数组区间A[0…n-1]的最后一个元素作为pivot，对数组A[0…n-1]进行原地分区，这样数组就分成了3部分，A[0…p-1]、A[p]、A[p+1…n-1]。 \n​    如果如果p+1=K，那A[p]就是要求解的元素；如果K&gt;p+1，说明第K大元素出现在A[p+1…n-1]区间，我们按照上面的思路递归地在A[p+1…n-1]这个区间查找。同理，如果K&lt;p+1，那我们就在A[0…p-1]区间查找。 \n​    时间复杂度分析？ 第一次分区查找，我们需要对大小为n的数组进行分区操作，需要遍历n个元素。第二次分区查找，我们需要对大小为n/2的数组执行分区操作，需要遍历n/2个元素。依次类推，分区遍历元素的个数分别为n、n/2、n/4、n/8、n/16……直到区间缩小为1。如果把每次分区遍历的元素个数累加起来，就是等比数列求和，结果为2n-1。所以，上述解决问题的思路为O(n)。 \n​    2.有10个访问日志文件，每个日志文件大小约为300MB，每个文件里的日志都是按照时间戳从小到大排序的。现在需要将这10个较小的日志文件合并为1个日志文件，合并之后的日志仍然按照时间戳从小到大排列。如果处理上述任务的机器内存只有1GB，你有什么好的解决思路能快速地将这10个日志文件合并？\n代码实现1.归并排序123456789101112131415161718192021222324252627282930313233343536373839// 归并排序算法, A 是数组，n 表示数组大小merge_sort(A, n) &#123;  merge_sort_c(A, 0, n-1)&#125;// 递归调用函数merge_sort_c(A, p, r) &#123;  // 递归终止条件  if p &gt;= r then return  // 取 p 到 r 之间的中间位置 q  q = (p+r) / 2  // 分治递归  merge_sort_c(A, p, q)  merge_sort_c(A, q+1, r)  // 将 A[p...q] 和 A[q+1...r] 合并为 A[p...r]  merge(A[p...r], A[p...q], A[q+1...r])&#125;merge(A[p...r], A[p...q], A[q+1...r]) &#123;  var i := p，j := q+1，k := 0 // 初始化变量 i, j, k  var tmp := new array[0...r-p] // 申请一个大小跟 A[p...r] 一样的临时数组  while i&lt;=q AND j&lt;=r do &#123;    if A[i] &lt;= A[j] &#123;      tmp[k++] = A[i++] // i++ 等于 i:=i+1    &#125; else &#123;      tmp[k++] = A[j++]    &#125;  &#125;  // 判断哪个子数组中有剩余的数据  var start := i，end := q  if j&lt;=r then start := j, end:=r  // 将剩余的数据拷贝到临时数组 tmp  while start &lt;= end do &#123;    tmp[k++] = A[start++]  &#125;  // 将 tmp 中的数组拷贝回 A[p...r]  for i:=0 to r-p do &#123;    A[p+i] = tmp[i]  &#125;&#125;注：merge()合并函数如果借助哨兵代码就会简洁很多。\n\n2.快速排序12345678910111213141516171819202122232425// 快速排序，A 是数组，n 表示数组的大小quick_sort(A, n) &#123;  quick_sort_c(A, 0, n-1)&#125;// 快速排序递归函数，p,r 为下标quick_sort_c(A, p, r) &#123;  if p &gt;= r then return  q = partition(A, p, r) // 获取分区点  quick_sort_c(A, p, q-1)  quick_sort_c(A, q+1, r)&#125;//分区函数partition(A, p, r) &#123;  pivot := A[r]  i := p  for j := p to r-1 do &#123;    if A[j] &lt; pivot &#123;      swap A[i] with A[j]      i := i+1    &#125;  &#125;  swap A[i] with A[r]  return i&#125;分区函数代码说明：通过游标i把A[p...r-1]分成2部分，A[p...i-1]的元素都是小于pivot的，我们暂且叫它“已处理区间”，A[i+1...r-1]是“未处理区间”。我们每次都从未处理区间取出一个元素A[j]，与poivt相比，如果小于pivot，则将其加入到已处理区间的尾部，也就是A[i]位置。\n\n","dateCreated":"2018-10-23T09:40:55+08:00","dateModified":"2020-04-21T19:26:12+08:00","datePublished":"2018-10-23T09:40:55+08:00","description":"复习数据结构笔记之归并&amp;快速排序","headline":"数据结构篇笔记-8-归并&快速排序","image":["mushroom.jpg","galaxy.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"/kuberme.cn/Data-Structure-8-Sorting-2/"},"publisher":{"@type":"Organization","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg","logo":{"@type":"ImageObject","url":"elephant.jpg"}},"url":"/kuberme.cn/Data-Structure-8-Sorting-2/","keywords":"数据结构, 归并排序, 快速排序","thumbnailUrl":"mushroom.jpg"}</script>
-    <meta name="description" content="复习数据结构笔记之归并&amp;amp;快速排序">
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>数据结构篇笔记-8-归并&amp;快速排序 | Fly with You</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="复习数据结构笔记之归并&amp;amp;快速排序">
 <meta name="keywords" content="数据结构,归并排序,快速排序">
-<meta property="og:type" content="blog">
+<meta property="og:type" content="article">
 <meta property="og:title" content="数据结构篇笔记-8-归并&amp;快速排序">
 <meta property="og:url" content="kuberme.cn/Data-Structure-8-Sorting-2/index.html">
 <meta property="og:site_name" content="Fly with You">
@@ -32,270 +17,87 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据结构篇笔记-8-归并&amp;快速排序">
 <meta name="twitter:description" content="复习数据结构笔记之归并&amp;amp;快速排序">
-    
-    
-        
-    
-    
-        <meta property="og:image" content="kuberme.cn/assets/images/elephant.jpg"/>
-    
-    
-        <meta property="og:image" content="kuberme.cn/Data-Structure-8-Sorting-2/mushroom.jpg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="kuberme.cn/Data-Structure-8-Sorting-2/mushroom.jpg"/>
-    
-    
-        <meta property="og:image" content="kuberme.cn/Data-Structure-8-Sorting-2/galaxy.jpg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="kuberme.cn/Data-Structure-8-Sorting-2/galaxy.jpg"/>
-    
-    
-    <!--STYLES-->
-    <link rel="stylesheet" href="/assets/css/style-fniyqlsw5pf9vc6yjgxwasnk5aedpxzktlqqyflf36mnqscn70u3wtotq7ms.min.css">
-    <!--STYLES END-->
-    
+  
+    <link rel="alternate" href="/atom.xml" title="Fly with You" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
 
-    
-
-    
-        
-    
 </head>
-
-    <body>
-        <div id="blog">
-            <!-- Define author's picture -->
-
-
-    
-        
-            
-        
-    
-
-<header id="header" data-behavior="5">
-    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <div class="header-title">
-        <a
-            class="header-title-link"
-            href="/ "
-            aria-label=""
-        >
-            Fly with You
-        </a>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Fly with You</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">多谷黑芝麻 &amp; 蜂蜜柚子茶</a>
+        </h2>
+      
     </div>
-    
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
         
-            <a
-                class="header-right-picture "
-                href="#about"
-                aria-label="Open the link: /#about"
-            >
+          <a class="main-nav-link" href="/">Home</a>
         
+          <a class="main-nav-link" href="/archives">Archives</a>
         
-            <img class="header-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+      </nav>
+      <nav id="sub-nav">
         
-        </a>
-    
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="kuberme.cn"></form>
+      </div>
+    </div>
+  </div>
 </header>
+      <div class="outer">
+        <section id="main"><article id="post-Data-Structure-8-Sorting-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/Data-Structure-8-Sorting-2/" class="article-date">
+  <time datetime="2018-10-23T01:40:55.000Z" itemprop="datePublished">2018-10-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/数据结构/">数据结构</a>
+  </div>
 
-            <!-- Define author's picture -->
-
-
-
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
         
-    
+  
+    <h1 class="article-title" itemprop="name">
+      数据结构篇笔记-8-归并&amp;快速排序
+    </h1>
+  
 
-<nav id="sidebar" data-behavior="5">
-    <div class="sidebar-container">
-        
-            <div class="sidebar-profile">
-                <a
-                    href="/#about"
-                    aria-label="Read more about the author"
-                >
-                    <img class="sidebar-profile-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
-                </a>
-                <h4 class="sidebar-profile-name">Kubert</h4>
-                
-                    <h5 class="sidebar-profile-bio"><p>author.bio</p>
-</h5>
-                
-            </div>
-        
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a  class="sidebar-button-link "
-                             href="/ "
-                            
-                            title="主页"
-                        >
-                    
-                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">主页</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a  class="sidebar-button-link "
-                             href="/all-categories"
-                            
-                            title="条目"
-                        >
-                    
-                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">条目</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a  class="sidebar-button-link "
-                             href="/all-tags"
-                            
-                            title="标签"
-                        >
-                    
-                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">标签</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a  class="sidebar-button-link "
-                             href="/all-archives"
-                            
-                            title="归档"
-                        >
-                    
-                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">归档</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a  class="sidebar-button-link open-algolia-search"
-                             href="#search"
-                            
-                            title="搜索"
-                        >
-                    
-                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">搜索</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a  class="sidebar-button-link "
-                             href="#about"
-                            
-                            title="关于"
-                        >
-                    
-                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">关于</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a  class="sidebar-button-link " href="https://github.com/kubertalk" target="_blank" rel="noopener" title="GitHub">
-                    
-                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">GitHub</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a  class="sidebar-button-link " href="mailto:kubertqiu@hotmail.com" target="_blank" rel="noopener" title="Mail">
-                    
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a  class="sidebar-button-link "
-                             href="/atom.xml"
-                            
-                            title="RSS"
-                        >
-                    
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-    </div>
-</nav>
-
-            
-        <div class="post-header-cover
-                    text-left
-                    "
-             style="background-image:url('/Data-Structure-8-Sorting-2/galaxy.jpg');"
-             data-behavior="5">
-            
-                <div class="post-header main-content-wrap text-left">
+      </header>
     
-        <h1 class="post-title">
-            数据结构篇笔记-8-归并&amp;快速排序
-        </h1>
-    
-    
-        <div class="post-meta">
-    <time datetime="2018-10-23T09:40:55+08:00">
-	
-		    Oct 23, 2018
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/categories/数据结构/">数据结构</a>
-
-
-    
-</div>
-
-    
-</div>
-
-            
-        </div>
-
-            <div id="main" data-behavior="5"
-                 class="hasCover
-                        hasCoverMetaIn
-                        hasCoverCaption">
-                
-<article class="post">
-    
-        <span class="post-header-cover-caption caption">A beautiful galaxy</span>
-    
-    
-    <div class="post-content markdown">
-        <div class="main-content-wrap">
-            <p>复习数据结构笔记之归并&amp;快速排序</p>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>复习数据结构笔记之归并&amp;快速排序</p>
 <a id="more"></a>
-<h1 id="table-of-contents">Table of Contents</h1><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据结构篇-8-归并-amp-快速排序"><span class="toc-text">数据结构篇-8-归并&amp;快速排序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#一、分治思想"><span class="toc-text">一、分治思想</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#二、归并排序"><span class="toc-text">二、归并排序</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-算法原理"><span class="toc-text">1.算法原理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-代码实现（见文末）"><span class="toc-text">2.代码实现（见文末）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-性能分析"><span class="toc-text">3.性能分析</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#三、快速排序"><span class="toc-text">三、快速排序</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-算法原理-1"><span class="toc-text">1.算法原理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-代码实现（见文末）-1"><span class="toc-text">2.代码实现（见文末）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-性能分析-1"><span class="toc-text">3.性能分析</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3）空间复杂度："><span class="toc-text">3）空间复杂度：</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#四、归并排序与快速排序的区别"><span class="toc-text">四、归并排序与快速排序的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#五、思考"><span class="toc-text">五、思考</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代码实现"><span class="toc-text">代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-归并排序"><span class="toc-text">1.归并排序</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-快速排序"><span class="toc-text">2.快速排序</span></a></li></ol></li></ol></li></ol>
+<!--toc-->
 
 <h3 id="数据结构篇-8-归并-amp-快速排序"><a href="#数据结构篇-8-归并-amp-快速排序" class="headerlink" title="数据结构篇-8-归并&amp;快速排序"></a>数据结构篇-8-归并&amp;快速排序</h3><h4 id="一、分治思想"><a href="#一、分治思想" class="headerlink" title="一、分治思想"></a>一、分治思想</h4><ol>
 <li><p>分治思想：分治，顾明思意，就是分而治之，将一个大问题分解成小的子问题来解决，小的子问题解决了，大问题也就解决了。</p>
@@ -338,358 +140,167 @@
 <h5 id="2-快速排序"><a href="#2-快速排序" class="headerlink" title="2.快速排序"></a>2.快速排序</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">// 快速排序，A 是数组，n 表示数组的大小</span><br><span class="line">quick_sort(A, n) &#123;</span><br><span class="line">  quick_sort_c(A, 0, n-1)</span><br><span class="line">&#125;</span><br><span class="line">// 快速排序递归函数，p,r 为下标</span><br><span class="line">quick_sort_c(A, p, r) &#123;</span><br><span class="line">  if p &gt;= r then return</span><br><span class="line">  q = partition(A, p, r) // 获取分区点</span><br><span class="line">  quick_sort_c(A, p, q-1)</span><br><span class="line">  quick_sort_c(A, q+1, r)</span><br><span class="line">&#125;</span><br><span class="line">//分区函数</span><br><span class="line">partition(A, p, r) &#123;</span><br><span class="line">  pivot := A[r]</span><br><span class="line">  i := p</span><br><span class="line">  for j := p to r-1 do &#123;</span><br><span class="line">    if A[j] &lt; pivot &#123;</span><br><span class="line">      swap A[i] with A[j]</span><br><span class="line">      i := i+1</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  swap A[i] with A[r]</span><br><span class="line">  return i</span><br><span class="line">&#125;</span><br><span class="line">分区函数代码说明：通过游标i把A[p...r-1]分成2部分，A[p...i-1]的元素都是小于pivot的，我们暂且叫它“已处理区间”，A[i+1...r-1]是“未处理区间”。我们每次都从未处理区间取出一个元素A[j]，与poivt相比，如果小于pivot，则将其加入到已处理区间的尾部，也就是A[i]位置。</span><br></pre></td></tr></table></figure>
 
 
-            
-
-
-            <!-- my-copyright -->
-            
-            <!-- my-copyright -->
-        </div>
+      
     </div>
-    <div id="post-footer" class="post-footer main-content-wrap">
-        
-            <div class="post-footer-tags">
-                <span class="text-color-light text-small">TAGGED IN</span><br/>
-                
-    <a class="tag tag--primary tag--small t-link" href="/tags/归并排序/">归并排序</a> <a class="tag tag--primary tag--small t-link" href="/tags/快速排序/">快速排序</a> <a class="tag tag--primary tag--small t-link" href="/tags/数据结构/">数据结构</a>
+    <footer class="article-footer">
+      <a data-url="kuberme.cn/Data-Structure-8-Sorting-2/" data-id="ck9gt25if000j034gsfxd66d7" class="article-share-link">Share</a>
+      
+        <a href="kuberme.cn/Data-Structure-8-Sorting-2/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/归并排序/">归并排序</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/快速排序/">快速排序</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li></ul>
 
-            </div>
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/Data-Structure-9-Sorting-3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
         
+          数据结构篇笔记-9-桶&amp;计数&amp;基数排序
         
-            <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/Data-Structure-9-Sorting-3/"
-                    data-tooltip="数据结构篇笔记-9-桶&amp;计数&amp;基数排序"
-                    aria-label="PREVIOUS: 数据结构篇笔记-9-桶&amp;计数&amp;基数排序"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/Data-Structure-7-Sorting-1/"
-                    data-tooltip="数据结构篇笔记-7-冒泡&amp;插入&amp;选择排序"
-                    aria-label="NEXT: 数据结构篇笔记-7-冒泡&amp;插入&amp;选择排序"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Data-Structure-8-Sorting-2/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=kuberme.cn/Data-Structure-8-Sorting-2/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=kuberme.cn/Data-Structure-8-Sorting-2/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="Table of Contents">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
+      </div>
+    </a>
+  
+  
+    <a href="/Data-Structure-7-Sorting-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">数据结构篇笔记-7-冒泡&amp;插入&amp;选择排序</div>
+    </a>
+  
+</nav>
 
-
-        
-        
-            
-        
-    </div>
+  
 </article>
 
 
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/C/Compiler/">Compiler</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/KuberTalk/">KuberTalk</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据库/">数据库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据结构/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/研究僧日常/">研究僧日常</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/研究僧日常/操作系统/">操作系统</a></li></ul></li></ul>
+    </div>
+  </div>
 
-                <footer id="footer" class="main-content-wrap">
-    <span class="copyrights">
-        Copyrights &copy; 2020 Kubert. All Rights Reserved.
-    </span><br>
-    <span class="upyun-image">
-    	Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>&nbsp&nbsp&nbsp&nbsp
-        CDN Accelerating Supported by<a href="https://www.upyun.com/" target="_blank" rel="external nofollow">
-        	<img src="/assets/images/upyunLogo.png" height="20" width="50"/>
-       	</a>
-    </span>
 
-<!--不蒜子统计
-<br>
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CUDA/">CUDA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GCC/">GCC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jetson-TK1/">Jetson TK1</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jetson-TX1/">Jetson TX1</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/二分查找/">二分查找</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/冒泡排序/">冒泡排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基数排序/">基数排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/堆排序/">堆排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/希尔排序/">希尔排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/归并排序/">归并排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/快速排序/">快速排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/插入排序/">插入排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库事务/">数据库事务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库索引/">数据库索引</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库锁/">数据库锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/智能小车/">智能小车</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/栈/">栈</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/桶排序/">桶排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/计数排序/">计数排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/选择排序/">选择排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/递归/">递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/链表/">链表</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/队列/">队列</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/随笔/">随笔</a></li></ul>
+    </div>
+  </div>
 
-    <span id="busuanzi_container_site_pv">
-            PV&nbsp<span id="busuanzi_value_site_pv"></span>
-    </span>
-    <span class="post-meta-divider">|</span>
-    <span id="busuanzi_container_site_uv" style='display:none'>
-            Vistors&nbsp<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-	 
--->
 
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/CUDA/" style="font-size: 13.33px;">CUDA</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/GCC/" style="font-size: 10px;">GCC</a> <a href="/tags/Jetson-TK1/" style="font-size: 10px;">Jetson TK1</a> <a href="/tags/Jetson-TX1/" style="font-size: 10px;">Jetson TX1</a> <a href="/tags/二分查找/" style="font-size: 10px;">二分查找</a> <a href="/tags/冒泡排序/" style="font-size: 13.33px;">冒泡排序</a> <a href="/tags/基数排序/" style="font-size: 13.33px;">基数排序</a> <a href="/tags/堆排序/" style="font-size: 10px;">堆排序</a> <a href="/tags/希尔排序/" style="font-size: 10px;">希尔排序</a> <a href="/tags/归并排序/" style="font-size: 16.67px;">归并排序</a> <a href="/tags/快速排序/" style="font-size: 16.67px;">快速排序</a> <a href="/tags/插入排序/" style="font-size: 13.33px;">插入排序</a> <a href="/tags/操作系统/" style="font-size: 10px;">操作系统</a> <a href="/tags/数据库事务/" style="font-size: 10px;">数据库事务</a> <a href="/tags/数据库索引/" style="font-size: 10px;">数据库索引</a> <a href="/tags/数据库锁/" style="font-size: 10px;">数据库锁</a> <a href="/tags/数据结构/" style="font-size: 20px;">数据结构</a> <a href="/tags/智能小车/" style="font-size: 10px;">智能小车</a> <a href="/tags/栈/" style="font-size: 10px;">栈</a> <a href="/tags/桶排序/" style="font-size: 13.33px;">桶排序</a> <a href="/tags/计数排序/" style="font-size: 10px;">计数排序</a> <a href="/tags/选择排序/" style="font-size: 13.33px;">选择排序</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/链表/" style="font-size: 13.33px;">链表</a> <a href="/tags/队列/" style="font-size: 10px;">队列</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/Data-Structure-11-Binary Search-1/">数据结构篇笔记-11-二分查找(上)</a>
+          </li>
+        
+          <li>
+            <a href="/Data-Structure-10-Sorting-4/">数据结构篇笔记-10-排序算法小结</a>
+          </li>
+        
+          <li>
+            <a href="/Data-Structure-9-Sorting-3/">数据结构篇笔记-9-桶&amp;计数&amp;基数排序</a>
+          </li>
+        
+          <li>
+            <a href="/Data-Structure-8-Sorting-2/">数据结构篇笔记-8-归并&amp;快速排序</a>
+          </li>
+        
+          <li>
+            <a href="/Data-Structure-7-Sorting-1/">数据结构篇笔记-7-冒泡&amp;插入&amp;选择排序</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Kubert<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
 </footer>
-
-            </div>
-            
-                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
-                    <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/Data-Structure-9-Sorting-3/"
-                    data-tooltip="数据结构篇笔记-9-桶&amp;计数&amp;基数排序"
-                    aria-label="PREVIOUS: 数据结构篇笔记-9-桶&amp;计数&amp;基数排序"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/Data-Structure-7-Sorting-1/"
-                    data-tooltip="数据结构篇笔记-7-冒泡&amp;插入&amp;选择排序"
-                    aria-label="NEXT: 数据结构篇笔记-7-冒泡&amp;插入&amp;选择排序"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Data-Structure-8-Sorting-2/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=kuberme.cn/Data-Structure-8-Sorting-2/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=kuberme.cn/Data-Structure-8-Sorting-2/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="Table of Contents">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-                </div>
-                
-    <div id="share-options-bar" class="share-options-bar" data-behavior="5">
-        <i id="btn-close-shareoptions" class="fa fa-times"></i>
-        <ul class="share-options">
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Data-Structure-8-Sorting-2/"
-                        aria-label="Share on Facebook"
-                    >
-                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://twitter.com/intent/tweet?text=kuberme.cn/Data-Structure-8-Sorting-2/"
-                        aria-label="Share on Twitter"
-                    >
-                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://plus.google.com/share?url=kuberme.cn/Data-Structure-8-Sorting-2/"
-                        aria-label="Share on Google+"
-                    >
-                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
-                    </a>
-                </li>
-            
-        </ul>
     </div>
-
-
-            
-        </div>
-        
-
-
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
     
-        
-    
-
-<div id="about">
-    <div id="about-card">
-        <div id="about-btn-close">
-            <i class="fa fa-times"></i>
-        </div>
-        
-            <img id="about-card-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
-        
-            <h4 id="about-card-name">Kubert</h4>
-        
-            <div id="about-card-bio"><p>author.bio</p>
-</div>
-        
-        
-            <div id="about-card-job">
-                <i class="fa fa-briefcase"></i>
-                <br/>
-                <p>author.job</p>
-
-            </div>
-        
-        
-            <div id="about-card-location">
-                <i class="fa fa-map-marker-alt"></i>
-                <br/>
-                Chengdu,China
-            </div>
-        
-    </div>
-</div>
-
-        
-        
-<div id="cover" style="background-image:url('/assets/images/galaxy.jpg');"></div>
-        <!--SCRIPTS-->
-<script src="/assets/js/script-pn1j1k5loooddhnobedbnbb3axrh5qfsl8x8kmeka2su2hkn9zbqwjkkkqva.min.js"></script>
-<!--SCRIPTS END-->
+<script>
+  var disqus_shortname = 'kuberme';
+  
+  var disqus_url = 'kuberme.cn/Data-Structure-8-Sorting-2/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
 
 
-    
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
-    </body>
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
 </html>

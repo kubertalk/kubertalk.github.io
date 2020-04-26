@@ -1,28 +1,13 @@
-
 <!DOCTYPE html>
-<html lang="en">
-    
-<head>
-    <meta charset="UTF-8">
-    <meta name="google-site-verification" content="0DhOwPrg8r0NkCu3BwNH0_WgQalIXNAOanq-Gs-xLaI" />
-    <meta name="google-site-verification" content="OaEXvviVUNa10fJC2M-0qnpN6izG0NxVTQfjg1MmUsE" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="generator" content="Fly with You">
-    <title>数据结构篇笔记-5-队列 - Fly with You</title>
-    <meta name="author" content="Kubert">
-    
-        <meta name="keywords" content="hexo,javascript,">
-    
-    
-        <link rel="icon" href="kuberme.cn/assets/images/elephant.jpg">
-    
-    
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
-    
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg"},"articleBody":"复习数据结构笔记之队列\n\n\n数据结构篇-5-队列如何理解“队列”？1、队列是一种操作受限的线性表数据结构。2、队列最大的特点就是先进先出。3、最基本的操作：入队 enqueue()，放一个数据到队列尾部；出队 dequeue()，从队列头部取一个元素。\n顺序队列和链式队列1、用数组实现的队列叫顺序队列，用链表实现的队列叫链式队列。2、队列需要两个指针：一个是 head 指针，指向队头；一个是 tail 指针，指向队尾。3、随着不停地进行入队、出队操作，head 和 tail 都会持续往后移动。当 tail 移动到最右边，即使数组中还有空闲空间，也无法继续往队列中添加数据了。       实际上，我们在出队时可以不用搬移数据。如果没有空闲空间了，只需要在入队时，再集中触发一次数据的搬移操作。出队函数 dequeue() 保持不变，我们稍加改造一下入队函数 enqueue() 的实现，当队列的 tail 指针移动到数组的最右边后，如果有新的数据入队，我们可以将 head 到 tail 之间的数据，整体搬移到数组中 0 到 tail-head 的位置。4、基于链表的实现，同样需要两个指针：head 指针和 tail 指针。分别指向链表的第一个结点和最后一个结点。入队时，tail-&gt;next= new_node, tail = tail-&gt;next；出队时，head = head-&gt;next。\n循环队列1、循环队列，原本数组是有头有尾的，是一条直线。把首尾相连，扳成了一个环。2、在数组实现队列的时候，会有数据搬移操作，要想解决数据搬移的问题，需要像环一样的循环队列。3、要想写出没有 bug 的循环队列的实现代码，最关键的是，确定好队空和队满的判定条件。1）队列为空的判断条件仍然是 head == tail。2）当队满时，(tail+1)%n=head。 tail 指向的位置实际上是没有存储数据的。所以，循环队列会浪费一个数组的存储空间。\nPS: 这个表达式是怎么来的。在一般情况下，我们可以看出来，当队列满时，tail+1=head。但是，有个特殊情况，就是tail=n-1，而head=0时，这时候，tail+1=n，而head=0，所以用(tail+1)%n == n%n == 0。而且，tail+1最大的情况就是 n ，不会大于 n，这样，tail+1 除了最大情况，不然怎么余 n 都是 tail+1 本身，也就是 head。这样，表达式就出现了。\n阻塞队列和并发队列1、阻塞队列1）阻塞队列就是在队列基础上增加了阻塞操作。2）在队列为空的时候，从队头取数据会被阻塞。因为此时还没有数据可取，直到队列中有了数据才能返回；如果队列已经满了，那么插入数据的操作就会被阻塞，直到队列中有空闲位置后再插入数据，然后再返回。3）基于阻塞队列实现的“生产者 - 消费者模型”，可以有效地协调生产和消费的速度。\n2、并发队列1）线程安全的队列，叫作并发队列。2）最简单直接的实现方式是直接在 enqueue()、dequeue() 方法上加锁，但是锁粒度大并发度会比较低，同一时刻仅允许一个存或者取操作。3）实际上，基于数组的循环队列，利用 CAS 原子操作，可以实现非常高效的并发队列。这也是循环队列比链式队列应用更加广泛的原因。\n线程池没有空闲线程时，新的任务请求线程资源时，线程池该如何处理？各种处理策略又是如何实现的呢？一般有两种处理策略。第一种是非阻塞的处理方式，直接拒绝任务请求；另一种是阻塞的处理方式，将请求排队，等到有空闲线程时，取出排队的请求继续处理。1、基于链表的实现方式，可以实现一个支持无限排队的无界队列（unbounded queue），但是可能会导致过多的请求排队等待，请求处理的响应时间过长。所以，针对响应时间比较敏感的系统，基于链表实现的无限排队的线程池是不合适的。2、基于数组实现的有界队列（bounded queue），队列的大小有限，所以线程池中排队的请求超过队列大小时，接下来的请求就会被拒绝，这种方式对响应时间敏感的系统来说，就相对更加合理。不过，设置一个合理的队列大小，也是非常有讲究的。队列太大导致等待的请求太多，队列太小会导致无法充分利用系统资源、发挥最大性能。（除了前面讲到队列应用在线程池请求排队的场景之外，队列可以应用在任何有限资源池中，用于排队请求，比如数据库连接池等。实际上，对于大部分资源有限的场景，当没有空闲资源时，基本上都可以通过“队列”这种数据结构来实现请求排队。）\n【思考】一、1、像windows操作系统的消息队列，略高级一些带有优先级。还有qt中的信号与槽函数机制，使用connect链接，其中的参数就是设置为把窗口界面消息放到消息队列，然后一次取出。比如优先级消息，窗口系统关闭，优先级高，则就直接执行关闭操作。2、sockets网络连接队列。3、数据库连接队列。4、一种集群操作，很多客户端像服务端请求资源，处理高并发大量请求。把这些请求放到队列中。5、分布式应用中的消息队列，也是一种队列结构。二、考虑使用CAS实现无锁队列，则在入队前，获取tail位置，入队时比较tail是否发生变化，如果否，则允许入队，反之，本次入队失败。出队则是获取head位置，进行cas。  \n","dateCreated":"2018-10-13T11:07:55+08:00","dateModified":"2020-04-21T19:24:41+08:00","datePublished":"2018-10-13T11:07:55+08:00","description":"复习数据结构笔记之队列","headline":"数据结构篇笔记-5-队列","image":["mushroom.jpg","galaxy.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"/kuberme.cn/Data-Structure-5-Queue/"},"publisher":{"@type":"Organization","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg","logo":{"@type":"ImageObject","url":"elephant.jpg"}},"url":"/kuberme.cn/Data-Structure-5-Queue/","keywords":"数据结构, 队列","thumbnailUrl":"mushroom.jpg"}</script>
-    <meta name="description" content="复习数据结构笔记之队列">
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>数据结构篇笔记-5-队列 | Fly with You</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="复习数据结构笔记之队列">
 <meta name="keywords" content="数据结构,队列">
-<meta property="og:type" content="blog">
+<meta property="og:type" content="article">
 <meta property="og:title" content="数据结构篇笔记-5-队列">
 <meta property="og:url" content="kuberme.cn/Data-Structure-5-Queue/index.html">
 <meta property="og:site_name" content="Fly with You">
@@ -32,270 +17,87 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据结构篇笔记-5-队列">
 <meta name="twitter:description" content="复习数据结构笔记之队列">
-    
-    
-        
-    
-    
-        <meta property="og:image" content="kuberme.cn/assets/images/elephant.jpg"/>
-    
-    
-        <meta property="og:image" content="kuberme.cn/Data-Structure-5-Queue/mushroom.jpg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="kuberme.cn/Data-Structure-5-Queue/mushroom.jpg"/>
-    
-    
-        <meta property="og:image" content="kuberme.cn/Data-Structure-5-Queue/galaxy.jpg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="kuberme.cn/Data-Structure-5-Queue/galaxy.jpg"/>
-    
-    
-    <!--STYLES-->
-    <link rel="stylesheet" href="/assets/css/style-fniyqlsw5pf9vc6yjgxwasnk5aedpxzktlqqyflf36mnqscn70u3wtotq7ms.min.css">
-    <!--STYLES END-->
-    
+  
+    <link rel="alternate" href="/atom.xml" title="Fly with You" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
 
-    
-
-    
-        
-    
 </head>
-
-    <body>
-        <div id="blog">
-            <!-- Define author's picture -->
-
-
-    
-        
-            
-        
-    
-
-<header id="header" data-behavior="5">
-    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
-    <div class="header-title">
-        <a
-            class="header-title-link"
-            href="/ "
-            aria-label=""
-        >
-            Fly with You
-        </a>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Fly with You</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">多谷黑芝麻 &amp; 蜂蜜柚子茶</a>
+        </h2>
+      
     </div>
-    
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
         
-            <a
-                class="header-right-picture "
-                href="#about"
-                aria-label="Open the link: /#about"
-            >
+          <a class="main-nav-link" href="/">Home</a>
         
+          <a class="main-nav-link" href="/archives">Archives</a>
         
-            <img class="header-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+      </nav>
+      <nav id="sub-nav">
         
-        </a>
-    
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="kuberme.cn"></form>
+      </div>
+    </div>
+  </div>
 </header>
+      <div class="outer">
+        <section id="main"><article id="post-Data-Structure-5-Queue" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/Data-Structure-5-Queue/" class="article-date">
+  <time datetime="2018-10-13T03:07:55.000Z" itemprop="datePublished">2018-10-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/数据结构/">数据结构</a>
+  </div>
 
-            <!-- Define author's picture -->
-
-
-
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
         
-    
+  
+    <h1 class="article-title" itemprop="name">
+      数据结构篇笔记-5-队列
+    </h1>
+  
 
-<nav id="sidebar" data-behavior="5">
-    <div class="sidebar-container">
-        
-            <div class="sidebar-profile">
-                <a
-                    href="/#about"
-                    aria-label="Read more about the author"
-                >
-                    <img class="sidebar-profile-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
-                </a>
-                <h4 class="sidebar-profile-name">Kubert</h4>
-                
-                    <h5 class="sidebar-profile-bio"><p>author.bio</p>
-</h5>
-                
-            </div>
-        
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a  class="sidebar-button-link "
-                             href="/ "
-                            
-                            title="主页"
-                        >
-                    
-                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">主页</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a  class="sidebar-button-link "
-                             href="/all-categories"
-                            
-                            title="条目"
-                        >
-                    
-                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">条目</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a  class="sidebar-button-link "
-                             href="/all-tags"
-                            
-                            title="标签"
-                        >
-                    
-                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">标签</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a  class="sidebar-button-link "
-                             href="/all-archives"
-                            
-                            title="归档"
-                        >
-                    
-                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">归档</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a  class="sidebar-button-link open-algolia-search"
-                             href="#search"
-                            
-                            title="搜索"
-                        >
-                    
-                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">搜索</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a  class="sidebar-button-link "
-                             href="#about"
-                            
-                            title="关于"
-                        >
-                    
-                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">关于</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a  class="sidebar-button-link " href="https://github.com/kubertalk" target="_blank" rel="noopener" title="GitHub">
-                    
-                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">GitHub</span>
-                    </a>
-            </li>
-            
-                <li class="sidebar-button">
-                    
-                        <a  class="sidebar-button-link " href="mailto:kubertqiu@hotmail.com" target="_blank" rel="noopener" title="Mail">
-                    
-                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Mail</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-            <ul class="sidebar-buttons">
-            
-                <li class="sidebar-button">
-                    
-                        <a  class="sidebar-button-link "
-                             href="/atom.xml"
-                            
-                            title="RSS"
-                        >
-                    
-                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">RSS</span>
-                    </a>
-            </li>
-            
-        </ul>
-        
-    </div>
-</nav>
-
-            
-        <div class="post-header-cover
-                    text-left
-                    "
-             style="background-image:url('/Data-Structure-5-Queue/galaxy.jpg');"
-             data-behavior="5">
-            
-                <div class="post-header main-content-wrap text-left">
+      </header>
     
-        <h1 class="post-title">
-            数据结构篇笔记-5-队列
-        </h1>
-    
-    
-        <div class="post-meta">
-    <time datetime="2018-10-13T11:07:55+08:00">
-	
-		    Oct 13, 2018
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/categories/数据结构/">数据结构</a>
-
-
-    
-</div>
-
-    
-</div>
-
-            
-        </div>
-
-            <div id="main" data-behavior="5"
-                 class="hasCover
-                        hasCoverMetaIn
-                        hasCoverCaption">
-                
-<article class="post">
-    
-        <span class="post-header-cover-caption caption">A beautiful galaxy</span>
-    
-    
-    <div class="post-content markdown">
-        <div class="main-content-wrap">
-            <p>复习数据结构笔记之队列</p>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>复习数据结构笔记之队列</p>
 <a id="more"></a>
-<h1 id="table-of-contents">Table of Contents</h1><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据结构篇-5-队列"><span class="toc-text">数据结构篇-5-队列</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#如何理解“队列”？"><span class="toc-text">如何理解“队列”？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#顺序队列和链式队列"><span class="toc-text">顺序队列和链式队列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#循环队列"><span class="toc-text">循环队列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#阻塞队列和并发队列"><span class="toc-text">阻塞队列和并发队列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#线程池没有空闲线程时，新的任务请求线程资源时，线程池该如何处理？各种处理策略又是如何实现的呢？"><span class="toc-text">线程池没有空闲线程时，新的任务请求线程资源时，线程池该如何处理？各种处理策略又是如何实现的呢？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#【思考】"><span class="toc-text">【思考】</span></a></li></ol></li></ol>
+<!--toc-->
 <h3 id="数据结构篇-5-队列"><a href="#数据结构篇-5-队列" class="headerlink" title="数据结构篇-5-队列"></a>数据结构篇-5-队列</h3><h4 id="如何理解“队列”？"><a href="#如何理解“队列”？" class="headerlink" title="如何理解“队列”？"></a>如何理解“队列”？</h4><p>1、<strong>队列是一种操作受限的线性表数据结构</strong>。<br>2、队列最大的特点就是先进先出。<br>3、最基本的操作：入队 enqueue()，放一个数据到队列尾部；出队 dequeue()，从队列头部取一个元素。</p>
 <h4 id="顺序队列和链式队列"><a href="#顺序队列和链式队列" class="headerlink" title="顺序队列和链式队列"></a>顺序队列和链式队列</h4><p>1、<strong>用数组实现的队列叫顺序队列，用链表实现的队列叫链式队列。</strong><br>2、队列需要两个指针：一个是 head 指针，指向队头；一个是 tail 指针，指向队尾。<br>3、随着不停地进行入队、出队操作，head 和 tail 都会持续往后移动。当 tail 移动到最右边，即使数组中还有空闲空间，也无法继续往队列中添加数据了。<br>       实际上，我们在出队时可以不用搬移数据。如果没有空闲空间了，只需要在入队时，再集中触发一次数据的搬移操作。出队函数 dequeue() 保持不变，我们稍加改造一下入队函数 enqueue() 的实现，当队列的 tail 指针移动到数组的最右边后，如果有新的数据入队，我们可以将 head 到 tail 之间的数据，整体搬移到数组中 0 到 tail-head 的位置。<br>4、基于链表的实现，同样需要两个指针：head 指针和 tail 指针。分别指向链表的第一个结点和最后一个结点。入队时，tail-&gt;next= new_node, tail = tail-&gt;next；出队时，head = head-&gt;next。</p>
 <h4 id="循环队列"><a href="#循环队列" class="headerlink" title="循环队列"></a>循环队列</h4><p>1、<strong>循环队列</strong>，原本数组是有头有尾的，是一条直线。把首尾相连，扳成了一个环。<br>2、在数组实现队列的时候，会有数据搬移操作，要想解决数据搬移的问题，需要像环一样的循环队列。<br>3、要想写出没有 bug 的循环队列的实现代码，最关键的是，确定好队空和队满的判定条件。<br>1）队列为空的判断条件仍然是 head == tail。<br>2）<strong>当队满时，(tail+1)%n=head。 tail 指向的位置实际上是没有存储数据的。所以，循环队列会浪费一个数组的存储空间。</strong></p>
@@ -305,358 +107,167 @@
 <h4 id="线程池没有空闲线程时，新的任务请求线程资源时，线程池该如何处理？各种处理策略又是如何实现的呢？"><a href="#线程池没有空闲线程时，新的任务请求线程资源时，线程池该如何处理？各种处理策略又是如何实现的呢？" class="headerlink" title="线程池没有空闲线程时，新的任务请求线程资源时，线程池该如何处理？各种处理策略又是如何实现的呢？"></a>线程池没有空闲线程时，新的任务请求线程资源时，线程池该如何处理？各种处理策略又是如何实现的呢？</h4><p>一般有两种处理策略。第一种是非阻塞的处理方式，直接拒绝任务请求；另一种是阻塞的处理方式，将请求排队，等到有空闲线程时，取出排队的请求继续处理。<br>1、基于链表的实现方式，可以实现一个支持无限排队的无界队列（unbounded queue），但是可能会导致过多的请求排队等待，请求处理的响应时间过长。所以，针对响应时间比较敏感的系统，基于链表实现的无限排队的线程池是不合适的。<br>2、基于数组实现的有界队列（bounded queue），队列的大小有限，所以线程池中排队的请求超过队列大小时，接下来的请求就会被拒绝，这种方式对响应时间敏感的系统来说，就相对更加合理。不过，设置一个合理的队列大小，也是非常有讲究的。队列太大导致等待的请求太多，队列太小会导致无法充分利用系统资源、发挥最大性能。<br>（除了前面讲到队列应用在线程池请求排队的场景之外，队列可以应用在任何有限资源池中，用于排队请求，比如数据库连接池等。实际上，对于大部分资源有限的场景，当没有空闲资源时，基本上都可以通过“队列”这种数据结构来实现请求排队。）</p>
 <h4 id="【思考】"><a href="#【思考】" class="headerlink" title="【思考】"></a>【思考】</h4><p>一、1、像windows操作系统的消息队列，略高级一些带有优先级。还有qt中的信号与槽函数机制，使用connect链接，其中的参数就是设置为把窗口界面消息放到消息队列，然后一次取出。比如优先级消息，窗口系统关闭，优先级高，则就直接执行关闭操作。<br>2、sockets网络连接队列。<br>3、数据库连接队列。<br>4、一种集群操作，很多客户端像服务端请求资源，处理高并发大量请求。把这些请求放到队列中。<br>5、分布式应用中的消息队列，也是一种队列结构。<br>二、考虑使用CAS实现无锁队列，则在入队前，获取tail位置，入队时比较tail是否发生变化，如果否，则允许入队，反之，本次入队失败。出队则是获取head位置，进行cas。  </p>
 
-            
-
-
-            <!-- my-copyright -->
-            
-            <!-- my-copyright -->
-        </div>
+      
     </div>
-    <div id="post-footer" class="post-footer main-content-wrap">
-        
-            <div class="post-footer-tags">
-                <span class="text-color-light text-small">TAGGED IN</span><br/>
-                
-    <a class="tag tag--primary tag--small t-link" href="/tags/数据结构/">数据结构</a> <a class="tag tag--primary tag--small t-link" href="/tags/队列/">队列</a>
+    <footer class="article-footer">
+      <a data-url="kuberme.cn/Data-Structure-5-Queue/" data-id="ck9gt25i30009034gun649ow0" class="article-share-link">Share</a>
+      
+        <a href="kuberme.cn/Data-Structure-5-Queue/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/队列/">队列</a></li></ul>
 
-            </div>
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/Data-Structure-6-Recursion/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
         
+          数据结构篇笔记-6-递归
         
-            <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/Data-Structure-6-Recursion/"
-                    data-tooltip="数据结构篇笔记-6-递归"
-                    aria-label="PREVIOUS: 数据结构篇笔记-6-递归"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/Data-Structure-4-Stack/"
-                    data-tooltip="数据结构篇笔记-4-栈"
-                    aria-label="NEXT: 数据结构篇笔记-4-栈"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Data-Structure-5-Queue/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=kuberme.cn/Data-Structure-5-Queue/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=kuberme.cn/Data-Structure-5-Queue/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="Table of Contents">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
+      </div>
+    </a>
+  
+  
+    <a href="/Data-Structure-4-Stack/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">数据结构篇笔记-4-栈</div>
+    </a>
+  
+</nav>
 
-
-        
-        
-            
-        
-    </div>
+  
 </article>
 
 
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/C/Compiler/">Compiler</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/KuberTalk/">KuberTalk</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据库/">数据库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据结构/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/研究僧日常/">研究僧日常</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/研究僧日常/操作系统/">操作系统</a></li></ul></li></ul>
+    </div>
+  </div>
 
-                <footer id="footer" class="main-content-wrap">
-    <span class="copyrights">
-        Copyrights &copy; 2020 Kubert. All Rights Reserved.
-    </span><br>
-    <span class="upyun-image">
-    	Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>&nbsp&nbsp&nbsp&nbsp
-        CDN Accelerating Supported by<a href="https://www.upyun.com/" target="_blank" rel="external nofollow">
-        	<img src="/assets/images/upyunLogo.png" height="20" width="50"/>
-       	</a>
-    </span>
 
-<!--不蒜子统计
-<br>
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CUDA/">CUDA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GCC/">GCC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jetson-TK1/">Jetson TK1</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jetson-TX1/">Jetson TX1</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/二分查找/">二分查找</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/冒泡排序/">冒泡排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基数排序/">基数排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/堆排序/">堆排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/希尔排序/">希尔排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/归并排序/">归并排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/快速排序/">快速排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/插入排序/">插入排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/操作系统/">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库事务/">数据库事务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库索引/">数据库索引</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据库锁/">数据库锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/智能小车/">智能小车</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/栈/">栈</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/桶排序/">桶排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/计数排序/">计数排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/选择排序/">选择排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/递归/">递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/链表/">链表</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/队列/">队列</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/随笔/">随笔</a></li></ul>
+    </div>
+  </div>
 
-    <span id="busuanzi_container_site_pv">
-            PV&nbsp<span id="busuanzi_value_site_pv"></span>
-    </span>
-    <span class="post-meta-divider">|</span>
-    <span id="busuanzi_container_site_uv" style='display:none'>
-            Vistors&nbsp<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-	 
--->
 
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/CUDA/" style="font-size: 13.33px;">CUDA</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/GCC/" style="font-size: 10px;">GCC</a> <a href="/tags/Jetson-TK1/" style="font-size: 10px;">Jetson TK1</a> <a href="/tags/Jetson-TX1/" style="font-size: 10px;">Jetson TX1</a> <a href="/tags/二分查找/" style="font-size: 10px;">二分查找</a> <a href="/tags/冒泡排序/" style="font-size: 13.33px;">冒泡排序</a> <a href="/tags/基数排序/" style="font-size: 13.33px;">基数排序</a> <a href="/tags/堆排序/" style="font-size: 10px;">堆排序</a> <a href="/tags/希尔排序/" style="font-size: 10px;">希尔排序</a> <a href="/tags/归并排序/" style="font-size: 16.67px;">归并排序</a> <a href="/tags/快速排序/" style="font-size: 16.67px;">快速排序</a> <a href="/tags/插入排序/" style="font-size: 13.33px;">插入排序</a> <a href="/tags/操作系统/" style="font-size: 10px;">操作系统</a> <a href="/tags/数据库事务/" style="font-size: 10px;">数据库事务</a> <a href="/tags/数据库索引/" style="font-size: 10px;">数据库索引</a> <a href="/tags/数据库锁/" style="font-size: 10px;">数据库锁</a> <a href="/tags/数据结构/" style="font-size: 20px;">数据结构</a> <a href="/tags/智能小车/" style="font-size: 10px;">智能小车</a> <a href="/tags/栈/" style="font-size: 10px;">栈</a> <a href="/tags/桶排序/" style="font-size: 13.33px;">桶排序</a> <a href="/tags/计数排序/" style="font-size: 10px;">计数排序</a> <a href="/tags/选择排序/" style="font-size: 13.33px;">选择排序</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/链表/" style="font-size: 13.33px;">链表</a> <a href="/tags/队列/" style="font-size: 10px;">队列</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/Data-Structure-11-Binary Search-1/">数据结构篇笔记-11-二分查找(上)</a>
+          </li>
+        
+          <li>
+            <a href="/Data-Structure-10-Sorting-4/">数据结构篇笔记-10-排序算法小结</a>
+          </li>
+        
+          <li>
+            <a href="/Data-Structure-9-Sorting-3/">数据结构篇笔记-9-桶&amp;计数&amp;基数排序</a>
+          </li>
+        
+          <li>
+            <a href="/Data-Structure-8-Sorting-2/">数据结构篇笔记-8-归并&amp;快速排序</a>
+          </li>
+        
+          <li>
+            <a href="/Data-Structure-7-Sorting-1/">数据结构篇笔记-7-冒泡&amp;插入&amp;选择排序</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Kubert<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
 </footer>
-
-            </div>
-            
-                <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
-                    <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/Data-Structure-6-Recursion/"
-                    data-tooltip="数据结构篇笔记-6-递归"
-                    aria-label="PREVIOUS: 数据结构篇笔记-6-递归"
-                >
-                    
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/Data-Structure-4-Stack/"
-                    data-tooltip="数据结构篇笔记-4-栈"
-                    aria-label="NEXT: 数据结构篇笔记-4-栈"
-                >
-                    
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
-            <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
-            >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
-            </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Data-Structure-5-Queue/"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=kuberme.cn/Data-Structure-5-Queue/"
-                    title="Share on Twitter"
-                    aria-label="Share on Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=kuberme.cn/Data-Structure-5-Queue/"
-                    title="Share on Google+"
-                    aria-label="Share on Google+"
-                >
-                    <i class="fab fa-google-plus" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-        
-        <li class="post-action">
-            
-                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="Table of Contents">
-            
-                <i class="fa fa-list" aria-hidden="true"></i>
-            </a>
-        </li>
-    </ul>
-</div>
-
-
-                </div>
-                
-    <div id="share-options-bar" class="share-options-bar" data-behavior="5">
-        <i id="btn-close-shareoptions" class="fa fa-times"></i>
-        <ul class="share-options">
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Data-Structure-5-Queue/"
-                        aria-label="Share on Facebook"
-                    >
-                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://twitter.com/intent/tweet?text=kuberme.cn/Data-Structure-5-Queue/"
-                        aria-label="Share on Twitter"
-                    >
-                        <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
-                    </a>
-                </li>
-            
-                
-                
-                <li class="share-option">
-                    <a
-                        class="share-option-btn"
-                        target="new"
-                        href="https://plus.google.com/share?url=kuberme.cn/Data-Structure-5-Queue/"
-                        aria-label="Share on Google+"
-                    >
-                        <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
-                    </a>
-                </li>
-            
-        </ul>
     </div>
-
-
-            
-        </div>
-        
-
-
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
     
-        
-    
-
-<div id="about">
-    <div id="about-card">
-        <div id="about-btn-close">
-            <i class="fa fa-times"></i>
-        </div>
-        
-            <img id="about-card-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
-        
-            <h4 id="about-card-name">Kubert</h4>
-        
-            <div id="about-card-bio"><p>author.bio</p>
-</div>
-        
-        
-            <div id="about-card-job">
-                <i class="fa fa-briefcase"></i>
-                <br/>
-                <p>author.job</p>
-
-            </div>
-        
-        
-            <div id="about-card-location">
-                <i class="fa fa-map-marker-alt"></i>
-                <br/>
-                Chengdu,China
-            </div>
-        
-    </div>
-</div>
-
-        
-        
-<div id="cover" style="background-image:url('/assets/images/galaxy.jpg');"></div>
-        <!--SCRIPTS-->
-<script src="/assets/js/script-pn1j1k5loooddhnobedbnbb3axrh5qfsl8x8kmeka2su2hkn9zbqwjkkkqva.min.js"></script>
-<!--SCRIPTS END-->
+<script>
+  var disqus_shortname = 'kuberme';
+  
+  var disqus_url = 'kuberme.cn/Data-Structure-5-Queue/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
 
 
-    
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
-    </body>
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
 </html>
