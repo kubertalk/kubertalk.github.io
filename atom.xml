@@ -310,9 +310,9 @@
       <category term="研究僧日常" scheme="kuberme.cn/categories/%E7%A0%94%E7%A9%B6%E5%83%A7%E6%97%A5%E5%B8%B8/"/>
     
     
-      <category term="Jetson TX1" scheme="kuberme.cn/tags/Jetson-TX1/"/>
-    
       <category term="CUDA" scheme="kuberme.cn/tags/CUDA/"/>
+    
+      <category term="Jetson TX1" scheme="kuberme.cn/tags/Jetson-TX1/"/>
     
       <category term="智能小车" scheme="kuberme.cn/tags/%E6%99%BA%E8%83%BD%E5%B0%8F%E8%BD%A6/"/>
     
@@ -424,9 +424,9 @@
       <category term="研究僧日常" scheme="kuberme.cn/categories/%E7%A0%94%E7%A9%B6%E5%83%A7%E6%97%A5%E5%B8%B8/"/>
     
     
-      <category term="CUDA" scheme="kuberme.cn/tags/CUDA/"/>
-    
       <category term="Jetson TK1" scheme="kuberme.cn/tags/Jetson-TK1/"/>
+    
+      <category term="CUDA" scheme="kuberme.cn/tags/CUDA/"/>
     
   </entry>
   
