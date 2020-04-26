@@ -14,17 +14,17 @@
         <meta name="keywords" content="hexo,javascript,">
     
     
-        <link rel="icon" href="https://kubertalk.github.io/kubertalk/assets/images/elephant.jpg">
+        <link rel="icon" href="kuberme.cn/assets/images/elephant.jpg">
     
     
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="/kubertalk/atom.xml">
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg"},"articleBody":"复习数据结构笔记之链表一\n\n\n链表篇-1一、什么是链表？1.和数组一样，链表也是一种线性表。2.从内存结构来看，链表的内存结构是不连续的内存空间，是将一组零散的内存块串联起来，从而进行数据存储的数据结构。3.链表中的每一个内存块被称为节点Node。节点除了存储数据外，还需记录链上下一个节点的地址，即后继指针next。\n二、为什么使用链表？即链表的特点1.插入、删除数据效率高O(1)级别（只需更改指针指向即可），随机访问效率低O(n)级别（需要从链头至链尾进行遍历）。2.和数组相比，内存空间消耗更大，因为每个存储数据的节点都需要额外的空间存储后继指针。\n三、常用链表：单链表、循环链表和双向链表1.单链表1）每个节点只包含一个指针，即后继指针。2）单链表有两个特殊的节点，即首节点和尾节点。为什么特殊？用首节点地址表示整条链表，尾节点的后继指针指向空地址null。3）性能特点：插入和删除节点的时间复杂度为O（1），查找的时间复杂度为O(n)。2.循环链表1）除了尾节点的后继指针指向首节点的地址外均与单链表一致。2）适用于存储有循环特点的数据，比如约瑟夫问题。3.双向链表1）节点除了存储数据外，还有两个指针分别指向前一个节点地址（前驱指针prev）和下一个节点地址（后继指针next）。2）首节点的前驱指针prev和尾节点的后继指针均指向空地址。3）性能特点：和单链表相比，存储相同的数据，需要消耗更多的存储空间。插入、删除操作比单链表效率更高O(1)级别。以删除操作为例，删除操作分为2种情况：给定数据值删除对应节点和给定节点地址删除节点。对于前一种情况，单链表和双向链表都需要从头到尾进行遍历从而找到对应节点进行删除，时间复杂度为O(n)。对于第二种情况，要进行删除操作必须找到前驱节点，单链表需要从头到尾进行遍历直到p-&gt;next = q，时间复杂度为O(n)，而双向链表可以直接找到前驱节点，时间复杂度为O(1)。对于一个有序链表，双向链表的按值查询效率要比单链表高一些。因为我们可以记录上次查找的位置p，每一次查询时，根据要查找的值与p的大小关系，决定是往前还是往后查找，所以平均只需要查找一半的数据。4.双向循环链表：首节点的前驱指针指向尾节点，尾节点的后继指针指向首节点。\n四、选择数组还是链表？1.插入、删除和随机访问的时间复杂度数组：插入、删除的时间复杂度是O(n)，随机访问的时间复杂度是O(1)。链表：插入、删除的时间复杂度是O(1)，随机访问的时间复杂端是O(n)。2.数组缺点1）若申请内存空间很大，比如100M，但若内存空间没有100M的连续空间时，则会申请失败，尽管内存可用空间超过100M。2）大小固定，若存储空间不足，需进行扩容，一旦扩容就要进行数据复制，而这时非常费时的。3.链表缺点1）内存空间消耗更大，因为需要额外的空间存储指针信息。2）对链表进行频繁的插入和删除操作，会导致频繁的内存申请和释放，容易造成内存碎片，如果是Java语言，还可能会造成频繁的GC（自动垃圾回收器）操作。4.如何选择？数组简单易用，在实现上使用连续的内存空间，可以借助CPU的缓冲机制预读数组中的数据，所以访问效率更高，而链表在内存中并不是连续存储，所以对CPU缓存不友好，没办法预读。如果代码对内存的使用非常苛刻，那数组就更适合。\n","dateCreated":"2018-10-03T17:21:55+08:00","dateModified":"2020-04-21T19:20:42+08:00","datePublished":"2018-10-03T17:21:55+08:00","description":"复习数据结构笔记之链表一","headline":"数据结构篇笔记-2-链表","image":["mushroom.jpg","galaxy.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://kubertalk.github.io/kubertalk/Data-Structure-2-Linked-List/"},"publisher":{"@type":"Organization","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg","logo":{"@type":"ImageObject","url":"elephant.jpg"}},"url":"https://kubertalk.github.io/kubertalk/Data-Structure-2-Linked-List/","keywords":"数据结构, 链表","thumbnailUrl":"mushroom.jpg"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg"},"articleBody":"复习数据结构笔记之链表一\n\n\n链表篇-1一、什么是链表？1.和数组一样，链表也是一种线性表。2.从内存结构来看，链表的内存结构是不连续的内存空间，是将一组零散的内存块串联起来，从而进行数据存储的数据结构。3.链表中的每一个内存块被称为节点Node。节点除了存储数据外，还需记录链上下一个节点的地址，即后继指针next。\n二、为什么使用链表？即链表的特点1.插入、删除数据效率高O(1)级别（只需更改指针指向即可），随机访问效率低O(n)级别（需要从链头至链尾进行遍历）。2.和数组相比，内存空间消耗更大，因为每个存储数据的节点都需要额外的空间存储后继指针。\n三、常用链表：单链表、循环链表和双向链表1.单链表1）每个节点只包含一个指针，即后继指针。2）单链表有两个特殊的节点，即首节点和尾节点。为什么特殊？用首节点地址表示整条链表，尾节点的后继指针指向空地址null。3）性能特点：插入和删除节点的时间复杂度为O（1），查找的时间复杂度为O(n)。2.循环链表1）除了尾节点的后继指针指向首节点的地址外均与单链表一致。2）适用于存储有循环特点的数据，比如约瑟夫问题。3.双向链表1）节点除了存储数据外，还有两个指针分别指向前一个节点地址（前驱指针prev）和下一个节点地址（后继指针next）。2）首节点的前驱指针prev和尾节点的后继指针均指向空地址。3）性能特点：和单链表相比，存储相同的数据，需要消耗更多的存储空间。插入、删除操作比单链表效率更高O(1)级别。以删除操作为例，删除操作分为2种情况：给定数据值删除对应节点和给定节点地址删除节点。对于前一种情况，单链表和双向链表都需要从头到尾进行遍历从而找到对应节点进行删除，时间复杂度为O(n)。对于第二种情况，要进行删除操作必须找到前驱节点，单链表需要从头到尾进行遍历直到p-&gt;next = q，时间复杂度为O(n)，而双向链表可以直接找到前驱节点，时间复杂度为O(1)。对于一个有序链表，双向链表的按值查询效率要比单链表高一些。因为我们可以记录上次查找的位置p，每一次查询时，根据要查找的值与p的大小关系，决定是往前还是往后查找，所以平均只需要查找一半的数据。4.双向循环链表：首节点的前驱指针指向尾节点，尾节点的后继指针指向首节点。\n四、选择数组还是链表？1.插入、删除和随机访问的时间复杂度数组：插入、删除的时间复杂度是O(n)，随机访问的时间复杂度是O(1)。链表：插入、删除的时间复杂度是O(1)，随机访问的时间复杂端是O(n)。2.数组缺点1）若申请内存空间很大，比如100M，但若内存空间没有100M的连续空间时，则会申请失败，尽管内存可用空间超过100M。2）大小固定，若存储空间不足，需进行扩容，一旦扩容就要进行数据复制，而这时非常费时的。3.链表缺点1）内存空间消耗更大，因为需要额外的空间存储指针信息。2）对链表进行频繁的插入和删除操作，会导致频繁的内存申请和释放，容易造成内存碎片，如果是Java语言，还可能会造成频繁的GC（自动垃圾回收器）操作。4.如何选择？数组简单易用，在实现上使用连续的内存空间，可以借助CPU的缓冲机制预读数组中的数据，所以访问效率更高，而链表在内存中并不是连续存储，所以对CPU缓存不友好，没办法预读。如果代码对内存的使用非常苛刻，那数组就更适合。\n","dateCreated":"2018-10-03T17:21:55+08:00","dateModified":"2020-04-21T19:20:42+08:00","datePublished":"2018-10-03T17:21:55+08:00","description":"复习数据结构笔记之链表一","headline":"数据结构篇笔记-2-链表","image":["mushroom.jpg","galaxy.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"/kuberme.cn/Data-Structure-2-Linked-List/"},"publisher":{"@type":"Organization","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg","logo":{"@type":"ImageObject","url":"elephant.jpg"}},"url":"/kuberme.cn/Data-Structure-2-Linked-List/","keywords":"数据结构, 链表","thumbnailUrl":"mushroom.jpg"}</script>
     <meta name="description" content="复习数据结构笔记之链表一">
 <meta name="keywords" content="数据结构,链表">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="数据结构篇笔记-2-链表">
-<meta property="og:url" content="https://kubertalk.github.io/kubertalk/Data-Structure-2-Linked-List/index.html">
+<meta property="og:url" content="kuberme.cn/Data-Structure-2-Linked-List/index.html">
 <meta property="og:site_name" content="Fly with You">
 <meta property="og:description" content="复习数据结构笔记之链表一">
 <meta property="og:locale" content="en">
@@ -37,19 +37,19 @@
         
     
     
-        <meta property="og:image" content="https://kubertalk.github.io/kubertalk/assets/images/elephant.jpg"/>
+        <meta property="og:image" content="kuberme.cn/assets/images/elephant.jpg"/>
     
     
-        <meta property="og:image" content="https://kubertalk.github.io/kubertalk/Data-Structure-2-Linked-List/mushroom.jpg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="https://kubertalk.github.io/kubertalk/Data-Structure-2-Linked-List/mushroom.jpg"/>
+        <meta property="og:image" content="kuberme.cn/Data-Structure-2-Linked-List/mushroom.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="kuberme.cn/Data-Structure-2-Linked-List/mushroom.jpg"/>
     
     
-        <meta property="og:image" content="https://kubertalk.github.io/kubertalk/Data-Structure-2-Linked-List/galaxy.jpg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="https://kubertalk.github.io/kubertalk/Data-Structure-2-Linked-List/galaxy.jpg"/>
+        <meta property="og:image" content="kuberme.cn/Data-Structure-2-Linked-List/galaxy.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="kuberme.cn/Data-Structure-2-Linked-List/galaxy.jpg"/>
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/kubertalk/assets/css/style-fniyqlsw5pf9vc6yjgxwasnk5aedpxzktlqqyflf36mnqscn70u3wtotq7ms.min.css">
+    <link rel="stylesheet" href="/assets/css/style-fniyqlsw5pf9vc6yjgxwasnk5aedpxzktlqqyflf36mnqscn70u3wtotq7ms.min.css">
     <!--STYLES END-->
     
 
@@ -76,7 +76,7 @@
     <div class="header-title">
         <a
             class="header-title-link"
-            href="/kubertalk/ "
+            href="/ "
             aria-label=""
         >
             Fly with You
@@ -87,11 +87,11 @@
             <a
                 class="header-right-picture "
                 href="#about"
-                aria-label="Open the link: /kubertalk/#about"
+                aria-label="Open the link: /#about"
             >
         
         
-            <img class="header-picture" src="/kubertalk/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+            <img class="header-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
         
         </a>
     
@@ -109,10 +109,10 @@
         
             <div class="sidebar-profile">
                 <a
-                    href="/kubertalk/#about"
+                    href="/#about"
                     aria-label="Read more about the author"
                 >
-                    <img class="sidebar-profile-picture" src="/kubertalk/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+                    <img class="sidebar-profile-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
                 </a>
                 <h4 class="sidebar-profile-name">Kubert</h4>
                 
@@ -127,7 +127,7 @@
                 <li class="sidebar-button">
                     
                         <a  class="sidebar-button-link "
-                             href="/kubertalk/ "
+                             href="/ "
                             
                             title="主页"
                         >
@@ -140,7 +140,7 @@
                 <li class="sidebar-button">
                     
                         <a  class="sidebar-button-link "
-                             href="/kubertalk/all-categories"
+                             href="/all-categories"
                             
                             title="条目"
                         >
@@ -153,7 +153,7 @@
                 <li class="sidebar-button">
                     
                         <a  class="sidebar-button-link "
-                             href="/kubertalk/all-tags"
+                             href="/all-tags"
                             
                             title="标签"
                         >
@@ -166,7 +166,7 @@
                 <li class="sidebar-button">
                     
                         <a  class="sidebar-button-link "
-                             href="/kubertalk/all-archives"
+                             href="/all-archives"
                             
                             title="归档"
                         >
@@ -231,7 +231,7 @@
                 <li class="sidebar-button">
                     
                         <a  class="sidebar-button-link "
-                             href="/kubertalk/atom.xml"
+                             href="/atom.xml"
                             
                             title="RSS"
                         >
@@ -250,7 +250,7 @@
         <div class="post-header-cover
                     text-left
                     "
-             style="background-image:url('/kubertalk/Data-Structure-2-Linked-List/galaxy.jpg');"
+             style="background-image:url('/Data-Structure-2-Linked-List/galaxy.jpg');"
              data-behavior="5">
             
                 <div class="post-header main-content-wrap text-left">
@@ -269,7 +269,7 @@
     
         <span>in </span>
         
-    <a class="category-link" href="/kubertalk/categories/数据结构/">数据结构</a>
+    <a class="category-link" href="/categories/数据结构/">数据结构</a>
 
 
     
@@ -314,7 +314,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">TAGGED IN</span><br/>
                 
-    <a class="tag tag--primary tag--small t-link" href="/kubertalk/tags/数据结构/">数据结构</a> <a class="tag tag--primary tag--small t-link" href="/kubertalk/tags/链表/">链表</a>
+    <a class="tag tag--primary tag--small t-link" href="/tags/数据结构/">数据结构</a> <a class="tag tag--primary tag--small t-link" href="/tags/链表/">链表</a>
 
             </div>
         
@@ -327,7 +327,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/kubertalk/Data-Structure-3-Linked-List/"
+                    href="/Data-Structure-3-Linked-List/"
                     data-tooltip="数据结构篇笔记-3-链表"
                     aria-label="PREVIOUS: 数据结构篇笔记-3-链表"
                 >
@@ -341,7 +341,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/kubertalk/Gcc-Link-Sequence-Issue/"
+                    href="/Gcc-Link-Sequence-Issue/"
                     data-tooltip="Gcc Link Sequence Issue"
                     aria-label="NEXT: Gcc Link Sequence Issue"
                 >
@@ -368,7 +368,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://kubertalk.github.io/kubertalk/Data-Structure-2-Linked-List/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Data-Structure-2-Linked-List/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -381,7 +381,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://kubertalk.github.io/kubertalk/Data-Structure-2-Linked-List/"
+                    target="new" href="https://twitter.com/intent/tweet?text=kuberme.cn/Data-Structure-2-Linked-List/"
                     title="Share on Twitter"
                     aria-label="Share on Twitter"
                 >
@@ -394,7 +394,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=https://kubertalk.github.io/kubertalk/Data-Structure-2-Linked-List/"
+                    target="new" href="https://plus.google.com/share?url=kuberme.cn/Data-Structure-2-Linked-List/"
                     title="Share on Google+"
                     aria-label="Share on Google+"
                 >
@@ -463,7 +463,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/kubertalk/Data-Structure-3-Linked-List/"
+                    href="/Data-Structure-3-Linked-List/"
                     data-tooltip="数据结构篇笔记-3-链表"
                     aria-label="PREVIOUS: 数据结构篇笔记-3-链表"
                 >
@@ -477,7 +477,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/kubertalk/Gcc-Link-Sequence-Issue/"
+                    href="/Gcc-Link-Sequence-Issue/"
                     data-tooltip="Gcc Link Sequence Issue"
                     aria-label="NEXT: Gcc Link Sequence Issue"
                 >
@@ -504,7 +504,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://kubertalk.github.io/kubertalk/Data-Structure-2-Linked-List/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Data-Structure-2-Linked-List/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -517,7 +517,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://kubertalk.github.io/kubertalk/Data-Structure-2-Linked-List/"
+                    target="new" href="https://twitter.com/intent/tweet?text=kuberme.cn/Data-Structure-2-Linked-List/"
                     title="Share on Twitter"
                     aria-label="Share on Twitter"
                 >
@@ -530,7 +530,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=https://kubertalk.github.io/kubertalk/Data-Structure-2-Linked-List/"
+                    target="new" href="https://plus.google.com/share?url=kuberme.cn/Data-Structure-2-Linked-List/"
                     title="Share on Google+"
                     aria-label="Share on Google+"
                 >
@@ -564,7 +564,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=https://kubertalk.github.io/kubertalk/Data-Structure-2-Linked-List/"
+                        href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Data-Structure-2-Linked-List/"
                         aria-label="Share on Facebook"
                     >
                         <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
@@ -577,7 +577,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://twitter.com/intent/tweet?text=https://kubertalk.github.io/kubertalk/Data-Structure-2-Linked-List/"
+                        href="https://twitter.com/intent/tweet?text=kuberme.cn/Data-Structure-2-Linked-List/"
                         aria-label="Share on Twitter"
                     >
                         <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
@@ -590,7 +590,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://plus.google.com/share?url=https://kubertalk.github.io/kubertalk/Data-Structure-2-Linked-List/"
+                        href="https://plus.google.com/share?url=kuberme.cn/Data-Structure-2-Linked-List/"
                         aria-label="Share on Google+"
                     >
                         <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
@@ -616,7 +616,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/kubertalk/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+            <img id="about-card-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
         
             <h4 id="about-card-name">Kubert</h4>
         
@@ -643,9 +643,9 @@
 
         
         
-<div id="cover" style="background-image:url('/kubertalk/assets/images/galaxy.jpg');"></div>
+<div id="cover" style="background-image:url('/assets/images/galaxy.jpg');"></div>
         <!--SCRIPTS-->
-<script src="/kubertalk/assets/js/script-pn1j1k5loooddhnobedbnbb3axrh5qfsl8x8kmeka2su2hkn9zbqwjkkkqva.min.js"></script>
+<script src="/assets/js/script-pn1j1k5loooddhnobedbnbb3axrh5qfsl8x8kmeka2su2hkn9zbqwjkkkqva.min.js"></script>
 <!--SCRIPTS END-->
 
 

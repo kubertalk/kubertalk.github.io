@@ -14,17 +14,17 @@
         <meta name="keywords" content="hexo,javascript,">
     
     
-        <link rel="icon" href="https://kubertalk.github.io/kubertalk/assets/images/elephant.jpg">
+        <link rel="icon" href="kuberme.cn/assets/images/elephant.jpg">
     
     
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="/kubertalk/atom.xml">
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg"},"articleBody":"Sometimes when you need to use a cpp runtime environments on Windows system for your special applications, you can just install a Visuo Studio xxx to do it. But if you want to dilivery it to cloud environment, maybe you need make it into a Docker just like me. \n\n\nInstall Docker into Win10\nInstall Docker CE in one computer with Windows 10 system, which its Virtualization must to be turn on firstly in your BIOS.\n\nNote that, you need to log out once to complete installation when the installation succeeded.\n\nAfter it, when you start Docker, it will check your computer setting of Hyper-V. \nHyper-v must be turn on status when you run Docker, which means your Virtual Box can not be used in the meantime. maybe there will have one computer restart here, don’t panic, this is the last restart if you only use Docker instead of virtual machines.\n\nAfter Docker started, you can find a penguin log in your taskbar. here has some tips to help you test Docker or improve Docker.\n\nSwitch Registry: \nYou can switch your registry to China Official Registry by edit the Daemon which by right click your Docker to choose Setting. Or you can change registry to a private registry like your aliyun’s speeder address.\n\nSwitch to Windows Container Mode: \nIn order to use windows images in Docker, you must change mode from Linux Container to Windows Container. after that, you can check it through docker version command.\n\n\nFirst example of windows container: execute docker version in your cmd.exe, then the client and server information for Docker will be shown. After that,  you can execute docker run microsoft/sample-dotnet in your cmd.exe or Windows PowerShell.exe (more popular and more convenient) . if there has a logo output, your installation would be correct.\n\n\n\n\nLoad a Windows Image with VS Build Tools\nBasic Commands: \nAfter your Docker installation succeeded, you can always use it in your PowerShell through some usual commands to get some basic status like the bellowed.\n12345678#list running containersdocker ps#list all containers(include running/exited/created)docker ps -a#list imagesdocker images#check basic info of your Dockerdocker info\n\nLoad Images: \nSo, if you want to run a container with cpp files in it, you need to have a windows image with VS build tools environment first. I already packed a ready image, this image is built by Dockerfile, which is from a source image microsoft/windowsservercore with Visual Studio Build Tools in it. You just need to load my image into a new folder on your system through docker load -i \\\\cd-srv04\\pxa\\Projects\\simulation\\docker-images\\winservercore-vstools.tar. \nPS: if you want to what’s the difference of windowsservercore and nanoserver, please visit here.\nif you want to know how to build your own windows image, please visit here.\nand if you want to know the how to build and save the image we are using, and the please see here. \n\nCheck Images:\nUse docker images to check if this image already in your system when it load finished.\n\n\n\nStart a Container with a Interactive Cmdlet\nAfter the image load successfully, you can run a container with this image, or you can build other images using this image.\n\nStart a Container:\nUse docker run -it -v $host-code-addr:$container-code-addr win-vs to start a container with a interactive cmdlet, just like the below picture. Then you can do everything you like in this container.\n\n\nAbout the above command, just give you some tips for it:\n1234567$host-code-addr = c:/xxx/code   #code address in host computer, means container outer$container-code-addr = c:/code  #code address in container innerdocker run -it -v $host-code-addr:$container-code-addr win-vs# -i,--Interactive: keep STDIN open# -t,--tty : allocate a pseudo-TTY# -v,--volume list: Bind mount a volume\n\n\n\n\n\nCompile and Run a Hello World:\n12345cd code#compile your filescl .\\hello.cpp /EHsc#run your application.\\hello\n\n\n\nMove your whole application of vc++ code to your shared volume on your host computer, and make it in your container. just have a try !\n\nAfter test or debug on this pseudo cmdlet, you can use exit or ctl+P+Q to quit this window. Then you can use docker start/restart -i $containerID  to go back this container’s cmdlet.\n\n\nQA and IssuesHave a fun and if you have any issues or problem, please don’t hesitate to contact me with kubertqiu@hotmail.com.\n","dateCreated":"2017-05-15T16:40:11+08:00","dateModified":"2020-04-15T11:23:32+08:00","datePublished":"2017-05-15T16:40:11+08:00","description":"Sometimes when you need to use a cpp runtime environments on Windows system for your special applications, you can just install a Visuo Studio xxx to do it. But if you want to dilivery it to cloud environment, maybe you need make it into a Docker just like me. ","headline":"Run a cpp Example on Win10 Docker with VS Build Tools","image":["architecture-buildings-business-2385210.jpg","galaxy.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://kubertalk.github.io/kubertalk/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"},"publisher":{"@type":"Organization","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg","logo":{"@type":"ImageObject","url":"elephant.jpg"}},"url":"https://kubertalk.github.io/kubertalk/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/","keywords":"Docker","thumbnailUrl":"architecture-buildings-business-2385210.jpg"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg"},"articleBody":"Sometimes when you need to use a cpp runtime environments on Windows system for your special applications, you can just install a Visuo Studio xxx to do it. But if you want to dilivery it to cloud environment, maybe you need make it into a Docker just like me. \n\n\nInstall Docker into Win10\nInstall Docker CE in one computer with Windows 10 system, which its Virtualization must to be turn on firstly in your BIOS.\n\nNote that, you need to log out once to complete installation when the installation succeeded.\n\nAfter it, when you start Docker, it will check your computer setting of Hyper-V. \nHyper-v must be turn on status when you run Docker, which means your Virtual Box can not be used in the meantime. maybe there will have one computer restart here, don’t panic, this is the last restart if you only use Docker instead of virtual machines.\n\nAfter Docker started, you can find a penguin log in your taskbar. here has some tips to help you test Docker or improve Docker.\n\nSwitch Registry: \nYou can switch your registry to China Official Registry by edit the Daemon which by right click your Docker to choose Setting. Or you can change registry to a private registry like your aliyun’s speeder address.\n\nSwitch to Windows Container Mode: \nIn order to use windows images in Docker, you must change mode from Linux Container to Windows Container. after that, you can check it through docker version command.\n\n\nFirst example of windows container: execute docker version in your cmd.exe, then the client and server information for Docker will be shown. After that,  you can execute docker run microsoft/sample-dotnet in your cmd.exe or Windows PowerShell.exe (more popular and more convenient) . if there has a logo output, your installation would be correct.\n\n\n\n\nLoad a Windows Image with VS Build Tools\nBasic Commands: \nAfter your Docker installation succeeded, you can always use it in your PowerShell through some usual commands to get some basic status like the bellowed.\n12345678#list running containersdocker ps#list all containers(include running/exited/created)docker ps -a#list imagesdocker images#check basic info of your Dockerdocker info\n\nLoad Images: \nSo, if you want to run a container with cpp files in it, you need to have a windows image with VS build tools environment first. I already packed a ready image, this image is built by Dockerfile, which is from a source image microsoft/windowsservercore with Visual Studio Build Tools in it. You just need to load my image into a new folder on your system through docker load -i \\\\cd-srv04\\pxa\\Projects\\simulation\\docker-images\\winservercore-vstools.tar. \nPS: if you want to what’s the difference of windowsservercore and nanoserver, please visit here.\nif you want to know how to build your own windows image, please visit here.\nand if you want to know the how to build and save the image we are using, and the please see here. \n\nCheck Images:\nUse docker images to check if this image already in your system when it load finished.\n\n\n\nStart a Container with a Interactive Cmdlet\nAfter the image load successfully, you can run a container with this image, or you can build other images using this image.\n\nStart a Container:\nUse docker run -it -v $host-code-addr:$container-code-addr win-vs to start a container with a interactive cmdlet, just like the below picture. Then you can do everything you like in this container.\n\n\nAbout the above command, just give you some tips for it:\n1234567$host-code-addr = c:/xxx/code   #code address in host computer, means container outer$container-code-addr = c:/code  #code address in container innerdocker run -it -v $host-code-addr:$container-code-addr win-vs# -i,--Interactive: keep STDIN open# -t,--tty : allocate a pseudo-TTY# -v,--volume list: Bind mount a volume\n\n\n\n\n\nCompile and Run a Hello World:\n12345cd code#compile your filescl .\\hello.cpp /EHsc#run your application.\\hello\n\n\n\nMove your whole application of vc++ code to your shared volume on your host computer, and make it in your container. just have a try !\n\nAfter test or debug on this pseudo cmdlet, you can use exit or ctl+P+Q to quit this window. Then you can use docker start/restart -i $containerID  to go back this container’s cmdlet.\n\n\nQA and IssuesHave a fun and if you have any issues or problem, please don’t hesitate to contact me with kubertqiu@hotmail.com.\n","dateCreated":"2017-05-15T16:40:11+08:00","dateModified":"2020-04-15T11:23:32+08:00","datePublished":"2017-05-15T16:40:11+08:00","description":"Sometimes when you need to use a cpp runtime environments on Windows system for your special applications, you can just install a Visuo Studio xxx to do it. But if you want to dilivery it to cloud environment, maybe you need make it into a Docker just like me. ","headline":"Run a cpp Example on Win10 Docker with VS Build Tools","image":["architecture-buildings-business-2385210.jpg","galaxy.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"/kuberme.cn/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"},"publisher":{"@type":"Organization","name":"Kubert","sameAs":["https://github.com/kubertalk","mailto:kubertqiu@hotmail.com"],"image":"elephant.jpg","logo":{"@type":"ImageObject","url":"elephant.jpg"}},"url":"/kuberme.cn/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/","keywords":"Docker","thumbnailUrl":"architecture-buildings-business-2385210.jpg"}</script>
     <meta name="description" content="Sometimes when you need to use a cpp runtime environments on Windows system for your special applications, you can just install a Visuo Studio xxx to do it. But if you want to dilivery it to cloud env">
 <meta name="keywords" content="Docker">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="Run a cpp Example on Win10 Docker with VS Build Tools">
-<meta property="og:url" content="https://kubertalk.github.io/kubertalk/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/index.html">
+<meta property="og:url" content="kuberme.cn/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/index.html">
 <meta property="og:site_name" content="Fly with You">
 <meta property="og:description" content="Sometimes when you need to use a cpp runtime environments on Windows system for your special applications, you can just install a Visuo Studio xxx to do it. But if you want to dilivery it to cloud env">
 <meta property="og:locale" content="en">
@@ -44,19 +44,19 @@
         
     
     
-        <meta property="og:image" content="https://kubertalk.github.io/kubertalk/assets/images/elephant.jpg"/>
+        <meta property="og:image" content="kuberme.cn/assets/images/elephant.jpg"/>
     
     
-        <meta property="og:image" content="https://kubertalk.github.io/kubertalk/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/architecture-buildings-business-2385210.jpg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="https://kubertalk.github.io/kubertalk/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/architecture-buildings-business-2385210.jpg"/>
+        <meta property="og:image" content="kuberme.cn/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/architecture-buildings-business-2385210.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="kuberme.cn/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/architecture-buildings-business-2385210.jpg"/>
     
     
-        <meta property="og:image" content="https://kubertalk.github.io/kubertalk/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/galaxy.jpg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="https://kubertalk.github.io/kubertalk/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/galaxy.jpg"/>
+        <meta property="og:image" content="kuberme.cn/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/galaxy.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="kuberme.cn/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/galaxy.jpg"/>
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/kubertalk/assets/css/style-fniyqlsw5pf9vc6yjgxwasnk5aedpxzktlqqyflf36mnqscn70u3wtotq7ms.min.css">
+    <link rel="stylesheet" href="/assets/css/style-fniyqlsw5pf9vc6yjgxwasnk5aedpxzktlqqyflf36mnqscn70u3wtotq7ms.min.css">
     <!--STYLES END-->
     
 
@@ -83,7 +83,7 @@
     <div class="header-title">
         <a
             class="header-title-link"
-            href="/kubertalk/ "
+            href="/ "
             aria-label=""
         >
             Fly with You
@@ -94,11 +94,11 @@
             <a
                 class="header-right-picture "
                 href="#about"
-                aria-label="Open the link: /kubertalk/#about"
+                aria-label="Open the link: /#about"
             >
         
         
-            <img class="header-picture" src="/kubertalk/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+            <img class="header-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
         
         </a>
     
@@ -116,10 +116,10 @@
         
             <div class="sidebar-profile">
                 <a
-                    href="/kubertalk/#about"
+                    href="/#about"
                     aria-label="Read more about the author"
                 >
-                    <img class="sidebar-profile-picture" src="/kubertalk/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+                    <img class="sidebar-profile-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
                 </a>
                 <h4 class="sidebar-profile-name">Kubert</h4>
                 
@@ -134,7 +134,7 @@
                 <li class="sidebar-button">
                     
                         <a  class="sidebar-button-link "
-                             href="/kubertalk/ "
+                             href="/ "
                             
                             title="主页"
                         >
@@ -147,7 +147,7 @@
                 <li class="sidebar-button">
                     
                         <a  class="sidebar-button-link "
-                             href="/kubertalk/all-categories"
+                             href="/all-categories"
                             
                             title="条目"
                         >
@@ -160,7 +160,7 @@
                 <li class="sidebar-button">
                     
                         <a  class="sidebar-button-link "
-                             href="/kubertalk/all-tags"
+                             href="/all-tags"
                             
                             title="标签"
                         >
@@ -173,7 +173,7 @@
                 <li class="sidebar-button">
                     
                         <a  class="sidebar-button-link "
-                             href="/kubertalk/all-archives"
+                             href="/all-archives"
                             
                             title="归档"
                         >
@@ -238,7 +238,7 @@
                 <li class="sidebar-button">
                     
                         <a  class="sidebar-button-link "
-                             href="/kubertalk/atom.xml"
+                             href="/atom.xml"
                             
                             title="RSS"
                         >
@@ -257,7 +257,7 @@
         <div class="post-header-cover
                     text-left
                     "
-             style="background-image:url('/kubertalk/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/galaxy.jpg');"
+             style="background-image:url('/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/galaxy.jpg');"
              data-behavior="5">
             
                 <div class="post-header main-content-wrap text-left">
@@ -276,7 +276,7 @@
     
         <span>in </span>
         
-    <a class="category-link" href="/kubertalk/categories/DevOps/">DevOps</a>
+    <a class="category-link" href="/categories/DevOps/">DevOps</a>
 
 
     
@@ -380,7 +380,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">TAGGED IN</span><br/>
                 
-    <a class="tag tag--primary tag--small t-link" href="/kubertalk/tags/Docker/">Docker</a>
+    <a class="tag tag--primary tag--small t-link" href="/tags/Docker/">Docker</a>
 
             </div>
         
@@ -393,7 +393,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/kubertalk/Hacker Marathon Note of 2017/"
+                    href="/Hacker Marathon Note of 2017/"
                     data-tooltip="201705 交大黑客松（Hacker Marathon)纪要"
                     aria-label="PREVIOUS: 201705 交大黑客松（Hacker Marathon)纪要"
                 >
@@ -407,7 +407,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/kubertalk/Top-8-Sorting-Algorithm(cpp)/"
+                    href="/Top-8-Sorting-Algorithm(cpp)/"
                     data-tooltip="八大排序算法  by C++ (转)"
                     aria-label="NEXT: 八大排序算法  by C++ (转)"
                 >
@@ -434,7 +434,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://kubertalk.github.io/kubertalk/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -447,7 +447,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://kubertalk.github.io/kubertalk/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
+                    target="new" href="https://twitter.com/intent/tweet?text=kuberme.cn/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
                     title="Share on Twitter"
                     aria-label="Share on Twitter"
                 >
@@ -460,7 +460,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=https://kubertalk.github.io/kubertalk/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
+                    target="new" href="https://plus.google.com/share?url=kuberme.cn/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
                     title="Share on Google+"
                     aria-label="Share on Google+"
                 >
@@ -529,7 +529,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/kubertalk/Hacker Marathon Note of 2017/"
+                    href="/Hacker Marathon Note of 2017/"
                     data-tooltip="201705 交大黑客松（Hacker Marathon)纪要"
                     aria-label="PREVIOUS: 201705 交大黑客松（Hacker Marathon)纪要"
                 >
@@ -543,7 +543,7 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/kubertalk/Top-8-Sorting-Algorithm(cpp)/"
+                    href="/Top-8-Sorting-Algorithm(cpp)/"
                     data-tooltip="八大排序算法  by C++ (转)"
                     aria-label="NEXT: 八大排序算法  by C++ (转)"
                 >
@@ -570,7 +570,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://kubertalk.github.io/kubertalk/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -583,7 +583,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://kubertalk.github.io/kubertalk/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
+                    target="new" href="https://twitter.com/intent/tweet?text=kuberme.cn/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
                     title="Share on Twitter"
                     aria-label="Share on Twitter"
                 >
@@ -596,7 +596,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://plus.google.com/share?url=https://kubertalk.github.io/kubertalk/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
+                    target="new" href="https://plus.google.com/share?url=kuberme.cn/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
                     title="Share on Google+"
                     aria-label="Share on Google+"
                 >
@@ -630,7 +630,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=https://kubertalk.github.io/kubertalk/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
+                        href="https://www.facebook.com/sharer/sharer.php?u=kuberme.cn/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
                         aria-label="Share on Facebook"
                     >
                         <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
@@ -643,7 +643,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://twitter.com/intent/tweet?text=https://kubertalk.github.io/kubertalk/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
+                        href="https://twitter.com/intent/tweet?text=kuberme.cn/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
                         aria-label="Share on Twitter"
                     >
                         <i class="fab fa-twitter" aria-hidden="true"></i><span>Share on Twitter</span>
@@ -656,7 +656,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://plus.google.com/share?url=https://kubertalk.github.io/kubertalk/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
+                        href="https://plus.google.com/share?url=kuberme.cn/Run-a-cpp-Example-on-Win10-Docker-with-VS-Build-Tools/"
                         aria-label="Share on Google+"
                     >
                         <i class="fab fa-google-plus" aria-hidden="true"></i><span>Share on Google+</span>
@@ -682,7 +682,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/kubertalk/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
+            <img id="about-card-picture" src="/assets/images/elephant.jpg" alt="Author&#39;s picture"/>
         
             <h4 id="about-card-name">Kubert</h4>
         
@@ -709,9 +709,9 @@
 
         
         
-<div id="cover" style="background-image:url('/kubertalk/assets/images/galaxy.jpg');"></div>
+<div id="cover" style="background-image:url('/assets/images/galaxy.jpg');"></div>
         <!--SCRIPTS-->
-<script src="/kubertalk/assets/js/script-pn1j1k5loooddhnobedbnbb3axrh5qfsl8x8kmeka2su2hkn9zbqwjkkkqva.min.js"></script>
+<script src="/assets/js/script-pn1j1k5loooddhnobedbnbb3axrh5qfsl8x8kmeka2su2hkn9zbqwjkkkqva.min.js"></script>
 <!--SCRIPTS END-->
 
 
