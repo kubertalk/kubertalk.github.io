@@ -9,6 +9,8 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -17,7 +19,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"kuberme.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"kuberme.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="Sometimes when you need to use a cpp runtime environments on Windows system for your special applications, you can just install a Visuo Studio xxx to do it. But if you want to dilivery it to cloud env">
@@ -231,7 +233,7 @@
 <a id="more"></a>
 <!--toc-->
 <h3 id="Install-Docker-into-Win10"><a href="#Install-Docker-into-Win10" class="headerlink" title="Install Docker into Win10"></a>Install Docker into Win10</h3><ol>
-<li><p>Install <a href="https://docs.docker.com/docker-for-windows/install/" target="_blank" rel="noopener">Docker CE</a> in one computer with Windows 10 system, which its Virtualization must to be turn on firstly in your BIOS.</p>
+<li><p>Install <span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmRvY2tlci5jb20vZG9ja2VyLWZvci13aW5kb3dzL2luc3RhbGwv">Docker CE<i class="fa fa-external-link-alt"></i></span> in one computer with Windows 10 system, which its Virtualization must to be turn on firstly in your BIOS.</p>
 </li>
 <li><p>Note that, you need to log out once to complete installation when the installation succeeded.</p>
 </li>
@@ -241,7 +243,7 @@
 <li><p>After Docker started, you can find a penguin log in your taskbar. here has some tips to help you test Docker or improve Docker.</p>
 <ol>
 <li><p>Switch Registry: </p>
-<p>You can switch your registry to <a href="https://registry.docker-cn.com/" target="_blank" rel="noopener">China Official Registry</a> by edit the Daemon which by right click your Docker to choose Setting. Or you can change registry to a private registry like your aliyun’s speeder address.<br><img src="http://images.5bug.wang//2018/03/201803016053_9660.png" alt="Switch Regostry"></p>
+<p>You can switch your registry to <span class="exturl" data-url="aHR0cHM6Ly9yZWdpc3RyeS5kb2NrZXItY24uY29tLw==">China Official Registry<i class="fa fa-external-link-alt"></i></span> by edit the Daemon which by right click your Docker to choose Setting. Or you can change registry to a private registry like your aliyun’s speeder address.<br><img src="http://images.5bug.wang//2018/03/201803016053_9660.png" alt="Switch Regostry"></p>
 </li>
 <li><p>Switch to Windows Container Mode: </p>
 <p>In order to use windows images in Docker, you must change mode from Linux Container to Windows Container. after that, you can check it through <code>docker version</code> command.</p>
@@ -258,10 +260,10 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#list running containers</span><br><span class="line">docker ps</span><br><span class="line">#list all containers(include running/exited/created)</span><br><span class="line">docker ps -a</span><br><span class="line">#list images</span><br><span class="line">docker images</span><br><span class="line">#check basic info of your Docker</span><br><span class="line">docker info</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>Load Images</strong>: </p>
-<p>So, if you want to run a container with cpp files in it, you need to have a windows image with VS build tools environment first. I already packed a ready image, this image is built by <a href="https://github.com/kubertalk/DockerImage-Winserver/blob/master/Dockerfile?1556451298000" target="_blank" rel="noopener">Dockerfile</a>, which is from a source image <code>microsoft/windowsservercore</code> with Visual Studio Build Tools in it. You just need to load my image into a new folder on your system through <strong><em><code>docker load -i \\cd-srv04\pxa\Projects\simulation\docker-images\winservercore-vstools.tar</code></em></strong>. </p>
-<p>PS: if you want to what’s the difference of <code>windowsservercore</code> and <code>nanoserver</code>, please visit <a href="https://docs.microsoft.com/zh-cn/virtualization/windowscontainers/deploy-containers/deploy-containers-on-server" target="_blank" rel="noopener">here</a>.</p>
-<p>if you want to know how to build your own windows image, please visit <a href="https://github.com/docker/labs/blob/master/windows/windows-containers/WindowsContainers.md?1556446332153" target="_blank" rel="noopener">here</a>.</p>
-<p>and if you want to know the how to build and save the image we are using, and the please see <a href="https://github.com/kubertalk/DockerImage-Winserver" target="_blank" rel="noopener">here</a>. </p>
+<p>So, if you want to run a container with cpp files in it, you need to have a windows image with VS build tools environment first. I already packed a ready image, this image is built by <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2t1YmVydGFsay9Eb2NrZXJJbWFnZS1XaW5zZXJ2ZXIvYmxvYi9tYXN0ZXIvRG9ja2VyZmlsZT8xNTU2NDUxMjk4MDAw">Dockerfile<i class="fa fa-external-link-alt"></i></span>, which is from a source image <code>microsoft/windowsservercore</code> with Visual Studio Build Tools in it. You just need to load my image into a new folder on your system through <strong><em><code>docker load -i \\cd-srv04\pxa\Projects\simulation\docker-images\winservercore-vstools.tar</code></em></strong>. </p>
+<p>PS: if you want to what’s the difference of <code>windowsservercore</code> and <code>nanoserver</code>, please visit <span class="exturl" data-url="aHR0cHM6Ly9kb2NzLm1pY3Jvc29mdC5jb20vemgtY24vdmlydHVhbGl6YXRpb24vd2luZG93c2NvbnRhaW5lcnMvZGVwbG95LWNvbnRhaW5lcnMvZGVwbG95LWNvbnRhaW5lcnMtb24tc2VydmVy">here<i class="fa fa-external-link-alt"></i></span>.</p>
+<p>if you want to know how to build your own windows image, please visit <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2RvY2tlci9sYWJzL2Jsb2IvbWFzdGVyL3dpbmRvd3Mvd2luZG93cy1jb250YWluZXJzL1dpbmRvd3NDb250YWluZXJzLm1kPzE1NTY0NDYzMzIxNTM=">here<i class="fa fa-external-link-alt"></i></span>.</p>
+<p>and if you want to know the how to build and save the image we are using, and the please see <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2t1YmVydGFsay9Eb2NrZXJJbWFnZS1XaW5zZXJ2ZXI=">here<i class="fa fa-external-link-alt"></i></span>. </p>
 </li>
 <li><p>Check Images:</p>
 <p>Use <strong><code>docker images</code></strong> to check if this image already in your system when it load finished.</p>
@@ -292,7 +294,7 @@
 <li><p>After test or debug on this pseudo cmdlet, you can use <code>exit</code> or <code>ctl+P+Q</code> to quit this window. Then you can use <code>docker start/restart -i $containerID</code>  to go back this container’s cmdlet.</p>
 </li>
 </ol>
-<h3 id="QA-and-Issues"><a href="#QA-and-Issues" class="headerlink" title="QA and Issues"></a>QA and Issues</h3><p><strong>Have a fun and if you have any issues or problem, please don’t hesitate to contact me with <a href="mailto:kubertqiu@hotmail.com" target="_blank" rel="noopener">kubertqiu@hotmail.com</a></strong>.</p>
+<h3 id="QA-and-Issues"><a href="#QA-and-Issues" class="headerlink" title="QA and Issues"></a>QA and Issues</h3><p><strong>Have a fun and if you have any issues or problem, please don’t hesitate to contact me with <span class="exturl" data-url="bWFpbHRvOmt1YmVydHFpdUBob3RtYWlsLmNvbQ==">kubertqiu@hotmail.com<i class="fa fa-external-link-alt"></i></span></strong>.</p>
 
     </div>
 
@@ -408,10 +410,10 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/kubertalk" title="GitHub → https://github.com/kubertalk" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2t1YmVydGFsaw==" title="GitHub → https://github.com/kubertalk"><i class="fab fa-github fa-fw"></i>GitHub</span>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:kubertqiu@hotmail.com" title="E-Mail → mailto:kubertqiu@hotmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+        <span class="exturl" data-url="bWFpbHRvOmt1YmVydHFpdUBob3RtYWlsLmNvbQ==" title="E-Mail → mailto:kubertqiu@hotmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
       </span>
   </div>
 
@@ -442,7 +444,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Kubert</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  <div class="powered-by">Powered by <span class="exturl theme-link" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl theme-link" data-url="aHR0cHM6Ly90aGVtZS1uZXh0Lm9yZw==">NexT.Gemini</span>
   </div>
 
         
@@ -489,6 +491,15 @@
 
 
   
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
 
 
 

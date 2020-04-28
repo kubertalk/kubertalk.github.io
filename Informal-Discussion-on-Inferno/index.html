@@ -9,6 +9,8 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
 
 <link rel="stylesheet" href="/css/main.css">
 
@@ -17,7 +19,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"kuberme.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"kuberme.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="研究生操作系统课程的作业–每人调研分享一个操作系统">
@@ -231,12 +233,12 @@
 <a id="more"></a>
 <!--toc-->
 <h3 id="漫谈Inferno"><a href="#漫谈Inferno" class="headerlink" title="漫谈Inferno"></a><strong>漫谈Inferno</strong></h3><h4 id="Inferno-History"><a href="#Inferno-History" class="headerlink" title="Inferno History"></a><strong>Inferno History</strong></h4><ul>
-<li><a href="https://zh.wikipedia.org/w/index.php?title=IEEE_Internet_Computing&action=edit&redlink=1" target="_blank" rel="noopener">IEEE Internet Computing</a>在1997年3-4月的刊物中有Inferno网络软件的广告。该广告宣称可利用多种设备在包含互联网、电信网络，以及局域网等之”任何网络”上进行通讯。图中甚至摆放了<a href="https://zh.wikipedia.org/wiki/PlayStation" target="_blank" rel="noopener">PlayStation</a>之类的照片，如果电玩可以跟电脑沟通、手机可以访问电子邮件、电视可以访问语音邮件。</li>
-<li><a href="https://zh.wikipedia.org/wiki/朗訊科技" target="_blank" rel="noopener">朗讯科技</a>至少有两个内部项目有采用Inferno：Lucent VPN Firewall Brick以及Lucent Pathstar phone switch。这也打开了贩卖Inferno源代码授权的尝试，不过反应并不热烈。朗讯科技没特别做营销又忽略了Inferno与互联网的重要关连，而<a href="https://zh.wikipedia.org/wiki/Java" target="_blank" rel="noopener">Java语言</a>跟Inferno目标市场相似、采用类似的技术、可以在<a href="https://zh.wikipedia.org/wiki/網頁瀏覽器" target="_blank" rel="noopener">网页浏览器</a>中运行，也同时满足了当时对于<a href="https://zh.wikipedia.org/wiki/OOP" target="_blank" rel="noopener">面向对象语言</a>的流行。当<a href="https://zh.wikipedia.org/wiki/昇陽電腦" target="_blank" rel="noopener">SUN</a>大力营销自家的Java时，朗讯科技自太阳微系统获取Java的授权，宣称所有Inferno的设备皆能运行Java。Java比特码与Dis比特码的转译器就是为了达成这个功能所产生的。然而Inferno还是卖不出去。</li>
-<li>Inferno商业部门过了三年就关闭且被卖给<a href="https://zh.wikipedia.org/w/index.php?title=Vita_Nuova_Holdings&action=edit&redlink=1" target="_blank" rel="noopener">Vitanuova</a>在1999年。Vitanuova持有相关的权利后，便继续研发并对整个系统采用商业化授权的方式，随后提供免费下载以及对核心以及虚拟机以外的整个系统采用非<a href="https://zh.wikipedia.org/wiki/GPL" target="_blank" rel="noopener">GPL</a>兼容授权的方式。Vitanuova将软件继续移植到新的硬件以及专注在分散式应用软件上，最终将源代码采用<a href="https://zh.wikipedia.org/wiki/GPL" target="_blank" rel="noopener">GPLv2</a>授权发布，而Inferno操作系统现今也变成是一个<a href="https://zh.wikipedia.org/wiki/開放原始碼" target="_blank" rel="noopener">开放源代码</a>的项目。</li>
+<li><span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3cvaW5kZXgucGhwP3RpdGxlPUlFRUVfSW50ZXJuZXRfQ29tcHV0aW5nJmFjdGlvbj1lZGl0JnJlZGxpbms9MQ==">IEEE Internet Computing<i class="fa fa-external-link-alt"></i></span>在1997年3-4月的刊物中有Inferno网络软件的广告。该广告宣称可利用多种设备在包含互联网、电信网络，以及局域网等之”任何网络”上进行通讯。图中甚至摆放了<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvUGxheVN0YXRpb24=">PlayStation<i class="fa fa-external-link-alt"></i></span>之类的照片，如果电玩可以跟电脑沟通、手机可以访问电子邮件、电视可以访问语音邮件。</li>
+<li><span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kv5pyX6KiK56eR5oqA">朗讯科技<i class="fa fa-external-link-alt"></i></span>至少有两个内部项目有采用Inferno：Lucent VPN Firewall Brick以及Lucent Pathstar phone switch。这也打开了贩卖Inferno源代码授权的尝试，不过反应并不热烈。朗讯科技没特别做营销又忽略了Inferno与互联网的重要关连，而<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvSmF2YQ==">Java语言<i class="fa fa-external-link-alt"></i></span>跟Inferno目标市场相似、采用类似的技术、可以在<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kv57ay6aCB54CP6Ka95Zmo">网页浏览器<i class="fa fa-external-link-alt"></i></span>中运行，也同时满足了当时对于<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvT09Q">面向对象语言<i class="fa fa-external-link-alt"></i></span>的流行。当<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kv5piH6Zm96Zu76IWm">SUN<i class="fa fa-external-link-alt"></i></span>大力营销自家的Java时，朗讯科技自太阳微系统获取Java的授权，宣称所有Inferno的设备皆能运行Java。Java比特码与Dis比特码的转译器就是为了达成这个功能所产生的。然而Inferno还是卖不出去。</li>
+<li>Inferno商业部门过了三年就关闭且被卖给<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3cvaW5kZXgucGhwP3RpdGxlPVZpdGFfTnVvdmFfSG9sZGluZ3MmYWN0aW9uPWVkaXQmcmVkbGluaz0x">Vitanuova<i class="fa fa-external-link-alt"></i></span>在1999年。Vitanuova持有相关的权利后，便继续研发并对整个系统采用商业化授权的方式，随后提供免费下载以及对核心以及虚拟机以外的整个系统采用非<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvR1BM">GPL<i class="fa fa-external-link-alt"></i></span>兼容授权的方式。Vitanuova将软件继续移植到新的硬件以及专注在分散式应用软件上，最终将源代码采用<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvR1BM">GPLv2<i class="fa fa-external-link-alt"></i></span>授权发布，而Inferno操作系统现今也变成是一个<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kv6ZaL5pS+5Y6f5aeL56K8">开放源代码<i class="fa fa-external-link-alt"></i></span>的项目。</li>
 </ul>
-<h4 id="Licence-Terms"><a href="#Licence-Terms" class="headerlink" title="Licence Terms"></a><strong>Licence Terms</strong></h4><p>这里稍微提一句这个授权的问题，Inferno第四版于2004年以<a href="https://zh.wikipedia.org/wiki/自由軟體" target="_blank" rel="noopener">自由软件</a>的授权发布。具体来说，Inferno采用了<a href="https://zh.wikipedia.org/wiki/多許可" target="_blank" rel="noopener">双授权</a>的方式采用了两种授权供用户选择。用户可选择在<a href="https://zh.wikipedia.org/w/index.php?title=自由軟體授權&action=edit&redlink=1" target="_blank" rel="noopener">自由软件授权</a>或传统商业化授权的情况下获取Inferno。根据自由软件授权的规范，系统中各个部分可以采用不同的授权方式，这些授权方式包括<a href="https://zh.wikipedia.org/wiki/GPL" target="_blank" rel="noopener">GPL</a>、<a href="https://zh.wikipedia.org/wiki/LGPL" target="_blank" rel="noopener">LGPL</a>、<a href="https://zh.wikipedia.org/wiki/MIT_License" target="_blank" rel="noopener">MIT License</a>，以及<a href="https://zh.wikipedia.org/w/index.php?title=Lucent_Public_License&action=edit&redlink=1" target="_blank" rel="noopener">Lucent Public License</a>。这种就是根据不同的协议，在你做出修改后想要再传播时，需不需要公开修改的那部分代码。如果你不想公开任何一部分干脆使用商业版本，一开始付一点费用就可以。后来Vita Nuova让Inferno可以在<a href="https://zh.wikipedia.org/wiki/GPL" target="_blank" rel="noopener">GPLv2</a>的授权下获取除了字体（采用<a href="https://zh.wikipedia.org/w/index.php?title=Bigelow_and_Holmes&action=edit&redlink=1" target="_blank" rel="noopener">Bigelow and Holmes</a>授权）以外的整个系统。现在总共有三种授权方式可供选择。</p>
-<p>这里面有一个<a href="https://zh.wikipedia.org/w/index.php?title=Lucent_Public_License&action=edit&redlink=1" target="_blank" rel="noopener">Lucent Public License</a>，顾名思义就是朗讯自己搞的一个协议，有1和1.02两版。Plan 9第四版用的就是LPL1.02版，这个协议虽然被FSF和OSI都接受，但和GPL并不相容，因为其中竟然说被老美的某州法和知识产权法所统治。</p>
+<h4 id="Licence-Terms"><a href="#Licence-Terms" class="headerlink" title="Licence Terms"></a><strong>Licence Terms</strong></h4><p>这里稍微提一句这个授权的问题，Inferno第四版于2004年以<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kv6Ieq55Sx6Luf6auU">自由软件<i class="fa fa-external-link-alt"></i></span>的授权发布。具体来说，Inferno采用了<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kv5aSa6Kix5Y+v">双授权<i class="fa fa-external-link-alt"></i></span>的方式采用了两种授权供用户选择。用户可选择在<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3cvaW5kZXgucGhwP3RpdGxlPeiHqueUsei7n+mrlOaOiOasiiZhY3Rpb249ZWRpdCZyZWRsaW5rPTE=">自由软件授权<i class="fa fa-external-link-alt"></i></span>或传统商业化授权的情况下获取Inferno。根据自由软件授权的规范，系统中各个部分可以采用不同的授权方式，这些授权方式包括<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvR1BM">GPL<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvTEdQTA==">LGPL<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvTUlUX0xpY2Vuc2U=">MIT License<i class="fa fa-external-link-alt"></i></span>，以及<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3cvaW5kZXgucGhwP3RpdGxlPUx1Y2VudF9QdWJsaWNfTGljZW5zZSZhY3Rpb249ZWRpdCZyZWRsaW5rPTE=">Lucent Public License<i class="fa fa-external-link-alt"></i></span>。这种就是根据不同的协议，在你做出修改后想要再传播时，需不需要公开修改的那部分代码。如果你不想公开任何一部分干脆使用商业版本，一开始付一点费用就可以。后来Vita Nuova让Inferno可以在<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvR1BM">GPLv2<i class="fa fa-external-link-alt"></i></span>的授权下获取除了字体（采用<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3cvaW5kZXgucGhwP3RpdGxlPUJpZ2Vsb3dfYW5kX0hvbG1lcyZhY3Rpb249ZWRpdCZyZWRsaW5rPTE=">Bigelow and Holmes<i class="fa fa-external-link-alt"></i></span>授权）以外的整个系统。现在总共有三种授权方式可供选择。</p>
+<p>这里面有一个<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3cvaW5kZXgucGhwP3RpdGxlPUx1Y2VudF9QdWJsaWNfTGljZW5zZSZhY3Rpb249ZWRpdCZyZWRsaW5rPTE=">Lucent Public License<i class="fa fa-external-link-alt"></i></span>，顾名思义就是朗讯自己搞的一个协议，有1和1.02两版。Plan 9第四版用的就是LPL1.02版，这个协议虽然被FSF和OSI都接受，但和GPL并不相容，因为其中竟然说被老美的某州法和知识产权法所统治。</p>
 <h4 id="Inferno’s-Features"><a href="#Inferno’s-Features" class="headerlink" title="Inferno’s Features"></a>Inferno’s Features</h4><h5 id="Cross-Platform-Portability"><a href="#Cross-Platform-Portability" class="headerlink" title="Cross-Platform Portability"></a><strong>Cross-Platform Portability</strong></h5><p>Inferno可以直接在原生硬件中运行，也能在其他平台以应用程序的方式提供虚拟操作系统。应用程序无须经过修改或重编译即可在所有的Inferno平台开发并运行, 大多数流行的操作系统和处理器架构都支持：详细请看课堂展示<a href>PPT</a>图。</p>
 <h5 id="Limbo"><a href="#Limbo" class="headerlink" title="Limbo"></a><strong>Limbo</strong></h5><ul>
 <li><p>Easy to Learn – 它的语法和C很相似，设计的很容易读和理解。</p>
@@ -443,10 +445,10 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/kubertalk" title="GitHub → https://github.com/kubertalk" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2t1YmVydGFsaw==" title="GitHub → https://github.com/kubertalk"><i class="fab fa-github fa-fw"></i>GitHub</span>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:kubertqiu@hotmail.com" title="E-Mail → mailto:kubertqiu@hotmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+        <span class="exturl" data-url="bWFpbHRvOmt1YmVydHFpdUBob3RtYWlsLmNvbQ==" title="E-Mail → mailto:kubertqiu@hotmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
       </span>
   </div>
 
@@ -477,7 +479,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Kubert</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  <div class="powered-by">Powered by <span class="exturl theme-link" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl theme-link" data-url="aHR0cHM6Ly90aGVtZS1uZXh0Lm9yZw==">NexT.Gemini</span>
   </div>
 
         
@@ -524,6 +526,15 @@
 
 
   
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
 
 
 
